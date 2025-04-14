@@ -1,6 +1,6 @@
 name: whatsapp
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   dio: ^5.8.0+1
+  easy_localization: ^3.0.7+1
   get_it: ^8.0.3
 
 dev_dependencies:
@@ -19,3 +20,29 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  # assets:
+  # - assets/animations/
+  # - assets/images/
+  # - assets/fonts/
+  # - assets/svg/
+  # - assets/translations/
+
+flutter_assets:
+  assets_path: assets/svg
+  output_path: lib/core/utils
+  filename: app_svgs.dart
+  field_prefix: null
+  classname: AppSvgs
+# flutter_assets:
+#   assets_path: assets/images
+#   output_path: lib/core/utils
+#   filename: app_images.dart
+#   field_prefix: null
+#   classname: AppImages
+
+# flutter_assets:
+#   assets_path: assets/animations
+#   output_path: lib/core/utils
+#   filename: app_animations.dart
+#   field_prefix: null
+#   classname: AppAnimations
