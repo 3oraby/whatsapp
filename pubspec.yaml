@@ -12,6 +12,11 @@ dependencies:
   dio: ^5.8.0+1
   easy_localization: ^3.0.7+1
   get_it: ^8.0.3
+  dartz: ^0.10.1
+  flutter_bloc: ^9.1.0
+  lottie: ^3.3.1
+  modal_progress_hud_nsn: ^0.5.1
+  device_preview: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -20,12 +25,18 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  # assets:
-  # - assets/animations/
-  # - assets/images/
-  # - assets/fonts/
-  # - assets/svg/
-  # - assets/translations/
+  assets:
+    - assets/animations/
+    - assets/images/
+    - assets/fonts/
+    - assets/svgs/
+    - assets/translations/
+
+  fonts:
+    - family: SpecialGothicCondensedOne
+      fonts:
+        - asset: assets/fonts/SpecialGothicCondensedOne-Regular.ttf
+          weight: 400
 
 flutter_assets:
   assets_path: assets/svg

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class AppConstants {
   static const double borderRadius = 12;
@@ -8,7 +7,6 @@ class AppConstants {
   static const double topPadding = 16;
   static const double bottomPadding = 36;
   static const double contentTextFieldPadding = 22;
-  static const AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  static const int snackBarDuration = 3;
+  static const int splashScreenDuration = 3;
 }
-
-enum Gender { male, female, other }

@@ -1,8 +1,11 @@
-
 import 'package:whatsapp/core/models/error_model.dart';
 
-class ServerException implements Exception {
+class Failure implements Exception {
   final ErrorModel errModel;
 
-  ServerException({required this.errModel});
+  const Failure({required this.errModel});
+}
+
+class ServerException extends Failure {
+  ServerException({required super.errModel});
 }

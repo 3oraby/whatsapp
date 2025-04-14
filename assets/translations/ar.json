@@ -1,0 +1,94 @@
+{
+  "Password": "كلمة المرور",
+  "Email": "البريد الإلكتروني",
+  "or": "أو",
+  "Sign Up": "إنشاء حساب",
+  "SignUp": "إنشاء حساب",
+  "SignIn": "تسجيل الدخول",
+  "Sign In": "تسجيل الدخول",
+  "Enter Your Mobile Number": "أدخل رقم هاتفك المحمول",
+  "Continue With Phone": "الاستمرار باستخدام الهاتف",
+  "Continue With Google": "الاستمرار باستخدام جوجل",
+  "Already have an account?": "هل لديك حساب بالفعل؟",
+  "Don't have an account?": "ليس لديك حساب؟",
+  "Field is required": "هذا الحقل مطلوب",
+  "Email is required": "البريد الإلكتروني مطلوب",
+  "Please enter a valid email address": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+  "Password is required": "كلمة المرور مطلوبة",
+  "Password must be at least 8 characters long": "يجب أن تكون كلمة المرور مكونة من 8 أحرف على الأقل",
+  "Phone number is required": "رقم الهاتف مطلوب",
+  "Please enter a valid phone number": "يرجى إدخال رقم هاتف صحيح",
+  "Settings": "الإعدادات",
+  "Bookmarks": "المفضلة",
+  "Profile": "الملف الشخصي",
+  "Log Out": "تسجيل الخروج",
+  "Are you sure?": "هل أنت متأكد؟",
+  "Do you really want to log out?": "هل تريد حقًا تسجيل الخروج؟",
+  "Cancel": "إلغاء",
+  "Your Account Has Been Created Successfully! 🎉": "تم إنشاء حسابك بنجاح! 🎉",
+  "Next step: Complete your profile by adding essential details like your first name, bio, and more to get started.": "الخطوة التالية: أكمل ملفك الشخصي بإضافة تفاصيل أساسية مثل اسمك الأول والسيرة الذاتية والمزيد لتبدأ.",
+  "Complete Your Profile": "أكمل ملفك الشخصي",
+  "Welcome Back! 🎉": "مرحبًا بعودتك! 🎉",
+  "You’ve logged in successfully. Start exploring tweets, connecting with friends, and sharing your thoughts instantly.": "لقد سجلت الدخول بنجاح. ابدأ في استكشاف التغريدات، والتواصل مع الأصدقاء، ومشاركة أفكارك فورًا.",
+  "Explore Now": "استكشف الآن",
+  "Next": "التالى",
+  "Pick a profile picture": "اختر صورة الملف الشخصي",
+  "Have a favorite selfie? Upload it now.": ".هل لديك صورة مفضلة؟ قم بتحميلها الآن",
+  "Save & Proceed": "حفظ ومتابعة",
+  "Please upload a profile picture before proceeding.": ".يرجى تحميل صورة الملف الشخصي قبل المتابعة",
+  "Skip for now": "تخطي الآن",
+  "Failed to upload image": "فشل في تحميل الصورة",
+  "Image removed successfully!": "!تمت إزالة الصورة بنجاح",
+  "Profile Picture Uploaded! 🎉": "تم رفع صورة الملف الشخصي! 🎉",
+  "Your profile picture has been uploaded successfully. You're all set to explore tweets and connect with friends!": "تم رفع صورة الملف الشخصي بنجاح. يمكنك الآن استكشاف التغريدات والتواصل مع الأصدقاء!",
+  "Cannot add your data right now, please try again later.": "لا يمكن إضافة بياناتك في الوقت الحالي، يرجى المحاولة لاحقًا.",
+  "No items found matching your search.": "لم يتم العثور على عناصر تطابق بحثك.",
+  "Cannot fetch your data right now, please try again later.": "لا يمكن جلب بياناتك في الوقت الحالي، يرجى المحاولة لاحقًا.",
+  "Cannot update your data right now, please try again later.": "لا يمكن تحديث بياناتك في الوقت الحالي، يرجى المحاولة لاحقًا.",
+  "You do not have permission to perform this action.": "ليس لديك إذن لأداء هذا الإجراء.",
+  "Requested data not found.": "لم يتم العثور على البيانات المطلوبة.",
+  "Service is temporarily unavailable. Please try again later.": "الخدمة غير متوفرة مؤقتًا. يرجى المحاولة لاحقًا.",
+  "Operation timed out. Please try again.": "انتهت المهلة. يرجى المحاولة مرة أخرى.",
+  "An unknown error occurred": "حدث خطأ غير معروف",
+  "Tell us about yourself": "أخبرنا عن نفسك",
+  "First Name": "الاسم الأول",
+  "Enter your first name": "أدخل اسمك الأول",
+  "Last Name": "الاسم الأخير",
+  "Enter your last name": "أدخل اسمك الأخير",
+  "Age": "العمر",
+  "Enter your age": "أدخل عمرك",
+  "Phone Number": "رقم الهاتف",
+  "Enter your phone number": "أدخل رقم هاتفك",
+  "Gender": "الجنس",
+  "Age is required": "العمر مطلوب",
+  "Please enter a valid age": "يرجى إدخال عمر صحيح",
+  "Age must be 14 or older": "يجب أن يكون العمر 14 سنة أو أكثر",
+  "Please enter a realistic age": "يرجى إدخال عمر واقعي",
+  " Following": " متابعين",
+  " Followers": " المتابعون",
+  "Male": "ذكر",
+  "Female": "أنثى",
+  "Other": "آخر",
+  "Home": "الرئيسية",
+  "Search": "بحث",
+  "Notifications": "الإشعارات",
+  "Suggestions": "اقتراحات",
+  "Follow": "متابعة",
+  "Following": "متابع",
+  "Suggested for you": "مقترح لك",
+  "Connect": "متابعة",
+  "Failed to follow user. Please try again later.": "فشل في متابعة المستخدم. يرجى المحاولة لاحقًا.",
+  "Failed to unfollow user. Please try again later.": "فشل في إلغاء متابعة المستخدم. يرجى المحاولة لاحقًا.",
+  "Failed to get suggestions.": "فشل في الحصول على الاقتراحات.",
+  "Failed to update user stats.": "فشل في تحديث إحصائيات المستخدم.",
+  "The operation could not be completed due to an unexpected issue. Please try again later.": "تعذر إكمال العملية بسبب مشكلة غير متوقعة. يرجى المحاولة مرة أخرى لاحقًا.",
+  "Followers": "المتابعون",
+  "No Followers Yet!": "لا متابعين حتى الآن!",
+  "It looks like no one is following you right now. Share your profile to gain followers.": "يبدو أنه لا أحد يتابعك في الوقت الحالي. شارك ملفك الشخصي لكسب المتابعين.",
+  "back to home": "العودة إلى الصفحة الرئيسية",
+  "No Followings Yet!": "لا متابَعين حتى الآن!",
+  "You are not following anyone yet. Explore accounts and start connecting.": "أنت لا تتابع أي شخص حتى الآن. استكشف الحسابات وابدأ في الاتصال.",
+  "Discover Accounts": "اكتشاف الحسابات",
+  "Follows you": "يتابعك",
+  "Follow back": "رد المتابعة"
+}
