@@ -60,7 +60,7 @@ class _SignUpBodyState extends State<SignUpBody> {
               CustomTriggerButton(
                 buttonDescription: Text(
                   context.tr("SignUp"),
-                  style: AppTextStyles.specialGothicCondensedOneBold(context, 22)
+                  style: AppTextStyles.poppinsBold(context, 22)
                       .copyWith(color: Colors.white),
                 ),
                 onPressed: () {

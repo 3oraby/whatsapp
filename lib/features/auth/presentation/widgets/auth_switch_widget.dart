@@ -28,7 +28,7 @@ class AuthSwitchWidget extends StatelessWidget {
       children: [
         Text(
           promptText,
-          style: AppTextStyles.specialGothicCondensedOneRegular(context, 18).copyWith(
+          style: AppTextStyles.poppinsRegular(context, 18).copyWith(
             color: promptTextColor,
           ),
         ),
@@ -36,7 +36,7 @@ class AuthSwitchWidget extends StatelessWidget {
           onPressed: onActionPressed,
           child: Text(
             actionText,
-            style: AppTextStyles.specialGothicCondensedOneBold(context, 24).copyWith(
+            style: AppTextStyles.poppinsBold(context, 24).copyWith(
               color: actionTextColor,
               decoration: TextDecoration.underline,
               decorationColor: actionTextColor,

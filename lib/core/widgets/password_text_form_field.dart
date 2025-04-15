@@ -61,7 +61,7 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
       controller: widget.controller,
       focusNode: widget.focusNode,
       obscureText: isObscure,
-      style: widget.textStyle ?? AppTextStyles.specialGothicCondensedOneBold(context, 16),
+      style: widget.textStyle ?? AppTextStyles.poppinsBold(context, 16),
       onChanged: widget.onChanged,
       onSaved: widget.onSaved,
       validator: widget.validator,
@@ -69,7 +69,7 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
       decoration: InputDecoration(
         labelText: widget.labelText,
         hintText: widget.hintText ?? context.tr("Password"),
-        hintStyle: widget.hintTextStyle ?? AppTextStyles.specialGothicCondensedOneBold(context, 16),
+        hintStyle: widget.hintTextStyle ?? AppTextStyles.poppinsBold(context, 16),
         contentPadding: EdgeInsets.all(widget.contentPadding),
         suffixIcon: IconButton(
           icon: Icon(
