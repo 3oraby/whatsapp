@@ -5,8 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/on_generate_routes.dart';
 import 'package:whatsapp/core/services/custom_bloc_observer.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
-import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
+import 'package:whatsapp/core/utils/app_strings.dart';
+import 'package:whatsapp/core/utils/app_themes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,20 +36,16 @@ class Whatsapp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: AppStrings.appTitle,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: ThemeMode.system,
       onGenerateRoute: onGenerateRoutes,
       initialRoute: Routes.signInRoute,
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
-      ),
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
     );
   }
 }
