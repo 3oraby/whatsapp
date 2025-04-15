@@ -48,7 +48,7 @@ class CustomTriggerButton extends StatelessWidget {
           color: backgroundColor,
           border: Border.all(
             width: borderWidth,
-            color: borderWidth == 0 ? Colors.white : borderColor,
+            color: borderColor,
           ),
           borderRadius: BorderRadius.circular(borderRadius),
         ),

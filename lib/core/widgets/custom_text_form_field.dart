@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 
@@ -24,16 +23,16 @@ class CustomTextFormFieldWidget extends StatelessWidget {
     this.controller,
     this.focusNode,
     this.fillColor,
-    this.borderColor = AppColors.lightBackgroundColor,
+    this.borderColor,
     this.borderWidth = 0.5,
-    this.enabledBorderColor = AppColors.lightBackgroundColor,
+    this.enabledBorderColor,
     this.borderRadius = AppConstants.borderRadius,
     this.contentPadding = AppConstants.contentTextFieldPadding,
     this.maxLines = 1,
     this.isEnabled = true,
     this.onTap,
     this.autovalidateMode = AutovalidateMode.disabled,
-    this.focusedBorderColor = AppColors.primary,
+    this.focusedBorderColor,
     this.focusedBorderWidth = 2,
   });
 
@@ -54,16 +53,16 @@ class CustomTextFormFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final Color? fillColor;
-  final Color borderColor;
+  final Color? borderColor;
   final double borderWidth;
-  final Color enabledBorderColor;
+  final Color? enabledBorderColor;
   final double borderRadius;
   final double contentPadding;
   final int? maxLines;
   final bool isEnabled;
   final void Function()? onTap;
   final AutovalidateMode autovalidateMode;
-  final Color focusedBorderColor;
+  final Color? focusedBorderColor;
   final double focusedBorderWidth;
 
   @override
@@ -93,21 +92,32 @@ class CustomTextFormFieldWidget extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
-            color: borderColor,
+            color: borderColor ??
+                Theme.of(context).inputDecorationTheme.border!.borderSide.color,
             width: borderWidth,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
-            color: focusedBorderColor,
+            color: focusedBorderColor ??
+                Theme.of(context)
+                    .inputDecorationTheme
+                    .focusedBorder!
+                    .borderSide
+                    .color,
             width: focusedBorderWidth,
           ), // Focused border color
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
-            color: enabledBorderColor,
+            color: enabledBorderColor ??
+                Theme.of(context)
+                    .inputDecorationTheme
+                    .enabledBorder!
+                    .borderSide
+                    .color,
             width: borderWidth,
           ),
         ),

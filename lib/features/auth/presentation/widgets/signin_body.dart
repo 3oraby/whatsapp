@@ -37,7 +37,7 @@ class _SignInBodyState extends State<SignInBody> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const VerticalGap(16),
+              const VerticalGap(160),
               CustomTextFormFieldWidget(
                 autovalidateMode: autovalidateMode,
                 hintText: context.tr("Email"),

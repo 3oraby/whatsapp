@@ -28,8 +28,20 @@ class AppThemes {
           filled: true,
           fillColor: AppColors.lightInputBackground,
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.inputBorderLight),
+            borderSide: BorderSide(color: AppColors.lightInputBackground),
             borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            borderSide: BorderSide(
+              color: AppColors.lightInputBackground,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            borderSide: BorderSide(
+              color: AppColors.primary,
+            ), // Focused border color
           ),
         ),
       );
@@ -58,8 +70,20 @@ class AppThemes {
           filled: true,
           fillColor: AppColors.darkInputBackground,
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.inputBorderDark),
+            borderSide: BorderSide(color: AppColors.darkInputBackground),
             borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            borderSide: BorderSide(
+              color: AppColors.primary,
+            ), // Focused border color
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            borderSide: BorderSide(
+              color: AppColors.darkInputBackground,
+            ),
           ),
         ),
       );

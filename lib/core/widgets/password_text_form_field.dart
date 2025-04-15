@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
+
 class PasswordTextFieldWidget extends StatefulWidget {
   const PasswordTextFieldWidget({
     super.key,
@@ -13,14 +14,14 @@ class PasswordTextFieldWidget extends StatefulWidget {
     this.validator,
     this.controller,
     this.focusNode,
-    this.fillColor = AppColors.lightBackgroundColor,
-    this.borderColor = AppColors.lightBackgroundColor,
+    this.fillColor,
+    this.borderColor,
     this.borderWidth = 0.5,
-    this.enabledBorderColor = AppColors.lightBackgroundColor,
+    this.enabledBorderColor,
     this.borderRadius = AppConstants.borderRadius,
     this.contentPadding = AppConstants.contentTextFieldPadding,
     this.autovalidateMode = AutovalidateMode.disabled,
-    this.focusedBorderColor = AppColors.primary,
+    this.focusedBorderColor,
     this.focusedBorderWidth = 2,
     this.textStyle,
     this.hintTextStyle,
@@ -34,14 +35,14 @@ class PasswordTextFieldWidget extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final TextEditingController? controller;
   final FocusNode? focusNode;
-  final Color fillColor;
-  final Color borderColor;
+  final Color? fillColor;
+  final Color? borderColor;
   final double borderWidth;
-  final Color enabledBorderColor;
+  final Color? enabledBorderColor;
   final double borderRadius;
   final double contentPadding;
   final AutovalidateMode autovalidateMode;
-  final Color focusedBorderColor;
+  final Color? focusedBorderColor;
   final double focusedBorderWidth;
   final TextStyle? textStyle;
   final TextStyle? hintTextStyle;
@@ -69,7 +70,8 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
       decoration: InputDecoration(
         labelText: widget.labelText,
         hintText: widget.hintText ?? context.tr("Password"),
-        hintStyle: widget.hintTextStyle ?? AppTextStyles.poppinsBold(context, 16),
+        hintStyle:
+            widget.hintTextStyle ?? AppTextStyles.poppinsBold(context, 16),
         contentPadding: EdgeInsets.all(widget.contentPadding),
         suffixIcon: IconButton(
           icon: Icon(
@@ -85,21 +87,32 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(widget.borderRadius),
           borderSide: BorderSide(
-            color: widget.borderColor,
+            color: widget.borderColor ??
+                Theme.of(context).inputDecorationTheme.border!.borderSide.color,
             width: widget.borderWidth,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(widget.borderRadius),
           borderSide: BorderSide(
-            color: widget.focusedBorderColor,
+            color: widget.focusedBorderColor ??
+                Theme.of(context)
+                    .inputDecorationTheme
+                    .focusedBorder!
+                    .borderSide
+                    .color,
             width: widget.focusedBorderWidth,
           ), // Focused border color
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(widget.borderRadius),
           borderSide: BorderSide(
-            color: widget.enabledBorderColor,
+            color: widget.enabledBorderColor ??
+                Theme.of(context)
+                    .inputDecorationTheme
+                    .enabledBorder!
+                    .borderSide
+                    .color,
             width: widget.borderWidth,
           ),
         ),

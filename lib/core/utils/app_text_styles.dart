@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp/core/utils/app_colors.dart';
 
 class AppTextStyles {
   static TextStyle _textStyle(
@@ -6,6 +7,9 @@ class AppTextStyles {
     return TextStyle(
       fontFamily: 'Poppins',
       fontSize: size,
+      color: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.textPrimaryDark
+          : AppColors.textPrimaryLight,
       fontWeight: weight,
     );
   }
