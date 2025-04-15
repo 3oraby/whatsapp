@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
+import 'package:whatsapp/core/utils/app_constants.dart';
+import 'package:whatsapp/core/utils/app_text_styles.dart';
 
 void showCustomSnackBar(
   BuildContext context,
   String message, {
-  Color backgroundColor = AppColors.primaryColor,
+  Color backgroundColor = AppColors.primary,
 }) {
   final snackBar = SnackBar(
     content: Text(
       message,
-      style: const TextStyle(
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 20,
-      ),
+      style:
+          AppTextStyles.poppinsBold(context, 20).copyWith(color: Colors.white),
     ),
     showCloseIcon: true,
-    duration: const Duration(seconds: 3),
+    duration: const Duration(seconds: AppConstants.snackBarDuration),
     backgroundColor: backgroundColor,
   );
 

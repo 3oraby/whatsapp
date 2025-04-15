@@ -23,7 +23,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
     this.errorText,
     this.controller,
     this.focusNode,
-    this.fillColor = AppColors.lightBackgroundColor,
+    this.fillColor,
     this.borderColor = AppColors.lightBackgroundColor,
     this.borderWidth = 0.5,
     this.enabledBorderColor = AppColors.lightBackgroundColor,
@@ -33,7 +33,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
     this.isEnabled = true,
     this.onTap,
     this.autovalidateMode = AutovalidateMode.disabled,
-    this.focusedBorderColor = AppColors.primaryColor,
+    this.focusedBorderColor = AppColors.primary,
     this.focusedBorderWidth = 2,
   });
 

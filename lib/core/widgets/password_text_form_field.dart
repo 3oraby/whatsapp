@@ -20,7 +20,7 @@ class PasswordTextFieldWidget extends StatefulWidget {
     this.borderRadius = AppConstants.borderRadius,
     this.contentPadding = AppConstants.contentTextFieldPadding,
     this.autovalidateMode = AutovalidateMode.disabled,
-    this.focusedBorderColor = AppColors.primaryColor,
+    this.focusedBorderColor = AppColors.primary,
     this.focusedBorderWidth = 2,
     this.textStyle,
     this.hintTextStyle,
@@ -74,7 +74,7 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
         suffixIcon: IconButton(
           icon: Icon(
             isObscure ? Icons.visibility : Icons.visibility_off,
-            color: AppColors.primaryColor,
+            color: AppColors.primary,
           ),
           onPressed: () {
             setState(() {

@@ -18,7 +18,7 @@ class BuildUserCircleAvatarImage extends StatelessWidget {
       radius: circleAvatarRadius,
       backgroundColor: profilePicUrl == null
           ? Colors.white
-          : AppColors.highlightBackgroundColor,
+          : AppColors.appBackgroundLight,
       backgroundImage: profilePicUrl != null
           ? NetworkImage(
               profilePicUrl!,

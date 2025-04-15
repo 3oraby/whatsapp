@@ -15,8 +15,8 @@ class AuthSwitchWidget extends StatelessWidget {
     required this.promptText,
     required this.actionText,
     required this.onActionPressed,
-    this.promptTextColor = AppColors.primaryColor,
-    this.actionTextColor = AppColors.primaryColor,
+    this.promptTextColor,
+    this.actionTextColor = AppColors.primary,
     this.promptTextSize = 18,
     this.actionTextSize = 24,
   });

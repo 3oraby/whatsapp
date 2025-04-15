@@ -11,7 +11,6 @@ import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/signin_cubits/sign_in_cubit.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signup_screen.dart';
 import 'package:whatsapp/features/auth/presentation/widgets/auth_switch_widget.dart';
-import 'package:whatsapp/features/auth/presentation/widgets/custom_or_divider.dart';
 
 class SignInBody extends StatefulWidget {
   const SignInBody({
@@ -88,8 +87,6 @@ class _SignInBodyState extends State<SignInBody> {
                 },
               ),
               const VerticalGap(16),
-              const CustomOrDivider(),
-              const VerticalGap(24),
             ],
           ),
         ),

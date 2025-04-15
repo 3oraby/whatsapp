@@ -7,7 +7,7 @@ class CustomModalProgressHUD extends StatelessWidget {
     super.key,
     required this.inAsyncCall,
     required this.child,
-    this.indicatorColor = AppColors.primaryColor,
+    this.indicatorColor = AppColors.primary,
   });
 
   final bool inAsyncCall;
