@@ -9,7 +9,7 @@ class DioConsumer extends ApiConsumer {
 
   DioConsumer({required this.dio}) {
     dio.options.baseUrl = EndPoints.baseUrl;
-    dio.interceptors.add(ApiInterceptor());
+    dio.interceptors.add(ApiInterceptor(dio: dio));
     dio.interceptors.add(LogInterceptor(
       request: true,
       error: true,

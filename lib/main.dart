@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/on_generate_routes.dart';
 import 'package:whatsapp/core/services/custom_bloc_observer.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
+import 'package:whatsapp/core/storage/app_storage_helper.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_strings.dart';
 import 'package:whatsapp/core/utils/app_themes.dart';
@@ -12,6 +13,8 @@ import 'package:whatsapp/core/utils/app_themes.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await AppStorageHelper.init();
+  
   setupGetIt();
   Bloc.observer = CustomBlocObserver();
   runApp(
