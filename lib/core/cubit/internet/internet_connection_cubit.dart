@@ -20,7 +20,7 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   }
 
   void _onConnectivityChanged(List<ConnectivityResult> results) {
-    final hasConnection = results.any((r) => r != ConnectivityResult.none);
+    final hasConnection = results.any((result) => result != ConnectivityResult.none);
 
     if (hasConnection) {
       emit(InternetConnectionConnected());

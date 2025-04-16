@@ -6,7 +6,10 @@ import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
 class NetworkConnectionListenerWidget extends StatelessWidget {
   final Widget child;
 
-  const NetworkConnectionListenerWidget({super.key, required this.child});
+  const NetworkConnectionListenerWidget({
+    super.key,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class NetworkConnectionListenerWidget extends StatelessWidget {
         if (state is InternetConnectionDisconnected) {
           showCustomSnackBar(
             context,
-            "Reconnecting",
+            "Reconnecting..",
             durationDay: 1,
             showCloseIcon: false,
           );
