@@ -7,6 +7,8 @@ void showCustomSnackBar(
   BuildContext context,
   String message, {
   Color backgroundColor = AppColors.primary,
+  bool showCloseIcon = true,
+  int durationDay = 0,
 }) {
   final snackBar = SnackBar(
     content: Text(
@@ -14,8 +16,11 @@ void showCustomSnackBar(
       style:
           AppTextStyles.poppinsBold(context, 20).copyWith(color: Colors.white),
     ),
-    showCloseIcon: true,
-    duration: const Duration(seconds: AppConstants.snackBarDuration),
+    showCloseIcon: showCloseIcon,
+    duration: Duration(
+      seconds: AppConstants.snackBarDuration,
+      days: durationDay,
+    ),
     backgroundColor: backgroundColor,
   );
 

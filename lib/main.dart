@@ -1,7 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
 import 'package:whatsapp/core/helpers/on_generate_routes.dart';
 import 'package:whatsapp/core/services/custom_bloc_observer.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
@@ -40,18 +42,21 @@ class Whatsapp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppStrings.appTitle,
-      debugShowCheckedModeBanner: false,
-      navigatorKey: navigatorKey,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      theme: AppThemes.getLightTheme(context),
-      darkTheme: AppThemes.getDarkTheme(context),
-      themeMode: ThemeMode.system,
-      onGenerateRoute: onGenerateRoutes,
-      initialRoute: Routes.signInRoute,
+    return BlocProvider(
+      create: (context) => InternetConnectionCubit(Connectivity()),
+      child: MaterialApp(
+        title: AppStrings.appTitle,
+        debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        theme: AppThemes.getLightTheme(context),
+        darkTheme: AppThemes.getDarkTheme(context),
+        themeMode: ThemeMode.system,
+        onGenerateRoute: onGenerateRoutes,
+        initialRoute: Routes.signInRoute,
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
+import 'package:whatsapp/core/widgets/network_connection_listener_widget.dart';
 import 'package:whatsapp/core/widgets/custom_modal_progress_hud.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/signin_cubits/sign_in_cubit.dart';
@@ -19,8 +20,10 @@ class SignInScreen extends StatelessWidget {
       create: (context) => SignInCubit(
         authRepo: getIt<AuthRepo>(),
       ),
-      child: Scaffold(
-        body: const SignInBLocConsumerBody(),
+      child: NetworkConnectionListenerWidget(
+        child: Scaffold(
+          body: const SignInBLocConsumerBody(),
+        ),
       ),
     );
   }

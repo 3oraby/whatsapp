@@ -1,4 +1,4 @@
-import 'package:whatsapp/core/cubit/base_cubit.dart';
+import 'package:whatsapp/core/cubit/base/base_cubit.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 
 part 'sign_in_state.dart';
