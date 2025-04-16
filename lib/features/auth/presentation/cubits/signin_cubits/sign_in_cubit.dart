@@ -1,9 +1,9 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/cubit/base_cubit.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 
 part 'sign_in_state.dart';
 
-class SignInCubit extends Cubit<SignInState> {
+class SignInCubit extends BaseCubit<SignInState> {
   SignInCubit({required this.authRepo}) : super(SignInInitial());
 
   final AuthRepo authRepo;
@@ -14,8 +14,10 @@ class SignInCubit extends Cubit<SignInState> {
     final result = await authRepo.signInWithEmailAndPassword(
         email: email, password: password);
     result.fold(
-      (failure) =>
-          emit(SignInFailureState(message: failure.errModel!.errorMessage)),
+      (failure) {
+        handleFailure(failure);
+        emit(SignInFailureState(message: failure.errModel!.errorMessage));
+      },
       (userEntity) => emit(SignInLoadedState()),
     );
   }

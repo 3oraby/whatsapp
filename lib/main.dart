@@ -10,11 +10,13 @@ import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_strings.dart';
 import 'package:whatsapp/core/utils/app_themes.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await AppStorageHelper.init();
-  
+
   setupGetIt();
   Bloc.observer = CustomBlocObserver();
   runApp(
@@ -41,6 +43,7 @@ class Whatsapp extends StatelessWidget {
     return MaterialApp(
       title: AppStrings.appTitle,
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
