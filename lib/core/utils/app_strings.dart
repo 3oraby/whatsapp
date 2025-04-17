@@ -13,4 +13,7 @@ class AppStrings {
   static const String invalidAge = "Please enter a valid age";
   static const String ageTooYoung = "Age must be 14 or older";
   static const String ageTooOld = "Please enter a realistic age";
+  static const String confirmPasswordIsRequired =
+      "Confirm password is required.";
+  static const String passwordsDoNotMatch = "Passwords do not match.";
 }

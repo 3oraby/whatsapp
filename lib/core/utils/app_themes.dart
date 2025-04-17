@@ -5,6 +5,7 @@ import 'app_colors.dart';
 
 class AppThemes {
   static ThemeData getLightTheme(BuildContext context) => ThemeData(
+        primaryColor: AppColors.primaryLight,
         brightness: Brightness.light,
         scaffoldBackgroundColor: AppColors.appBackgroundLight,
         appBarTheme: AppBarTheme(
@@ -23,7 +24,9 @@ class AppThemes {
               .copyWith(color: AppColors.textSecondaryLight),
         ),
         dividerColor: AppColors.dividerLight,
-        iconTheme: const IconThemeData(color: AppColors.iconLight),
+        iconTheme: const IconThemeData(
+          color: AppColors.iconLight,
+        ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: AppColors.lightInputBackground,
@@ -47,6 +50,7 @@ class AppThemes {
       );
 
   static ThemeData getDarkTheme(BuildContext context) => ThemeData(
+        primaryColor: AppColors.primaryDark,
         brightness: Brightness.dark,
         scaffoldBackgroundColor: AppColors.appBackgroundDark,
         appBarTheme: AppBarTheme(

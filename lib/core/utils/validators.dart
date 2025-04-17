@@ -31,6 +31,19 @@ class Validators {
     return null;
   }
 
+  static String? confirmPasswordValidator(
+      BuildContext context, String? value, String? password) {
+    if (value == null || value.isEmpty) {
+      return context.tr(AppStrings.confirmPasswordIsRequired);
+    } else if (password == null || password.isEmpty) {
+      return context.tr(AppStrings.passwordIsRequired);
+    } else if (value != password) {
+      return context.tr(AppStrings.passwordsDoNotMatch);
+    } else {
+      return null;
+    }
+  }
+
   static String? validatePhoneNumber(BuildContext context, String? value) {
     const String phonePattern = r'^\+?[0-9]{10,15}$';
     final RegExp regex = RegExp(phonePattern);
