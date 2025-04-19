@@ -128,7 +128,7 @@ class _SignUpBodyState extends State<SignUpBody> {
                 const VerticalGap(24),
                 CustomTriggerButton(
                   buttonDescription: Text(
-                    context.tr("SignUp"),
+                    context.tr("Sign Up"),
                     style: AppTextStyles.poppinsBold(context, 18)
                         .copyWith(color: Colors.white),
                   ),

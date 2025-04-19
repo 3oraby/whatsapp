@@ -1,5 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:whatsapp/core/api/api_consumer.dart';
+import 'package:whatsapp/core/api/dio_consumer.dart';
 import 'package:whatsapp/features/auth/data/repo_impl/auth_repo_impl.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 
@@ -7,5 +10,12 @@ final getIt = GetIt.instance;
 
 void setupGetIt() {
   getIt.registerSingleton<Connectivity>(Connectivity());
-  getIt.registerSingleton<AuthRepo>(AuthRepoImpl());
+  getIt.registerSingleton<Dio>(Dio());
+ 
+  getIt.registerSingleton<ApiConsumer>(DioConsumer(
+    dio: getIt<Dio>(),
+  ));
+  getIt.registerSingleton<AuthRepo>(AuthRepoImpl(
+    apiConsumer: getIt<ApiConsumer>(),
+  ));
 }

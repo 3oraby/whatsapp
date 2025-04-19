@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
+import 'package:whatsapp/core/helpers/show_success_auth_modal_bottom_sheet.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
+import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/widgets/network_connection_listener_widget.dart';
 import 'package:whatsapp/core/widgets/custom_modal_progress_hud.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
@@ -40,20 +43,20 @@ class SignInBLocConsumerBody extends StatelessWidget {
           showCustomSnackBar(context, state.message);
         } else if (state is SignInLoadedState) {
           log("account successfully logged in");
-          // showSuccessAuthModalBottomSheet(
-          //   context: context,
-          //   sheetTitle: context.tr("Welcome Back! 🎉"),
-          //   sheetDescription: context.tr(
-          //       "You’ve logged in successfully. Start exploring tweets, connecting with friends, and sharing your thoughts instantly."),
-          //   buttonDescription: context.tr('Explore Now'),
-          //   onNextButtonPressed: () {
-          //     Navigator.pushNamedAndRemoveUntil(
-          //       context,
-          //       MainAppScreen.routeId,
-          //       (Route<dynamic> route) => false,
-          //     );
-          //   },
-          // );
+          showSuccessAuthModalBottomSheet(
+            context: context,
+            sheetTitle: context.tr("Welcome Back! 🎉"),
+            sheetDescription: context.tr(
+                "You’ve logged in successfully. Start exploring tweets, connecting with friends, and sharing your thoughts instantly."),
+            buttonDescription: context.tr('Explore Now'),
+            onNextButtonPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                Routes.homeRoute,
+                (Route<dynamic> route) => false,
+              );
+            },
+          );
         }
       },
       builder: (context, state) {

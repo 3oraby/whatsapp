@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:whatsapp/core/api/api_keys.dart';
 import 'package:whatsapp/core/api/end_points.dart';
 import 'package:whatsapp/core/constants/storage_keys.dart';
-import 'package:whatsapp/core/errors/exceptions.dart';
+import 'package:whatsapp/core/errors/failures.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
 
 class ApiInterceptor extends Interceptor {
@@ -25,6 +27,7 @@ class ApiInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     super.onError(err, handler);
 
+    log("error: ApiInterceptor.onError()");
     if (err.response?.statusMessage == "Unable to verify token") {
       try {
         final refreshResponse = await dio.post(EndPoints.refreshToken);
@@ -44,6 +47,6 @@ class ApiInterceptor extends Interceptor {
       }
     }
 
-    return handler.next(err);
+    // return handler.next(err);
   }
 }

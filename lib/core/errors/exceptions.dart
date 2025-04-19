@@ -1,13 +1,16 @@
 import 'package:whatsapp/core/models/error_model.dart';
 
-class Failure implements Exception {
-  final ErrorModel? errModel;
+class ServerException implements Exception {
+  final ErrorModel errModel;
 
-  const Failure({this.errModel});
+  const ServerException({required this.errModel});
 }
 
-class ServerException extends Failure {
-  ServerException({required super.errModel});
-}
+class ConnectionException implements Exception {
+  final String message;
 
-class UnAuthorizedException extends Failure {}
+  const ConnectionException({
+    this.message =
+        "No internet connection. Please check your connection and try again.",
+  });
+}

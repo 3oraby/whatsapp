@@ -15,7 +15,7 @@ void handleDioExceptions(DioException e) {
     case DioExceptionType.cancel:
       throw ServerException(errModel: ErrorModel.fromJson(e.response!.data));
     case DioExceptionType.connectionError:
-      throw ServerException(errModel: ErrorModel.fromJson(e.response!.data));
+      throw ConnectionException();
     case DioExceptionType.unknown:
       throw ServerException(errModel: ErrorModel.fromJson(e.response!.data));
     case DioExceptionType.badResponse:
@@ -32,7 +32,7 @@ void handleDioExceptions(DioException e) {
         case 404: // not found
           throw ServerException(
               errModel: ErrorModel.fromJson(e.response!.data));
-        case 409: // cofficient
+        case 409: // coefficient
           throw ServerException(
               errModel: ErrorModel.fromJson(e.response!.data));
         case 422: // Unprocessable Entity

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:whatsapp/core/errors/exceptions.dart';
+import 'package:whatsapp/core/errors/failures.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/main.dart';
 
