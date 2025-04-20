@@ -39,7 +39,7 @@ class AppStorageHelper {
     await prefs.setString(key, value);
   }
 
-  static Future<String?> getString(String key) async {
+  static String? getString(String key) {
     return prefs.getString(key);
   }
 

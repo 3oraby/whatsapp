@@ -12,7 +12,6 @@ import 'package:whatsapp/features/auth/presentation/widgets/sign_up_body.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
-  static const String routeId = 'kSignUpScreen';
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ enum StorageKeys {
   refreshToken,
   isDarkMode,
   isArabic,
+  userEmail,
 }
 
 extension StorageKeysExt on StorageKeys {
