@@ -7,7 +7,7 @@ class SignUpRequestModel extends SignUpRequestEntity {
     required super.password,
     required super.phone,
   });
-  
+
   factory SignUpRequestModel.fromEntity(SignUpRequestEntity entity) {
     return SignUpRequestModel(
       name: entity.name,
@@ -22,7 +22,7 @@ class SignUpRequestModel extends SignUpRequestEntity {
       "name": name,
       "email": email,
       "password": password,
-      "phone": phone,
+      "phone_number": phone,
     };
   }
 
