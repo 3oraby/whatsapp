@@ -10,7 +10,9 @@ import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
+import 'package:whatsapp/features/auth/presentation/cubits/resend_otp_cubit/resend_otp_cubit.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/verify_otp_cubit/verify_otp_cubit.dart';
+import 'package:whatsapp/features/auth/presentation/widgets/resend_otp_bloc_consumer_button.dart';
 
 class VerifyOtpBody extends StatefulWidget {
   const VerifyOtpBody({super.key});
@@ -24,17 +26,20 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
   int _secondsRemaining = 90;
   bool _canResend = false;
 
-  String currentOtp = "";
+  String? email;
+  late TextEditingController _otpController;
 
   @override
   void initState() {
     super.initState();
+    _otpController = TextEditingController();
     _startTimer();
+    email = AppStorageHelper.getString(StorageKeys.userEmail.toString());
   }
 
   void _startTimer() {
     setState(() {
-      _secondsRemaining = 90;
+      _secondsRemaining = 10;
       _canResend = false;
     });
 
@@ -55,11 +60,10 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
 
   Future<void> _verifyOtp(String otp) async {
     log("Verifying OTP: $otp");
-    String? email =
-        AppStorageHelper.getString(StorageKeys.userEmail.toString());
+
     if (email != null) {
       BlocProvider.of<VerifyOtpCubit>(context).verifyOtp(
-        email: email,
+        email: email!,
         otp: otp,
       );
     } else {
@@ -69,9 +73,12 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
 
   void _resendOtp() {
     if (_canResend) {
-      setState(() {
-        currentOtp = "";
-      });
+      _otpController.clear();
+
+      _startTimer();
+      BlocProvider.of<ResendOtpCubit>(context).resendOtp(
+        email: email!,
+      );
       _startTimer();
     }
   }
@@ -79,6 +86,7 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
   @override
   void dispose() {
     _timer?.cancel();
+    _otpController.dispose();
     super.dispose();
   }
 
@@ -96,48 +104,55 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.horizontalPadding,
-        ),
-        child: Column(
-          children: [
-            const VerticalGap(60),
-            Text(
-              "Enter the 6-digit code sent to your phone",
-              style: AppTextStyles.poppinsBold(context, 18),
-            ),
-            const VerticalGap(40),
-            PinCodeTextField(
-              appContext: context,
-              length: 6,
-              onChanged: (value) => currentOtp = value,
-              onCompleted: _verifyOtp,
-              keyboardType: TextInputType.number,
-              animationType: AnimationType.fade,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-                fieldHeight: 65,
-                fieldWidth: 50,
-                activeColor: AppColors.actionColor,
-                selectedColor: AppColors.primary,
-                inactiveColor: Colors.grey,
+      body: BlocListener<VerifyOtpCubit, VerifyOtpState>(
+        listener: (context, state) {
+          if (state is VerifyOtpFailureState) {
+            _otpController.clear();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.horizontalPadding,
+          ),
+          child: Column(
+            children: [
+              const VerticalGap(60),
+              Text(
+                "Enter the 6-digit code sent to your phone",
+                style: AppTextStyles.poppinsBold(context, 18),
               ),
-              backgroundColor: theme.scaffoldBackgroundColor,
-            ),
-            const VerticalGap(30),
-            Text(
-              _canResend
-                  ? "Didn't receive the code?"
-                  : "Resend code in $_secondsRemaining sec",
-              style: AppTextStyles.poppinsRegular(context, 16),
-            ),
-            TextButton(
-              onPressed: _canResend ? _resendOtp : null,
-              child: const Text("Resend Code"),
-            ),
-          ],
+              const VerticalGap(40),
+              PinCodeTextField(
+                controller: _otpController,
+                appContext: context,
+                length: 6,
+                onCompleted: _verifyOtp,
+                keyboardType: TextInputType.number,
+                animationType: AnimationType.fade,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius:
+                      BorderRadius.circular(AppConstants.borderRadius),
+                  fieldHeight: 65,
+                  fieldWidth: 50,
+                  activeColor: AppColors.actionColor,
+                  selectedColor: AppColors.primary,
+                  inactiveColor: Colors.grey,
+                ),
+                backgroundColor: theme.scaffoldBackgroundColor,
+              ),
+              const VerticalGap(30),
+              Text(
+                _canResend
+                    ? "Didn't receive the code?"
+                    : "Resend code in $_secondsRemaining sec",
+                style: AppTextStyles.poppinsRegular(context, 16),
+              ),
+              ResendOtpBlocConsumerButton(
+                onPressed: _canResend ? _resendOtp : null,
+              ),
+            ],
+          ),
         ),
       ),
     );

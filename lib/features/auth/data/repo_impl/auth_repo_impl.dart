@@ -112,4 +112,37 @@ class AuthRepoImpl extends AuthRepo {
           message: "Something went wrong. Please try again later."));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> resendOtp({
+    required String email,
+  }) async {
+    try {
+      await apiConsumer.post(
+        EndPoints.resendOTP,
+        data: {
+          ApiKeys.email: email,
+        },
+      );
+
+      return const Right(null);
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedException());
+    } on ConnectionException catch (e) {
+      return Left(CustomException(message: e.message));
+    } on ServerException catch (e) {
+      if (e.errModel.message == "user not found") {
+        return Left(CustomException(
+          message: "We couldn’t find an account with that information.",
+        ));
+      } else if (e.errModel.message == "user already active") {
+        return Left(CustomException(
+          message:
+              "Your account is already active. No further action is needed.",
+        ));
+      }
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    }
+  }
 }

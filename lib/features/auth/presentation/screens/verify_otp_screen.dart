@@ -8,18 +8,28 @@ import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/widgets/custom_modal_progress_hud.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
+import 'package:whatsapp/features/auth/presentation/cubits/resend_otp_cubit/resend_otp_cubit.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/verify_otp_cubit/verify_otp_cubit.dart';
 import 'package:whatsapp/features/auth/presentation/widgets/verify_otp_body.dart';
 
 class VerifyOtpScreen extends StatelessWidget {
   const VerifyOtpScreen({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => VerifyOtpCubit(
-        authRepo: getIt<AuthRepo>(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ResendOtpCubit(
+            authRepo: getIt<AuthRepo>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => VerifyOtpCubit(
+            authRepo: getIt<AuthRepo>(),
+          ),
+        ),
+      ],
       child: Scaffold(
         body: const VerifyOtpBlocConsumerBody(),
       ),

@@ -95,17 +95,6 @@ class _SignUpBodyState extends State<SignUpBody> {
                 ),
                 const VerticalGap(16),
                 CustomTextFormFieldWidget(
-                  hintText: context.tr("Phone Number"),
-                  autovalidateMode: autovalidateMode,
-                  keyboardType: TextInputType.phone,
-                  validator: (value) =>
-                      Validators.validatePhoneNumber(context, value),
-                  onSaved: (value) {
-                    phoneNumber = value!.trim();
-                  },
-                ),
-                const VerticalGap(16),
-                CustomTextFormFieldWidget(
                   autovalidateMode: autovalidateMode,
                   hintText: context.tr("Email"),
                   keyboardType: TextInputType.emailAddress,
@@ -123,6 +112,17 @@ class _SignUpBodyState extends State<SignUpBody> {
                       Validators.validatePassword(context, value),
                   onSaved: (value) {
                     password = value!;
+                  },
+                ),
+                const VerticalGap(16),
+                CustomTextFormFieldWidget(
+                  hintText: context.tr("Phone Number"),
+                  autovalidateMode: autovalidateMode,
+                  keyboardType: TextInputType.phone,
+                  validator: (value) =>
+                      Validators.validatePhoneNumber(context, value),
+                  onSaved: (value) {
+                    phoneNumber = value!.trim();
                   },
                 ),
                 const VerticalGap(24),
