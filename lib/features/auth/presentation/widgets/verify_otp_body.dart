@@ -39,7 +39,7 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
 
   void _startTimer() {
     setState(() {
-      _secondsRemaining = 10;
+      _secondsRemaining = 90;
       _canResend = false;
     });
 
@@ -94,65 +94,73 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Verify OTP",
-          style: AppTextStyles.poppinsBold(context, 20).copyWith(
-            color: Colors.white,
-          ),
+    return BlocListener<VerifyOtpCubit, VerifyOtpState>(
+      listener: (context, state) {
+        if (state is VerifyOtpFailureState) {
+          _otpController.clear();
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.horizontalPadding,
         ),
-        centerTitle: true,
-      ),
-      body: BlocListener<VerifyOtpCubit, VerifyOtpState>(
-        listener: (context, state) {
-          if (state is VerifyOtpFailureState) {
-            _otpController.clear();
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppConstants.horizontalPadding,
-          ),
-          child: Column(
-            children: [
-              const VerticalGap(60),
-              Text(
-                "Enter the 6-digit code sent to your phone",
-                style: AppTextStyles.poppinsBold(context, 18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const VerticalGap(60),
+            Text(
+              "Please Enter 6-digit code",
+              style: AppTextStyles.poppinsBlack(context, 32),
+            ),
+            const VerticalGap(16),
+            Text(
+              "We sent you 6-digit code to you at",
+              style: AppTextStyles.poppinsRegular(context, 16).copyWith(
+                color: Theme.of(context).colorScheme.secondary,
               ),
-              const VerticalGap(40),
-              PinCodeTextField(
-                controller: _otpController,
-                appContext: context,
-                length: 6,
-                onCompleted: _verifyOtp,
-                keyboardType: TextInputType.number,
-                animationType: AnimationType.fade,
-                pinTheme: PinTheme(
-                  shape: PinCodeFieldShape.box,
-                  borderRadius:
-                      BorderRadius.circular(AppConstants.borderRadius),
-                  fieldHeight: 65,
-                  fieldWidth: 50,
-                  activeColor: AppColors.actionColor,
-                  selectedColor: AppColors.primary,
-                  inactiveColor: Colors.grey,
+            ),
+            const VerticalGap(4),
+            Text(
+              email!,
+              style: AppTextStyles.poppinsRegular(context, 16).copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            const VerticalGap(40),
+            PinCodeTextField(
+              controller: _otpController,
+              appContext: context,
+              length: 6,
+              onCompleted: _verifyOtp,
+              keyboardType: TextInputType.number,
+              animationType: AnimationType.fade,
+              pinTheme: PinTheme(
+                shape: PinCodeFieldShape.box,
+                borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                fieldHeight: 65,
+                fieldWidth: 50,
+                activeColor: AppColors.actionColor,
+                selectedColor: AppColors.primary,
+                inactiveColor: Colors.grey,
+              ),
+              backgroundColor: theme.scaffoldBackgroundColor,
+            ),
+            const VerticalGap(30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _canResend
+                      ? "Didn't receive the code?"
+                      : "Resend code in $_secondsRemaining sec",
+                  style: AppTextStyles.poppinsRegular(context, 16),
                 ),
-                backgroundColor: theme.scaffoldBackgroundColor,
-              ),
-              const VerticalGap(30),
-              Text(
-                _canResend
-                    ? "Didn't receive the code?"
-                    : "Resend code in $_secondsRemaining sec",
-                style: AppTextStyles.poppinsRegular(context, 16),
-              ),
-              ResendOtpBlocConsumerButton(
-                onPressed: _canResend ? _resendOtp : null,
-              ),
-            ],
-          ),
+                ResendOtpBlocConsumerButton(
+                  onPressed: _canResend ? _resendOtp : null,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

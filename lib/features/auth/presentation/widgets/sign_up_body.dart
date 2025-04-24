@@ -21,7 +21,7 @@ class SignUpBody extends StatefulWidget {
 }
 
 class _SignUpBodyState extends State<SignUpBody> {
-  AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction;
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   late String name, phoneNumber, email, password, confirmPassword;

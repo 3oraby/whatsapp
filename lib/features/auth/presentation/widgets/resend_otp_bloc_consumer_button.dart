@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
+import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/resend_otp_cubit/resend_otp_cubit.dart';
 
 class ResendOtpBlocConsumerButton extends StatelessWidget {
@@ -24,13 +25,24 @@ class ResendOtpBlocConsumerButton extends StatelessWidget {
       },
       builder: (context, state) => TextButton(
         onPressed: onPressed,
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 12,
+          ),
+        ),
         child: state is ResendOtpLoadingState
-            ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(),
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator(),
+                  const HorizontalGap(10),
+                  Text(
+                    "Resending...",
+                  ),
+                ],
               )
-            : Text("Resend Code"),
+            : Text("Resend"),
       ),
     );
   }

@@ -7,6 +7,9 @@ class AppThemes {
   static ThemeData getLightTheme(BuildContext context) => ThemeData(
         primaryColor: AppColors.primaryLight,
         brightness: Brightness.light,
+        colorScheme: ColorScheme.light(
+          secondary: AppColors.textSecondaryLight,
+        ),
         scaffoldBackgroundColor: AppColors.appBackgroundLight,
         appBarTheme: AppBarTheme(
           backgroundColor: AppColors.primary,
@@ -26,6 +29,15 @@ class AppThemes {
         dividerColor: AppColors.dividerLight,
         iconTheme: const IconThemeData(
           color: AppColors.iconLight,
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.primary,
+            textStyle: AppTextStyles.poppinsMedium(context, 22),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            ),
+          ),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
@@ -47,11 +59,19 @@ class AppThemes {
             ), // Focused border color
           ),
         ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: AppColors.primaryLight,
+          circularTrackColor: AppColors.lightInputBackground,
+          strokeWidth: 4.0,
+        ),
       );
 
   static ThemeData getDarkTheme(BuildContext context) => ThemeData(
         primaryColor: AppColors.primaryDark,
         brightness: Brightness.dark,
+        colorScheme: ColorScheme.dark(
+          secondary: AppColors.textSecondaryDark,
+        ),
         scaffoldBackgroundColor: AppColors.appBackgroundDark,
         appBarTheme: AppBarTheme(
           backgroundColor: AppColors.primaryDark,
@@ -70,6 +90,15 @@ class AppThemes {
         ),
         dividerColor: AppColors.dividerDark,
         iconTheme: const IconThemeData(color: AppColors.iconDark),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.primary,
+            textStyle: AppTextStyles.poppinsMedium(context, 22),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            ),
+          ),
+        ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: AppColors.darkInputBackground,
@@ -89,6 +118,11 @@ class AppThemes {
               color: AppColors.darkInputBackground,
             ),
           ),
+        ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: AppColors.primaryDark,
+          circularTrackColor: AppColors.darkInputBackground,
+          strokeWidth: 4.0,
         ),
       );
 }
