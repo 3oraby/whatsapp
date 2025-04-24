@@ -16,8 +16,8 @@ flutter_native_splash:
   # size of the app. Only one parameter can be used, color and background_image cannot both be set.
   color: "#FFFFFF"
   color_dark: "#121212"
-  image: assets/images/light_whatsapp_image.png
-  image_dark: assets/images/dark_whatsapp_image.png
+  image: assets/images/light_whatsapp.png
+  image_dark: assets/images/light_whatsapp.png
   # branding: assets/dart.png
   # branding_dark: assets/dart_dark.png
   
@@ -59,8 +59,8 @@ flutter_native_splash:
   android_12:
     color: "#FFFFFF"
     color_dark: "#121212"
-    image: assets/images/light_whatsapp_image.png
-    image_dark: assets/images/dark_whatsapp_image.png
+    image: assets/images/light_whatsapp.png
+    image_dark: assets/images/light_whatsapp.png
 
     # The image parameter sets the splash screen icon image.  If this parameter is not specified,
     # the app's launcher icon will be used instead.
