@@ -43,7 +43,9 @@ class Whatsapp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => InternetConnectionCubit(getIt<Connectivity>()),
+      create: (context) => InternetConnectionCubit(
+        getIt<Connectivity>(),
+      ),
       child: MaterialApp(
         title: AppStrings.appTitle,
         debugShowCheckedModeBanner: false,
