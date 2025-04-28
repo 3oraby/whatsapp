@@ -12,7 +12,6 @@ class AppThemes {
         ),
         scaffoldBackgroundColor: AppColors.appBackgroundLight,
         appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           elevation: 0,
         ),
@@ -64,6 +63,15 @@ class AppThemes {
           circularTrackColor: AppColors.lightInputBackground,
           strokeWidth: 4.0,
         ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: AppColors.appBackgroundLight,
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: AppColors.textSecondaryLight,
+          selectedLabelStyle: AppTextStyles.poppinsMedium(context, 12),
+          unselectedLabelStyle: AppTextStyles.poppinsRegular(context, 12),
+          type: BottomNavigationBarType.fixed,
+          elevation: 8,
+        ),
       );
 
   static ThemeData getDarkTheme(BuildContext context) => ThemeData(
@@ -74,7 +82,6 @@ class AppThemes {
         ),
         scaffoldBackgroundColor: AppColors.appBackgroundDark,
         appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.primaryDark,
           foregroundColor: Colors.white,
           elevation: 0,
         ),
@@ -123,6 +130,15 @@ class AppThemes {
           color: AppColors.primaryDark,
           circularTrackColor: AppColors.darkInputBackground,
           strokeWidth: 4.0,
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: AppColors.appBackgroundDark,
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: AppColors.textSecondaryDark,
+          selectedLabelStyle: AppTextStyles.poppinsMedium(context, 12),
+          unselectedLabelStyle: AppTextStyles.poppinsRegular(context, 12),
+          type: BottomNavigationBarType.fixed,
+          elevation: 8,
         ),
       );
 }
