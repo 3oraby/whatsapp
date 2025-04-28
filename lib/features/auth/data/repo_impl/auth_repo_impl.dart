@@ -34,6 +34,8 @@ class AuthRepoImpl extends AuthRepo {
       await AppStorageHelper.setSecureData(
           StorageKeys.accessToken.toString(), result[ApiKeys.accessToken]);
 
+      await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), true);
+
       return const Right(null);
     } on UnAuthorizedException {
       return Left(UnAuthorizedException());
@@ -93,6 +95,8 @@ class AuthRepoImpl extends AuthRepo {
           ApiKeys.otp: otp,
         },
       );
+
+      await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), true);
 
       return const Right(null);
     } on UnAuthorizedException {

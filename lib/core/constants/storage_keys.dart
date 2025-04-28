@@ -4,6 +4,7 @@ enum StorageKeys {
   isDarkMode,
   isArabic,
   userEmail,
+  isLoggedIn,
 }
 
 extension StorageKeysExt on StorageKeys {

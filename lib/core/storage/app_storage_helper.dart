@@ -31,7 +31,7 @@ class AppStorageHelper {
     await prefs.setBool(key, value);
   }
 
-  static Future<bool?> getBool(String key) async {
+  static bool? getBool(String key) {
     return prefs.getBool(key);
   }
 

@@ -4,11 +4,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
+import 'package:whatsapp/core/helpers/get_initial_route.dart';
 import 'package:whatsapp/core/helpers/on_generate_routes.dart';
 import 'package:whatsapp/core/services/custom_bloc_observer.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
-import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_strings.dart';
 import 'package:whatsapp/core/utils/app_themes.dart';
 
@@ -57,7 +57,7 @@ class Whatsapp extends StatelessWidget {
         darkTheme: AppThemes.getDarkTheme(context),
         themeMode: ThemeMode.system,
         onGenerateRoute: onGenerateRoutes,
-        initialRoute: Routes.signInRoute,
+        initialRoute: getInitialRoute(),
       ),
     );
   }
