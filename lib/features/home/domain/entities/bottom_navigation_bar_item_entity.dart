@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
-
 class BottomNavigationBarItemEntity {
-  final IconData itemIcon;
+  final String iconName;
   final String name;
 
   BottomNavigationBarItemEntity({
-    required this.itemIcon,
+    required this.iconName,
     required this.name,
   });
 }
-

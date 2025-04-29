@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:whatsapp/core/utils/app_svgs.dart';
 import 'package:whatsapp/features/home/domain/entities/bottom_navigation_bar_item_entity.dart';
 
 class AppConstants {
@@ -17,19 +18,19 @@ class AppConstants {
           {required BuildContext context}) =>
       [
         BottomNavigationBarItemEntity(
-          itemIcon: Icons.home,
-          name: context.tr("Home"),
+          iconName: AppSvgs.svgsStatusIcon,
+          name: context.tr("Status"),
         ),
         BottomNavigationBarItemEntity(
-          itemIcon: Icons.search, 
-          name: context.tr("Search"),
+          iconName: AppSvgs.svgsChatsIcon, 
+          name: context.tr("Chats"),
         ),
         BottomNavigationBarItemEntity(
-          itemIcon: Icons.notifications_active_outlined,
-          name: context.tr("Notifications"),
+          iconName: AppSvgs.svgsCameraIcon,
+          name: context.tr("Camera"),
         ),
         BottomNavigationBarItemEntity(
-          itemIcon: Icons.settings,
+          iconName: AppSvgs.svgsSettingsIcon,
           name: context.tr("Settings"),
         ),
       ];

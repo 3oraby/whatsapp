@@ -65,12 +65,20 @@ class AppThemes {
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           backgroundColor: AppColors.appBackgroundLight,
-          selectedItemColor: AppColors.primary,
+          selectedItemColor: AppColors.actionColor,
           unselectedItemColor: AppColors.textSecondaryLight,
-          selectedLabelStyle: AppTextStyles.poppinsMedium(context, 12),
+          selectedLabelStyle: AppTextStyles.poppinsMedium(context, 14),
           unselectedLabelStyle: AppTextStyles.poppinsRegular(context, 12),
+          selectedIconTheme: const IconThemeData(
+            color: AppColors.actionColor,
+            size: 26,
+          ),
+          unselectedIconTheme: const IconThemeData(
+            color: AppColors.textSecondaryLight,
+            size: 24,
+          ),
           type: BottomNavigationBarType.fixed,
-          elevation: 8,
+          elevation: 12,
         ),
       );
 
@@ -133,12 +141,20 @@ class AppThemes {
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           backgroundColor: AppColors.appBackgroundDark,
-          selectedItemColor: AppColors.primary,
+          selectedItemColor: AppColors.actionColor,
           unselectedItemColor: AppColors.textSecondaryDark,
-          selectedLabelStyle: AppTextStyles.poppinsMedium(context, 12),
+          selectedLabelStyle: AppTextStyles.poppinsMedium(context, 14),
           unselectedLabelStyle: AppTextStyles.poppinsRegular(context, 12),
+          selectedIconTheme: const IconThemeData(
+            color: AppColors.actionColor,
+            size: 26,
+          ),
+          unselectedIconTheme: const IconThemeData(
+            color: AppColors.textSecondaryDark,
+            size: 24,
+          ),
           type: BottomNavigationBarType.fixed,
-          elevation: 8,
+          elevation: 12,
         ),
       );
 }

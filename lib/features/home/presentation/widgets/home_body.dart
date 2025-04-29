@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/chat_view.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({
@@ -17,6 +18,7 @@ class HomeBody extends StatelessWidget {
           // MainAppSearchView(),
           // NotificationView(),
           // SettingView(),
+          ChatView(),
           MyWidget(
             color: Colors.red,
           ),
@@ -25,9 +27,6 @@ class HomeBody extends StatelessWidget {
           ),
           MyWidget(
             color: Colors.amber,
-          ),
-          MyWidget(
-            color: Colors.green,
           ),
         ],
       ),

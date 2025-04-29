@@ -11,10 +11,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentViewIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CustomBottomNavigationBar(
+        currentViewIndex: currentViewIndex,
         onTabChange: (value) {
           setState(() {
             currentViewIndex = value;

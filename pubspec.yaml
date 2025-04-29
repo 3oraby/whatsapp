@@ -24,6 +24,7 @@ dependencies:
   socket_io_client: ^3.1.1
   flutter_native_splash: ^2.4.6
   google_nav_bar: ^5.0.7
+  flutter_svg: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -88,11 +89,12 @@ flutter:
           style: italic  
 
 flutter_assets:
-  assets_path: assets/svg
+  assets_path: assets/svgs
   output_path: lib/core/utils
   filename: app_svgs.dart
   field_prefix: null
   classname: AppSvgs
+
 # flutter_assets:
 #   assets_path: assets/images
 #   output_path: lib/core/utils
