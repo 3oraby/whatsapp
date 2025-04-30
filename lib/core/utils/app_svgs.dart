@@ -10,6 +10,10 @@ class AppSvgs {
   /// assets/svgs/chats_icon.svg
   static const String svgsChatsIcon = "assets/svgs/chats_icon.svg";
 
+  /// Assets for svgsContactsIcon
+  /// assets/svgs/contacts_icon.svg
+  static const String svgsContactsIcon = "assets/svgs/contacts_icon.svg";
+
   /// Assets for svgsDarkWhatsappLogo
   /// assets/svgs/dark_whatsapp_logo.svg
   static const String svgsDarkWhatsappLogo = "assets/svgs/dark_whatsapp_logo.svg";

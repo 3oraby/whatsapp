@@ -19,6 +19,9 @@ class HomeBody extends StatelessWidget {
           ),
           ChatsView(),
           MyWidget(
+            color: Colors.green,
+          ),
+          MyWidget(
             color: Colors.black,
           ),
           MyWidget(

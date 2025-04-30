@@ -30,6 +30,10 @@ class AppConstants {
           name: context.tr("Camera"),
         ),
         BottomNavigationBarItemEntity(
+          iconName: AppSvgs.svgsContactsIcon,
+          name: context.tr("Contacts"),
+        ),
+        BottomNavigationBarItemEntity(
           iconName: AppSvgs.svgsSettingsIcon,
           name: context.tr("Settings"),
         ),
