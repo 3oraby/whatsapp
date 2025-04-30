@@ -7,7 +7,7 @@ class AppColors {
   static const Color onlineStatus = Color(0xFF00FF00);
 
   // Light Mode Colors
-  static const Color primary = Color(0xFF075E54);
+  static const Color primary = Color(0xFF28a55d);
   static const Color primaryLight = Color(0xFF128C7E);
   static const Color actionColor = Color(0xFF25D366);
   static const Color appBackgroundLight = Color(0xFFFFFFFF);

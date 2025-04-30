@@ -12,8 +12,8 @@ class AppThemes {
         ),
         scaffoldBackgroundColor: AppColors.appBackgroundLight,
         appBarTheme: AppBarTheme(
-          foregroundColor: Colors.white,
-          elevation: 0,
+          foregroundColor: AppColors.iconLight,
+          actionsPadding: EdgeInsets.only(right: 8),
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: AppColors.actionColor,
@@ -63,6 +63,16 @@ class AppThemes {
           circularTrackColor: AppColors.lightInputBackground,
           strokeWidth: 4.0,
         ),
+        iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(
+            foregroundColor: AppColors.primary,
+            backgroundColor: Colors.transparent,
+            padding: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            ),
+          ),
+        ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           backgroundColor: AppColors.appBackgroundLight,
           selectedItemColor: AppColors.actionColor,
@@ -91,7 +101,7 @@ class AppThemes {
         scaffoldBackgroundColor: AppColors.appBackgroundDark,
         appBarTheme: AppBarTheme(
           foregroundColor: Colors.white,
-          elevation: 0,
+          actionsPadding: EdgeInsets.only(right: 8),
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: AppColors.actionColor,
@@ -138,6 +148,16 @@ class AppThemes {
           color: AppColors.primaryDark,
           circularTrackColor: AppColors.darkInputBackground,
           strokeWidth: 4.0,
+        ),
+        iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(
+            foregroundColor: AppColors.primary,
+            backgroundColor: Colors.transparent,
+            padding: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            ),
+          ),
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           backgroundColor: AppColors.appBackgroundDark,
