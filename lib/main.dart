@@ -9,8 +9,11 @@ import 'package:whatsapp/core/helpers/on_generate_routes.dart';
 import 'package:whatsapp/core/services/custom_bloc_observer.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
+import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_strings.dart';
 import 'package:whatsapp/core/utils/app_themes.dart';
+import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
+import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -57,7 +60,9 @@ class Whatsapp extends StatelessWidget {
         darkTheme: AppThemes.getDarkTheme(context),
         themeMode: ThemeMode.system,
         onGenerateRoute: onGenerateRoutes,
-        initialRoute: getInitialRoute(),
+        home: getInitialRoute() == Routes.homeRoute
+            ? HomeScreen()
+            : SignInScreen(),
       ),
     );
   }

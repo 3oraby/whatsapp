@@ -5,6 +5,7 @@ import 'package:whatsapp/core/storage/app_storage_helper.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 
 bool checkLoginState() {
+  log("check login state");
   return AppStorageHelper.getBool(StorageKeys.isLoggedIn.toString()) ?? false;
 }
 
