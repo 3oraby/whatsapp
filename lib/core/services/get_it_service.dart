@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:whatsapp/core/api/api_consumer.dart';
 import 'package:whatsapp/core/api/dio_consumer.dart';
 import 'package:whatsapp/core/repos/web_socket_repo/web_socket_repo.dart';
@@ -13,13 +17,26 @@ import 'package:whatsapp/features/contacts/domain/repos/contacts_repo.dart';
 
 final getIt = GetIt.instance;
 
-void setupGetIt() {
+Future<void> setupGetIt() async {
   getIt.registerSingleton<Connectivity>(Connectivity());
-  getIt.registerSingleton<Dio>(Dio());
 
+  // cookies
+  Directory tempDir = await getTemporaryDirectory();
+
+  final tempPath = tempDir.path;
+  final cookieJar = PersistCookieJar(
+    ignoreExpires: true,
+    storage: FileStorage(tempPath),
+  );
+
+  getIt.registerSingleton<CookieJar>(cookieJar);
+
+  // dio
+  getIt.registerSingleton<Dio>(Dio());
   getIt.registerSingleton<ApiConsumer>(DioConsumer(
     dio: getIt<Dio>(),
   ));
+
   getIt.registerSingleton<AuthRepo>(AuthRepoImpl(
     apiConsumer: getIt<ApiConsumer>(),
   ));

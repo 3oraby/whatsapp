@@ -22,7 +22,7 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await AppStorageHelper.init();
 
-  setupGetIt();
+  await setupGetIt();
   Bloc.observer = CustomBlocObserver();
   runApp(
     EasyLocalization(

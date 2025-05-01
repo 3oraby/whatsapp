@@ -29,8 +29,6 @@ class ApiInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    super.onError(err, handler);
-
     log("error: ApiInterceptor.onError()");
     log("status message: ${err.response?.statusMessage}");
     log("response data: ${err.response?.data}");
@@ -51,12 +49,20 @@ class ApiInterceptor extends Interceptor {
         return handler.resolve(clonedRequest);
       } catch (e) {
         log("error in get refresh token part: ${e.toString()}");
-        // await AppStorageHelper.deleteSecureData(
-        //     StorageKeys.accessToken.toString());
-        throw UnAuthorizedException();
+        await AppStorageHelper.deleteSecureData(
+            StorageKeys.accessToken.toString());
+
+        return handler.reject(
+          DioException(
+            requestOptions: err.requestOptions,
+            error: UnAuthorizedException(),
+            type: DioExceptionType.unknown,
+            response: err.response,
+          ),
+        );
       }
     }
 
-    // return handler.next(err);
+    return handler.next(err);
   }
 }

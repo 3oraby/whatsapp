@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:whatsapp/core/errors/exceptions.dart';
+import 'package:whatsapp/core/errors/failures.dart';
 import 'package:whatsapp/core/models/error_model.dart';
 
 void handleDioExceptions(DioException e) {
+  log("handle dio exceptions, exception is: ${e.toString()}");
   switch (e.type) {
     case DioExceptionType.connectionTimeout:
       throw ServerException(errModel: ErrorModel.fromJson(e.response!.data));
@@ -17,7 +21,7 @@ void handleDioExceptions(DioException e) {
     case DioExceptionType.connectionError:
       throw ConnectionException();
     case DioExceptionType.unknown:
-      throw ServerException(errModel: ErrorModel.fromJson(e.response!.data));
+      throw UnAuthorizedException();
     case DioExceptionType.badResponse:
       switch (e.response?.statusCode) {
         case 400: // Bad request

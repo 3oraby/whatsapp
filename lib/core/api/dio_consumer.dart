@@ -7,14 +7,16 @@ import 'package:whatsapp/core/api/api_consumer.dart';
 import 'package:whatsapp/core/api/api_interceptor.dart';
 import 'package:whatsapp/core/api/end_points.dart';
 import 'package:whatsapp/core/errors/handle_dio_exceptions.dart';
+import 'package:whatsapp/core/services/get_it_service.dart';
 
 class DioConsumer extends ApiConsumer {
   final Dio dio;
 
   DioConsumer({required this.dio}) {
+    log("dio consumer");
     dio.options.baseUrl = EndPoints.baseUrl;
-    final cookieJar = CookieJar();
-    dio.interceptors.add(CookieManager(cookieJar));
+
+    dio.interceptors.add(CookieManager(getIt<CookieJar>()));
     dio.interceptors.add(ApiInterceptor(dio: dio));
     dio.interceptors.add(LogInterceptor(
       request: true,

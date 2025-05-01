@@ -9,7 +9,7 @@ abstract class BaseCubit<State> extends Cubit<State> {
   BaseCubit(super.initialState);
 
   void handleFailure(Failure failure) {
-    log("handle failure in base cubit..");
+    log("handle failure in base cubit.. , failure is : ${failure.toString()}");
     if (failure is UnAuthorizedException) {
       log("failure in base cubit: 'unAuthorizedException'");
       navigatorKey.currentState?.pushNamedAndRemoveUntil(

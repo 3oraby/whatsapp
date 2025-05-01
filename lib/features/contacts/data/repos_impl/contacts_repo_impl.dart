@@ -39,6 +39,7 @@ class ContactsRepoImpl extends ContactsRepo {
       }
       return Right(users);
     } on UnAuthorizedException {
+      log("throw unAuthorizedException in contacts repo");
       return Left(UnAuthorizedException());
     } on ConnectionException catch (e) {
       return Left(CustomException(message: e.message));
