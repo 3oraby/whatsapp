@@ -15,8 +15,12 @@ class ApiInterceptor extends Interceptor {
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     options.headers['Accept-language'] = "en";
-    final token =
-        await AppStorageHelper.getSecureData(StorageKeys.accessToken.key);
+    options.extra['withCredentials'] = true;
+
+    final token = await AppStorageHelper.getSecureData(
+      StorageKeys.accessToken.toString(),
+    );
+
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
     }
@@ -28,13 +32,17 @@ class ApiInterceptor extends Interceptor {
     super.onError(err, handler);
 
     log("error: ApiInterceptor.onError()");
-    if (err.response?.statusMessage == "Unable to verify token") {
+    log("status message: ${err.response?.statusMessage}");
+    log("response data: ${err.response?.data}");
+
+    if (err.response?.data["message"] == "Unable to verify token") {
       try {
-        final refreshResponse = await dio.post(EndPoints.refreshToken);
+        log("error in ApiInterceptors: Unable to verify token");
+        final refreshResponse = await dio.get(EndPoints.refreshToken);
 
         final newAccessToken = refreshResponse.data[ApiKeys.accessToken];
         await AppStorageHelper.setSecureData(
-            StorageKeys.accessToken.key, newAccessToken);
+            StorageKeys.accessToken.toString(), newAccessToken);
 
         final opts = err.requestOptions;
         opts.headers['Authorization'] = 'Bearer $newAccessToken';
@@ -42,7 +50,9 @@ class ApiInterceptor extends Interceptor {
         final clonedRequest = await dio.fetch(opts);
         return handler.resolve(clonedRequest);
       } catch (e) {
-        await AppStorageHelper.deleteSecureData(StorageKeys.accessToken.key);
+        log("error in get refresh token part: ${e.toString()}");
+        // await AppStorageHelper.deleteSecureData(
+        //     StorageKeys.accessToken.toString());
         throw UnAuthorizedException();
       }
     }

@@ -7,8 +7,8 @@ class ErrorModel {
   ErrorModel({required this.code, required this.message});
   factory ErrorModel.fromJson(Map<String, dynamic> jsonData) {
     return ErrorModel(
-      code: jsonData[ApiKeys.code],
-      message: jsonData[ApiKeys.message],
+      code: int.parse(jsonData[ApiKeys.code]),
+      message: jsonData[ApiKeys.message] ?? "unknown error",
     );
   }
 }
