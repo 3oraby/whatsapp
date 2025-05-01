@@ -6,6 +6,7 @@ import 'package:whatsapp/core/widgets/undefined_route_page.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signup_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/verify_otp_screen.dart';
+import 'package:whatsapp/features/contacts/presentation/screens/add_new_contacts_screen.dart';
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
 
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
@@ -32,6 +33,10 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
     case Routes.verifyOtpRoute:
       return MaterialPageRoute(
         builder: (context) => VerifyOtpScreen(),
+      );
+    case Routes.addNewContactsRoute:
+      return MaterialPageRoute(
+        builder: (context) => AddNewContactsScreen(),
       );
     default:
       return MaterialPageRoute(

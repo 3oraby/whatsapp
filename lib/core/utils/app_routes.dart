@@ -6,4 +6,6 @@ class Routes {
   static const String verifyOtpRoute = "/verifyOtp";
   // home
   static const String homeRoute = "/home";
+  // contacts
+  static const String addNewContactsRoute = "/addNewContacts";
 }

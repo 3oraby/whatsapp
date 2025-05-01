@@ -8,6 +8,8 @@ import 'package:whatsapp/core/repos/web_socket_repo/web_socket_repo_impl.dart';
 import 'package:whatsapp/core/services/web_socket_service.dart';
 import 'package:whatsapp/features/auth/data/repo_impl/auth_repo_impl.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
+import 'package:whatsapp/features/contacts/data/repos_impl/contacts_repo_impl.dart';
+import 'package:whatsapp/features/contacts/domain/repos/contacts_repo.dart';
 
 final getIt = GetIt.instance;
 
@@ -22,9 +24,14 @@ void setupGetIt() {
     apiConsumer: getIt<ApiConsumer>(),
   ));
 
-  getIt.registerSingleton<WebSocketService>(WebSocketService()..initSocketConnection());
+  getIt.registerSingleton<WebSocketService>(
+      WebSocketService()..initSocketConnection());
 
   getIt.registerSingleton<WebSocketRepo>(WebSocketRepoImpl(
     webSocketService: getIt<WebSocketService>(),
+  ));
+
+  getIt.registerSingleton<ContactsRepo>(ContactsRepoImpl(
+    apiConsumer: getIt<ApiConsumer>(),
   ));
 }

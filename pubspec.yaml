@@ -25,6 +25,8 @@ dependencies:
   flutter_native_splash: ^2.4.6
   google_nav_bar: ^5.0.7
   flutter_svg: ^2.1.0
+  dio_cookie_manager: ^3.2.0
+  cookie_jar: ^4.0.8
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/errors/failures.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
@@ -7,7 +9,9 @@ abstract class BaseCubit<State> extends Cubit<State> {
   BaseCubit(super.initialState);
 
   void handleFailure(Failure failure) {
+    log("handle failure in base cubit..");
     if (failure is UnAuthorizedException) {
+      log("failure in base cubit: 'unAuthorizedException'");
       navigatorKey.currentState?.pushNamedAndRemoveUntil(
         Routes.signInRoute,
         (_) => false,

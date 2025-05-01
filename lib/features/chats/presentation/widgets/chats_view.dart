@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
+import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_app_padding.dart';
 
@@ -18,7 +19,9 @@ class ChatsView extends StatelessWidget {
                 color: Theme.of(context).iconTheme.color,
                 size: 30,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.addNewContactsRoute);
+              },
             ),
             IconButton(
               icon: Icon(
