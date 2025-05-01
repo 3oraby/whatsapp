@@ -60,7 +60,9 @@ class Whatsapp extends StatelessWidget {
         darkTheme: AppThemes.getDarkTheme(context),
         themeMode: ThemeMode.system,
         onGenerateRoute: onGenerateRoutes,
-        home: SignInScreen(),
+        home: getInitialRoute() == Routes.homeRoute
+            ? HomeScreen()
+            : SignInScreen(),
       ),
     );
   }
