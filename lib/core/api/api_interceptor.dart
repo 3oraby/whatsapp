@@ -52,6 +52,8 @@ class ApiInterceptor extends Interceptor {
         await AppStorageHelper.deleteSecureData(
             StorageKeys.accessToken.toString());
 
+        await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), false);
+
         return handler.reject(
           DioException(
             requestOptions: err.requestOptions,
