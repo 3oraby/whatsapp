@@ -8,7 +8,6 @@ import 'package:whatsapp/core/errors/failures.dart';
 import 'package:whatsapp/features/contacts/domain/entities/user_with_contact_status_entity.dart';
 import 'package:whatsapp/features/contacts/domain/repos/contacts_repo.dart';
 import 'package:whatsapp/features/user/data/models/user_model.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
 
 class ContactsRepoImpl extends ContactsRepo {
   final ApiConsumer apiConsumer;
@@ -25,18 +24,17 @@ class ContactsRepoImpl extends ContactsRepo {
         },
       );
 
-      log(result.toString());
-      List<UserWithContactStatusEntity> users = [];
-      for (int i = 0; i < result["users"].length; i++) {
-        log(result["users"][i].toString());
-        UserEntity user = UserModel.fromJson(result["users"][i]).toEntity();
-        UserWithContactStatusEntity userWithContactStatusEntity =
-            UserWithContactStatusEntity(
-          user: user,
-          isContact: result["users"][i]["is_contact"],
+      log("searchInUsers result: $result");
+
+      final users = (result["users"] as List).map((userJson) {
+        final userEntity = UserModel.fromJson(userJson).toEntity();
+        final isContact = (userJson["is_contact"] ?? -1) >= 0;
+        return UserWithContactStatusEntity(
+          user: userEntity,
+          isContact: isContact,
         );
-        users.add(userWithContactStatusEntity);
-      }
+      }).toList();
+
       return Right(users);
     } on UnAuthorizedException {
       log("throw unAuthorizedException in contacts repo");

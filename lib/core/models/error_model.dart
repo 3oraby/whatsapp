@@ -14,7 +14,7 @@ class ErrorModel {
   factory ErrorModel.fromJson(Map<String, dynamic> jsonData) {
     log(jsonData.toString());
     return ErrorModel(
-      code: int.parse(jsonData[ApiKeys.code] ?? "404"),
+      code: int.parse((jsonData[ApiKeys.code] ?? "404").toString()),
       message: jsonData[ApiKeys.message] ?? "unknown error",
     );
   }

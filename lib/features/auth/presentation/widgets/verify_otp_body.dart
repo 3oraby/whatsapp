@@ -97,9 +97,11 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
     return BlocListener<VerifyOtpCubit, VerifyOtpState>(
       listener: (context, state) {
         if (state is VerifyOtpFailureState) {
-          if (mounted) {
-            _otpController.clear();
-          }
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _otpController.clear();
+            }
+          });
         }
       },
       child: Padding(
