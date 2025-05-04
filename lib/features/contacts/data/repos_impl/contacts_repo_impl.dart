@@ -50,4 +50,23 @@ class ContactsRepoImpl extends ContactsRepo {
           message: "Something went wrong. Please try again later."));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> createNewContact({required int userId}) async {
+    try {
+      await apiConsumer.post(
+        "${EndPoints.createContact}/$userId",
+      );
+
+      return const Right(null);
+    } on UnAuthorizedException {
+      log("throw unAuthorizedException in contacts repo");
+      return Left(UnAuthorizedException());
+    } on ConnectionException catch (e) {
+      return Left(CustomException(message: e.message));
+    } on ServerException {
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    }
+  }
 }

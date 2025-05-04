@@ -6,4 +6,6 @@ abstract class ContactsRepo {
   Future<Either<Failure, List<UserWithContactStatusEntity>>> searchInUsers({
     String? query,
   });
+
+  Future<Either<Failure, void>> createNewContact({required int userId});
 }
