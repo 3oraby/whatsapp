@@ -10,13 +10,11 @@ class CustomChatButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomActionBox(
-      width: 115,
+      width: 95,
       height: 40,
       internalVerticalPadding: 0,
       internalHorizontalPadding: 0,
-      borderColor: AppColors.inputBorderLight,
-      borderWidth: 1,
-      backgroundColor: AppColors.actionColor,
+      backgroundColor: AppColors.primary,
       onPressed: () {
         // navigate to chat screen and make new chat
       },
@@ -24,18 +22,18 @@ class CustomChatButton extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Row(
-            spacing: 6,
+            spacing: 8,
             children: [
+              Icon(
+                Icons.chat_bubble,
+                color: Colors.white,
+              ),
               Text(
                 context.tr("Chat"),
                 style: AppTextStyles.poppinsBold(context, 14).copyWith(
                   color: Colors.white,
                 ),
               ),
-              Icon(
-                Icons.chat,
-                color: Colors.white,
-              )
             ],
           ),
         ),

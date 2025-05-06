@@ -39,12 +39,15 @@ class CustomActionBox extends StatelessWidget {
           vertical: internalVerticalPadding,
         ),
         decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(borderRadius),
-            border: Border.all(
-              color: borderColor,
-              width: borderWidth,
-            )),
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(borderRadius),
+          border: borderWidth != 0
+              ? Border.all(
+                  color: borderColor,
+                  width: borderWidth,
+                )
+              : null,
+        ),
         child: child,
       ),
     );

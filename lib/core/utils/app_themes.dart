@@ -65,7 +65,6 @@ class AppThemes {
         ),
         iconButtonTheme: IconButtonThemeData(
           style: IconButton.styleFrom(
-            foregroundColor: AppColors.primary,
             backgroundColor: Colors.transparent,
             padding: const EdgeInsets.all(8),
             shape: RoundedRectangleBorder(
@@ -151,7 +150,6 @@ class AppThemes {
         ),
         iconButtonTheme: IconButtonThemeData(
           style: IconButton.styleFrom(
-            foregroundColor: AppColors.primary,
             backgroundColor: Colors.transparent,
             padding: const EdgeInsets.all(8),
             shape: RoundedRectangleBorder(
