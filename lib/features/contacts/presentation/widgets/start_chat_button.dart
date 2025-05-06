@@ -4,8 +4,8 @@ import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_action_box.dart';
 
-class CustomChatButton extends StatelessWidget {
-  const CustomChatButton({super.key});
+class StartChatButton extends StatelessWidget {
+  const StartChatButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +27,7 @@ class CustomChatButton extends StatelessWidget {
               Icon(
                 Icons.chat_bubble,
                 color: Colors.white,
+                size: 22,
               ),
               Text(
                 context.tr("Chat"),

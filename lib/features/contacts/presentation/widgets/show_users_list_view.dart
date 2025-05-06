@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapp/core/widgets/custom_user_info_card.dart';
+import 'package:whatsapp/features/contacts/presentation/widgets/custom_user_info_card.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/contacts/domain/entities/user_with_contact_status_entity.dart';
 
