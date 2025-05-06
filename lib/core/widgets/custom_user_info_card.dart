@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:whatsapp/core/helpers/is_light_theme.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
@@ -150,42 +151,68 @@ class _UserInteractionButtonBlocConsumerBodyState
 }
 
 class CustomAddNewContactButton extends StatelessWidget {
-  const CustomAddNewContactButton({
-    super.key,
-    required this.userId,
-  });
-
+  const CustomAddNewContactButton({super.key, required this.userId});
   final int userId;
+
   @override
   Widget build(BuildContext context) {
-    return CustomActionBox(
-      width: 95,
-      height: 40,
-      internalVerticalPadding: 0,
-      internalHorizontalPadding: 0,
-      borderWidth: 0,
-      backgroundColor: isLightTheme(context)
-          ? AppColors.highlightBackgroundColor
-          : AppColors.highlightBackgroundColorDark,
-      onPressed: () {
-        BlocProvider.of<CreateNewContactCubit>(context)
-            .createNewContact(userId: userId);
-      },
-      child: Center(
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Row(
-            spacing: 8,
-            children: [
-              Icon(Icons.person_add),
-              Text(
-                context.tr("Add"),
-                style: AppTextStyles.poppinsBold(context, 14),
-              ),
-            ],
+    return BlocBuilder<CreateNewContactCubit, CreateNewContactState>(
+      builder: (context, state) {
+        final isLoading = state is CreateNewContactLoadingState;
+
+        return CustomActionBox(
+          width: 95,
+          height: 40,
+          internalVerticalPadding: 0,
+          internalHorizontalPadding: 0,
+          borderWidth: 0,
+          backgroundColor: isLightTheme(context)
+              ? AppColors.highlightBackgroundColor
+              : AppColors.highlightBackgroundColorDark,
+          onPressed: isLoading
+              ? null
+              : () => context
+                  .read<CreateNewContactCubit>()
+                  .createNewContact(userId: userId),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (isLoading)
+                  SizedBox(
+                    height: 22,
+                    width: 22,
+                    child: CustomLoadingIndicator(),
+                  )
+                else
+                  Icon(Icons.person_add, size: 22),
+                const SizedBox(width: 8),
+                Text(
+                  context.tr("Add"),
+                  style: AppTextStyles.poppinsBold(context, 14),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
+    );
+  }
+}
+
+class CustomLoadingIndicator extends StatelessWidget {
+  const CustomLoadingIndicator({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LoadingIndicator(
+      indicatorType: Indicator.ballPulse,
+      colors: [
+        isLightTheme(context) ? Colors.black : Colors.white
+      ],
+      strokeWidth: 2,
     );
   }
 }
@@ -213,6 +240,7 @@ class CustomChatButton extends StatelessWidget {
               Icon(
                 Icons.chat_bubble,
                 color: Colors.white,
+                size: 22,
               ),
               Text(
                 context.tr("Chat"),
