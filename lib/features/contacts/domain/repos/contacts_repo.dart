@@ -8,4 +8,6 @@ abstract class ContactsRepo {
   });
 
   Future<Either<Failure, void>> createNewContact({required int userId});
+
+  Future<Either<Failure, List<UserWithContactStatusEntity>>> getUserContacts();
 }

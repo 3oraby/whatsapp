@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/chats_view.dart';
+import 'package:whatsapp/features/contacts/presentation/widgets/user_contacts_view.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({
@@ -21,9 +22,7 @@ class HomeBody extends StatelessWidget {
           MyWidget(
             color: Colors.green,
           ),
-          MyWidget(
-            color: Colors.black,
-          ),
+          UserContactsView(),
           MyWidget(
             color: Colors.amber,
           ),

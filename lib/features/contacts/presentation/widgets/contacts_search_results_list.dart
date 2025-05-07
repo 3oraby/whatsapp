@@ -23,7 +23,9 @@ class ContactsSearchResultsList extends StatelessWidget {
             },
           );
         } else if (state is SearchInUsersLoadedState) {
-          return ShowUsersListView(users: state.users);
+          return ShowUsersListView(
+            users: state.users,
+          );
         } else if (state is SearchInUsersEmptyState) {
           return const CustomEmptyStateBody(
             title: "No users found",
