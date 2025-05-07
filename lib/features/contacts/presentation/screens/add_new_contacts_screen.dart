@@ -25,48 +25,8 @@ class AddNewContactsScreen extends StatelessWidget {
             style: AppTextStyles.poppinsBold(context, 22),
           ),
         ),
-        body: AddNewContactsBlocConsumerBody(),
+        body: AddNewContactsBody(),
       ),
-    );
-  }
-}
-
-
-
-class AddNewContactsBlocConsumerBody extends StatefulWidget {
-  const AddNewContactsBlocConsumerBody({super.key});
-
-  @override
-  State<AddNewContactsBlocConsumerBody> createState() =>
-      _AddNewContactsBlocConsumerBodyState();
-}
-
-class _AddNewContactsBlocConsumerBodyState
-    extends State<AddNewContactsBlocConsumerBody> {
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<SearchInUsersCubit>(context).searchInUsers();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<SearchInUsersCubit, SearchInUsersState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        if (state is SearchInUsersLoadingState) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is SearchInUsersFailureState) {
-          return Center(
-            child: Text(state.message),
-          );
-        } else if (state is SearchInUsersLoadedState) {
-          return AddNewContactsBody(users: state.users);
-        }
-        return SizedBox();
-      },
     );
   }
 }

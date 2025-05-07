@@ -18,7 +18,13 @@ class SearchInUsersCubit extends BaseCubit<SearchInUsersState> {
         handleFailure(failure);
         emit(SearchInUsersFailureState(message: failure.message!));
       },
-      (users) => emit(SearchInUsersLoadedState(users: users)),
+      (users) {
+        if (users.isEmpty) {
+          emit(SearchInUsersEmptyState());
+        } else {
+          emit(SearchInUsersLoadedState(users: users));
+        }
+      },
     );
   }
 }

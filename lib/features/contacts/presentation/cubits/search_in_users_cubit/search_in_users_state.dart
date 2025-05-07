@@ -6,6 +6,8 @@ final class SearchInUsersInitial extends SearchInUsersState {}
 
 final class SearchInUsersLoadingState extends SearchInUsersState {}
 
+final class SearchInUsersEmptyState extends SearchInUsersState {}
+
 final class SearchInUsersLoadedState extends SearchInUsersState {
   final List<UserWithContactStatusEntity> users;
 

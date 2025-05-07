@@ -34,6 +34,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
     this.autovalidateMode = AutovalidateMode.disabled,
     this.focusedBorderColor,
     this.focusedBorderWidth = 2,
+    this.autofocus = false,
   });
 
   final String? labelText;
@@ -64,6 +65,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
   final AutovalidateMode autovalidateMode;
   final Color? focusedBorderColor;
   final double focusedBorderWidth;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +81,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
       maxLines: maxLines,
       enabled: isEnabled,
       onTap: onTap,
+      autofocus: autofocus,
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: labelStyle ?? AppTextStyles.poppinsBold(context, 16),
