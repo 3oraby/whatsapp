@@ -8,10 +8,10 @@ class StoryModel extends StoryEntity {
   const StoryModel({
     required super.id,
     required super.content,
-    required super.mediaUrl,
     required super.isActive,
     required super.expiredAt,
     required super.createdAt,
+    super.mediaUrl,
     super.isViewed,
     super.views,
     super.reacts,

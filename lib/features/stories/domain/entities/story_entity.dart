@@ -4,7 +4,7 @@ import 'package:whatsapp/features/stories/domain/entities/view_story_entity.dart
 class StoryEntity {
   final int id;
   final String content;
-  final String mediaUrl;
+  final String? mediaUrl;
   final bool isActive;
   final DateTime expiredAt;
   final DateTime createdAt;
