@@ -7,6 +7,7 @@ import 'package:whatsapp/core/api/api_consumer.dart';
 import 'package:whatsapp/core/api/api_interceptor.dart';
 import 'package:whatsapp/core/api/end_points.dart';
 import 'package:whatsapp/core/errors/handle_dio_exceptions.dart';
+import 'package:whatsapp/core/services/convert_data_to_form_data.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 
 class DioConsumer extends ApiConsumer {
@@ -89,9 +90,14 @@ class DioConsumer extends ApiConsumer {
     bool isFromData = false,
   }) async {
     try {
+      FormData? formData;
+      if (isFromData) {
+        formData = await convertDataToFormData(data);
+      }
+
       final response = await dio.post(
         path,
-        data: isFromData ? FormData.fromMap(data) : data,
+        data: isFromData ? formData : data,
         queryParameters: queryParameters,
       );
       return response.data;

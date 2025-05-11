@@ -21,7 +21,10 @@ void handleDioExceptions(DioException e) {
     case DioExceptionType.connectionError:
       throw ConnectionException();
     case DioExceptionType.unknown:
+      // solve the issue here
+      log("error in handle dio exception : unKnown");
       throw UnAuthorizedException();
+    // throw ServerException(errModel: ErrorModel.fromJson(e.response!.data));
     case DioExceptionType.badResponse:
       switch (e.response?.statusCode) {
         case 400: // Bad request

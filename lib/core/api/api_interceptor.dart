@@ -49,23 +49,30 @@ class ApiInterceptor extends Interceptor {
         return handler.resolve(clonedRequest);
       } catch (e) {
         log("error in get refresh token part: ${e.toString()}");
-        await AppStorageHelper.deleteSecureData(
-            StorageKeys.accessToken.toString());
-
-        await AppStorageHelper.setBool(
-            StorageKeys.isLoggedIn.toString(), false);
-
-        return handler.reject(
-          DioException(
-            requestOptions: err.requestOptions,
-            error: UnAuthorizedException(),
-            type: DioExceptionType.unknown,
-            response: err.response,
-          ),
-        );
+        await forcesUserLogOut(handler, err);
       }
     }
 
+    if (err.response?.data['message'] == "No refreshToken found in cookie") {
+      log("No refreshToken found in cookie");
+      log("there is an except in the refresh token now, there is a problem");
+      await forcesUserLogOut(handler, err);
+    }
     return handler.next(err);
+  }
+
+  forcesUserLogOut(ErrorInterceptorHandler handler, DioException err) async {
+    await AppStorageHelper.deleteSecureData(StorageKeys.accessToken.toString());
+
+    await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), false);
+
+    return handler.reject(
+      DioException(
+        requestOptions: err.requestOptions,
+        error: UnAuthorizedException(),
+        type: DioExceptionType.unknown,
+        response: err.response,
+      ),
+    );
   }
 }

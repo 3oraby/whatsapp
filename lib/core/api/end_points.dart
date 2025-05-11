@@ -19,4 +19,16 @@ class EndPoints {
   // contacts
   static const String getUserContacts = "contact";
   static const String createContact = "contact";
+
+  // stories
+  static const String createStory = "status";
+  static const String getUserContactsStory = "status/getUserCotactsStatus";
+  static String viewStory({required String storyId}) => "status/view/$storyId";
+  static String deleteStory({required String storyId}) => "status/$storyId";
+  static String reactStory({required String storyId}) =>
+      "status/react/$storyId";
+  static String getReactsOnStory({required String storyId}) =>
+      "status/reacts/$storyId";
+  static String getViewsOnStory({required String storyId}) =>
+      "status/views/$storyId";
 }
