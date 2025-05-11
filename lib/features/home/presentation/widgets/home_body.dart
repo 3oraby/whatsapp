@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/chats_view.dart';
 import 'package:whatsapp/features/contacts/presentation/widgets/user_contacts_view.dart';
+import 'package:whatsapp/features/stories/presentation/widgets/stories_view.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({
@@ -15,9 +16,7 @@ class HomeBody extends StatelessWidget {
       child: IndexedStack(
         index: currentViewIndex,
         children: const [
-          MyWidget(
-            color: Colors.red,
-          ),
+          StoriesView(),
           ChatsView(),
           MyWidget(
             color: Colors.green,
