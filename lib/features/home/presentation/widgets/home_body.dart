@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/chats_view.dart';
 import 'package:whatsapp/features/contacts/presentation/widgets/user_contacts_view.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/stories_view.dart';
@@ -12,21 +13,19 @@ class HomeBody extends StatelessWidget {
   final int currentViewIndex;
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: IndexedStack(
-        index: currentViewIndex,
-        children: const [
-          StoriesView(),
-          ChatsView(),
-          MyWidget(
-            color: Colors.green,
-          ),
-          UserContactsView(),
-          MyWidget(
-            color: Colors.amber,
-          ),
-        ],
-      ),
+    return LazyIndexedStack(
+      index: currentViewIndex,
+      children: const [
+        StoriesView(),
+        ChatsView(),
+        MyWidget(
+          color: Colors.green,
+        ),
+        UserContactsView(),
+        MyWidget(
+          color: Colors.amber,
+        ),
+      ],
     );
   }
 }

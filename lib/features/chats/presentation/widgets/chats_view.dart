@@ -55,7 +55,7 @@ class ShowUserChatsBody extends StatelessWidget {
           children: [
             Text(
               "Chats",
-              style: AppTextStyles.poppinsBlack(context, 54),
+              style: AppTextStyles.poppinsBold(context, 48),
             ),
             Container(
               height: 100,

@@ -1,3 +1,4 @@
+import 'package:whatsapp/core/api/api_keys.dart';
 import 'package:whatsapp/features/stories/data/models/react_story_model.dart';
 import 'package:whatsapp/features/stories/data/models/view_story_model.dart';
 import 'package:whatsapp/features/stories/domain/entities/react_story_entity.dart';
@@ -7,12 +8,13 @@ import 'package:whatsapp/features/stories/domain/entities/view_story_entity.dart
 class StoryModel extends StoryEntity {
   const StoryModel({
     required super.id,
-    required super.content,
+    super.content,
     required super.isActive,
     required super.expiredAt,
     required super.createdAt,
     super.mediaUrl,
     super.isViewed,
+    super.isReacted,
     super.views,
     super.reacts,
   });
@@ -24,7 +26,8 @@ class StoryModel extends StoryEntity {
         isActive: json['isActive'],
         expiredAt: DateTime.parse(json['expired_at']),
         createdAt: DateTime.parse(json['createdAt']),
-        isViewed: json['isViewed'],
+        isViewed: json[ApiKeys.isViewed],
+        isReacted: json[ApiKeys.isReacted],
         views: (json['views'] as List?)
             ?.map((e) => ViewStoryModel.fromJson(e))
             .toList(),
@@ -40,7 +43,8 @@ class StoryModel extends StoryEntity {
         'isActive': isActive,
         'expired_at': expiredAt.toIso8601String(),
         'createdAt': createdAt.toIso8601String(),
-        'isViewed': isViewed,
+        ApiKeys.isViewed: isViewed,
+        ApiKeys.isReacted: isReacted,
         'views': views?.map((e) => (e as ViewStoryModel).toJson()).toList(),
         'reacts': reacts?.map((e) => (e as ReactStoryModel).toJson()).toList(),
       };
@@ -53,6 +57,7 @@ class StoryModel extends StoryEntity {
         expiredAt: entity.expiredAt,
         createdAt: entity.createdAt,
         isViewed: entity.isViewed,
+        isReacted: entity.isReacted,
         views: entity.views,
         reacts: entity.reacts,
       );
@@ -65,6 +70,7 @@ class StoryModel extends StoryEntity {
         expiredAt: expiredAt,
         createdAt: createdAt,
         isViewed: isViewed,
+        isReacted: isReacted,
         views: views,
         reacts: reacts,
       );
@@ -77,6 +83,7 @@ class StoryModel extends StoryEntity {
     DateTime? expiredAt,
     DateTime? createdAt,
     bool? isViewed,
+    bool? isReacted,
     List<ViewStoryEntity>? views,
     List<ReactStoryEntity>? reacts,
   }) =>
@@ -88,6 +95,7 @@ class StoryModel extends StoryEntity {
         expiredAt: expiredAt ?? this.expiredAt,
         createdAt: createdAt ?? this.createdAt,
         isViewed: isViewed ?? this.isViewed,
+        isReacted: isReacted ?? this.isReacted,
         views: views ?? this.views,
         reacts: reacts ?? this.reacts,
       );

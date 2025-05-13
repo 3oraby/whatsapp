@@ -12,4 +12,6 @@ class ApiKeys {
   static const String data = "data";
   static const String viewedContacts = "viewedContacts";
   static const String unviewedContacts = "unviewedContacts";
+  static const String isReacted = "is_reacted";
+  static const String isViewed = "is_viewed";
 }

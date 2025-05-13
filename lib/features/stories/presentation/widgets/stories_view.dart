@@ -1,15 +1,15 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
-import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
-import 'package:whatsapp/core/widgets/horizontal_gap.dart';
+import 'package:whatsapp/core/widgets/custom_app_padding.dart';
+import 'package:whatsapp/core/widgets/custom_error_body_widget.dart';
+import 'package:whatsapp/core/widgets/custom_loading_body_widget.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/stories/domain/repos/stories_repo.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/get_current_stories/get_current_stories_cubit.dart';
+import 'package:whatsapp/features/stories/presentation/widgets/custom_user_story_item.dart';
 
 class StoriesView extends StatelessWidget {
   const StoriesView({super.key});
@@ -20,7 +20,82 @@ class StoriesView extends StatelessWidget {
       create: (_) => GetCurrentStoriesCubit(
         storiesRepo: getIt<StoriesRepo>(),
       ),
-      child: const ShowCurrentStoriesBody(),
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          // title: Text(
+          //   "Updates",
+          //   style: AppTextStyles.poppinsBold(context, 22),
+          // ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.edit,
+                color: Theme.of(context).iconTheme.color,
+                size: 30,
+              ),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.camera_alt,
+                color: AppColors.primary,
+                size: 36,
+              ),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        body: ShowCurrentStoriesBlocBuilderBody(),
+      ),
+    );
+  }
+}
+
+class ShowCurrentStoriesBlocBuilderBody extends StatefulWidget {
+  const ShowCurrentStoriesBlocBuilderBody({super.key});
+
+  @override
+  State<ShowCurrentStoriesBlocBuilderBody> createState() =>
+      _ShowCurrentStoriesBlocBuilderBodyState();
+}
+
+class _ShowCurrentStoriesBlocBuilderBodyState
+    extends State<ShowCurrentStoriesBlocBuilderBody> {
+  @override
+  void initState() {
+    super.initState();
+    getCurrentStories();
+  }
+
+  void getCurrentStories() {
+    BlocProvider.of<GetCurrentStoriesCubit>(context).getCurrentStories();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomAppPadding(
+      child: BlocBuilder<GetCurrentStoriesCubit, GetCurrentStoriesState>(
+        builder: (context, state) {
+          if (state is GetCurrentStoriesLoadingState) {
+            return CustomLoadingBodyWidget();
+          } else if (state is GetCurrentStoriesFailureState) {
+            return CustomErrorBodyWidget(
+              errorMessage: state.message,
+              onRetry: getCurrentStories,
+            );
+          } else if (state is GetCurrentStoriesLoadedState) {
+            return ShowCurrentStoriesBody();
+          }
+          //  else if (state is GetCurrentStoriesEmptyState) {
+          //   return const CustomEmptyStateBody(
+          //     title: "No users found",
+          //     icon: Icons.person_search,
+          //   );
+          // }
+          return SizedBox();
+        },
+      ),
     );
   }
 }
@@ -30,183 +105,106 @@ class ShowCurrentStoriesBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          const VerticalGap(100),
-          CustomContactStory(
-            userName: "oraby",
-            storyTimeAgo: "3 min ago",
-            imageUrl:
-                "https://th.bing.com/th/id/OIP.9I78FXC8CudGMDllr7iF2QHaKv?w=134&h=195&c=7&r=0&o=5&cb=iwc2&dpr=1.3&pid=1.7",
-          ),
-        ],
+    return SingleChildScrollView(
+      child: CustomAppPadding(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Updates",
+              style: AppTextStyles.poppinsBold(context, 48),
+            ),
+            const VerticalGap(24),
+
+            CustomUserStoryItem(
+              userName: "oraby",
+              storyTimeAgo: "3 min ago",
+              imageUrl:
+                  "https://th.bing.com/th/id/OIP.9I78FXC8CudGMDllr7iF2QHaKv?w=134&h=195&c=7&r=0&o=5&cb=iwc2&dpr=1.3&pid=1.7",
+              totalStoriesNumber: 6,
+              viewedStoriesNumber: 2,
+              showTopDivider: false,
+              showBottomDivider: false,
+            ),
+            //? add my status here
+            const VerticalGap(24),
+            Text(
+              "Recent updates",
+              style: AppTextStyles.poppinsMedium(context, 18).copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            const VerticalGap(24),
+
+            CustomUserStoryItem(
+              userName: "oraby",
+              storyTimeAgo: "3 min ago",
+              imageUrl:
+                  "https://th.bing.com/th/id/OIP.9I78FXC8CudGMDllr7iF2QHaKv?w=134&h=195&c=7&r=0&o=5&cb=iwc2&dpr=1.3&pid=1.7",
+              totalStoriesNumber: 4,
+              viewedStoriesNumber: 2,
+              showTopDivider: false,
+            ),
+            CustomUserStoryItem(
+              userName: "oraby",
+              storyTimeAgo: "3 min ago",
+              imageUrl:
+                  "https://th.bing.com/th/id/OIP.9I78FXC8CudGMDllr7iF2QHaKv?w=134&h=195&c=7&r=0&o=5&cb=iwc2&dpr=1.3&pid=1.7",
+              totalStoriesNumber: 7,
+              viewedStoriesNumber: 2,
+              showBottomDivider: false,
+              showTopDivider: false,
+            ),
+            const VerticalGap(24),
+            Text(
+              "Viewed updates",
+              style: AppTextStyles.poppinsMedium(context, 18).copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            const VerticalGap(24),
+
+            CustomUserStoryItem(
+              userName: "oraby",
+              storyTimeAgo: "3 min ago",
+              imageUrl:
+                  "https://th.bing.com/th/id/OIP.9I78FXC8CudGMDllr7iF2QHaKv?w=134&h=195&c=7&r=0&o=5&cb=iwc2&dpr=1.3&pid=1.7",
+              totalStoriesNumber: 4,
+              viewedStoriesNumber: 2,
+              showTopDivider: false,
+            ),
+            CustomUserStoryItem(
+              userName: "oraby",
+              storyTimeAgo: "3 min ago",
+              imageUrl:
+                  "https://th.bing.com/th/id/OIP.9I78FXC8CudGMDllr7iF2QHaKv?w=134&h=195&c=7&r=0&o=5&cb=iwc2&dpr=1.3&pid=1.7",
+              totalStoriesNumber: 7,
+              viewedStoriesNumber: 2,
+              showTopDivider: false,
+            ),
+            CustomUserStoryItem(
+              userName: "oraby",
+              storyTimeAgo: "3 min ago",
+              imageUrl:
+                  "https://th.bing.com/th/id/OIP.9I78FXC8CudGMDllr7iF2QHaKv?w=134&h=195&c=7&r=0&o=5&cb=iwc2&dpr=1.3&pid=1.7",
+              totalStoriesNumber: 7,
+              viewedStoriesNumber: 2,
+              showTopDivider: false,
+            ),
+            CustomUserStoryItem(
+              userName: "oraby",
+              storyTimeAgo: "3 min ago",
+              imageUrl:
+                  "https://th.bing.com/th/id/OIP.9I78FXC8CudGMDllr7iF2QHaKv?w=134&h=195&c=7&r=0&o=5&cb=iwc2&dpr=1.3&pid=1.7",
+              totalStoriesNumber: 7,
+              viewedStoriesNumber: 2,
+              showTopDivider: false,
+              showBottomDivider: false,
+            ),
+            const VerticalGap(24),
+          ],
+        ),
       ),
     );
   }
-}
-
-class CustomContactStory extends StatelessWidget {
-  const CustomContactStory({
-    super.key,
-    required this.userName,
-    required this.storyTimeAgo,
-    this.imageUrl,
-    this.showTopDivider = true,
-    this.showBottomDivider = true,
-  });
-
-  final String userName;
-  final String storyTimeAgo;
-  final String? imageUrl;
-  final bool showTopDivider;
-  final bool showBottomDivider;
-
-  @override
-  Widget build(BuildContext context) {
-    final double avatarSize = 80;
-    final double horizontalSpacing = 16;
-
-    // This left padding aligns the Divider with the start of the text,
-    // which comes after the avatar and the horizontal spacing.
-    final double dividerLeftPadding = avatarSize + horizontalSpacing;
-
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        children: [
-          if (showTopDivider)
-            Padding(
-              padding: EdgeInsets.only(left: dividerLeftPadding),
-              child: const Divider(),
-            ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              StoryRing(
-                segments: 5,
-                size: avatarSize,
-                imageUrl: imageUrl,
-                viewedSegments: 1,
-              ),
-              HorizontalGap(horizontalSpacing),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userName,
-                      style: AppTextStyles.poppinsBold(context, 22),
-                    ),
-                    const VerticalGap(4),
-                    Text(
-                      storyTimeAgo,
-                      style: AppTextStyles.poppinsRegular(context, 16).copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          if (showBottomDivider)
-            Padding(
-              padding: EdgeInsets.only(left: dividerLeftPadding),
-              child: const Divider(),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class StoryRing extends StatelessWidget {
-  final int segments;
-  final int viewedSegments;
-  final double size;
-  final String? imageUrl;
-
-  const StoryRing({
-    super.key,
-    required this.segments,
-    this.viewedSegments = 0,
-    required this.size,
-    this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    const strokeWidth = 4.0;
-
-    return SizedBox(
-      width: size,
-      height: size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CustomPaint(
-            size: Size(size, size),
-            painter: _StoryRingPainter(
-              segments: segments,
-              viewedSegments: viewedSegments,
-              strokeWidth: strokeWidth,
-            ),
-          ),
-          ClipOval(
-            child: SizedBox(
-              width: size - strokeWidth * 2,
-              height: size - strokeWidth * 2,
-              child: BuildUserProfileImage(
-                circleAvatarRadius: size - strokeWidth * 2,
-                profilePicUrl: imageUrl,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StoryRingPainter extends CustomPainter {
-  final int segments;
-  final int viewedSegments;
-  final double strokeWidth;
-
-  _StoryRingPainter({
-    required this.segments,
-    required this.viewedSegments,
-    required this.strokeWidth,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2 - strokeWidth / 2;
-    final gapSize = 2 * pi / 60;
-    final segmentAngle = (2 * pi / segments) - gapSize;
-
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
-
-    for (int i = 0; i < segments; i++) {
-      final startAngle = i * (2 * pi / segments);
-      paint.color = i < viewedSegments ? Colors.grey[400]! : AppColors.primary;
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: radius),
-        startAngle,
-        segmentAngle,
-        false,
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _StoryRingPainter oldDelegate) =>
-      oldDelegate.segments != segments ||
-      oldDelegate.viewedSegments != viewedSegments ||
-      oldDelegate.strokeWidth != strokeWidth;
 }

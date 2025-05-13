@@ -74,10 +74,29 @@ class StoriesRepoImpl extends StoriesRepo {
       getUserContactsStory() async {
     try {
       final result = await apiConsumer.get(
-        EndPoints.getCurrentUserStory,
+        EndPoints.getUserContactsStory,
       );
 
-      UserContactsStoryEntity userContactsStoryEntity = UserContactsStoryModel.fromJson(result);
+      if (result["viewedContacts"] != null) {
+        for (var contact in result["viewedContacts"]) {
+          for (var status in contact["statuses"]) {
+            status.remove("views");
+            status.remove("reacts");
+          }
+        }
+      }
+
+      if (result["unviewedContacts"] != null) {
+        for (var contact in result["unviewedContacts"]) {
+          for (var status in contact["statuses"]) {
+            status.remove("views");
+            status.remove("reacts");
+          }
+        }
+      }
+
+      UserContactsStoryEntity userContactsStoryEntity =
+          UserContactsStoryModel.fromJson(result);
 
       return Right(userContactsStoryEntity);
     } on UnAuthorizedException {

@@ -3,23 +3,25 @@ import 'package:whatsapp/features/stories/domain/entities/view_story_entity.dart
 
 class StoryEntity {
   final int id;
-  final String content;
+  final String? content;
   final String? mediaUrl;
   final bool isActive;
   final DateTime expiredAt;
   final DateTime createdAt;
   final bool? isViewed;
+  final bool? isReacted;
   final List<ViewStoryEntity>? views;
   final List<ReactStoryEntity>? reacts;
 
   const StoryEntity({
     required this.id,
-    required this.content,
+    this.content,
     required this.mediaUrl,
     required this.isActive,
     required this.expiredAt,
     required this.createdAt,
     this.isViewed,
+    this.isReacted,
     this.views,
     this.reacts,
   });

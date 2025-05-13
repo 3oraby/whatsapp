@@ -1,3 +1,4 @@
+import 'package:whatsapp/core/api/api_keys.dart';
 import 'package:whatsapp/features/stories/data/models/contact_story_model.dart';
 import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.dart';
 import 'package:whatsapp/features/stories/domain/entities/user_contacts_story_entity.dart';
@@ -10,19 +11,19 @@ class UserContactsStoryModel extends UserContactsStoryEntity {
 
   factory UserContactsStoryModel.fromJson(Map<String, dynamic> json) =>
       UserContactsStoryModel(
-        viewedContacts: (json['viewedContacts'] as List)
+        viewedContacts: (json[ApiKeys.viewedContacts] as List)
             .map((e) => ContactStoryModel.fromJson(e))
             .toList(),
-        unViewedContacts: (json['unviewedContacts'] as List)
+        unViewedContacts: (json[ApiKeys.unviewedContacts] as List)
             .map((e) => ContactStoryModel.fromJson(e))
             .toList(),
       );
 
   Map<String, dynamic> toJson() => {
-        'viewedContacts': viewedContacts
+        ApiKeys.viewedContacts: viewedContacts
             .map((e) => (e as ContactStoryModel).toJson())
             .toList(),
-        'unviewedContacts': unViewedContacts
+        ApiKeys.unviewedContacts: unViewedContacts
             .map((e) => (e as ContactStoryModel).toJson())
             .toList(),
       };
