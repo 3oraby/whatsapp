@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
-import 'package:whatsapp/core/utils/app_themes.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
@@ -53,46 +52,48 @@ class CustomContactStory extends StatelessWidget {
     required this.userName,
     required this.storyTimeAgo,
     this.imageUrl,
-    this.showFirstDivider = true,
-    this.showLastDivider = true,
+    this.showTopDivider = true,
+    this.showBottomDivider = true,
   });
 
   final String userName;
   final String storyTimeAgo;
   final String? imageUrl;
-  final bool showFirstDivider;
-  final bool showLastDivider;
+  final bool showTopDivider;
+  final bool showBottomDivider;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final double avatarSize = 80;
+    final double horizontalSpacing = 16;
+
+    // This left padding aligns the Divider with the start of the text,
+    // which comes after the avatar and the horizontal spacing.
+    final double dividerLeftPadding = avatarSize + horizontalSpacing;
+
+    return SizedBox(
       width: double.infinity,
       child: Column(
         children: [
-          Visibility(
-            visible: showFirstDivider,
-            child: const Divider(),
-          ),
+          if (showTopDivider)
+            Padding(
+              padding: EdgeInsets.only(left: dividerLeftPadding),
+              child: const Divider(),
+            ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               StoryRing(
                 segments: 5,
-                size: 80,
+                size: avatarSize,
                 imageUrl: imageUrl,
                 viewedSegments: 1,
               ),
-              const HorizontalGap(16),
+              HorizontalGap(horizontalSpacing),
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Visibility(
-                      visible: showFirstDivider,
-                      child: const Divider(),
-                    ),
                     Text(
                       userName,
                       style: AppTextStyles.poppinsBold(context, 22),
@@ -104,22 +105,16 @@ class CustomContactStory extends StatelessWidget {
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
-                    Visibility(
-                      visible: showLastDivider,
-                      child: const Divider(),
-                    ),
                   ],
                 ),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 80 + 16),
-            child: Visibility(
-              visible: showLastDivider,
+          if (showBottomDivider)
+            Padding(
+              padding: EdgeInsets.only(left: dividerLeftPadding),
               child: const Divider(),
             ),
-          ),
         ],
       ),
     );
