@@ -25,7 +25,10 @@ class AppThemes {
           bodyMedium: AppTextStyles.poppinsRegular(context, 16)
               .copyWith(color: AppColors.textSecondaryLight),
         ),
-        dividerColor: AppColors.dividerLight,
+        dividerTheme: DividerThemeData(
+          thickness: 1,
+          color: AppColors.dividerLight,
+        ),
         iconTheme: const IconThemeData(
           color: AppColors.iconLight,
         ),
@@ -112,7 +115,10 @@ class AppThemes {
           bodyMedium: AppTextStyles.poppinsRegular(context, 16)
               .copyWith(color: AppColors.textSecondaryDark),
         ),
-        dividerColor: AppColors.dividerDark,
+        dividerTheme: DividerThemeData(
+          thickness: 1,
+          color: AppColors.dividerDark,
+        ),
         iconTheme: const IconThemeData(color: AppColors.iconDark),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(

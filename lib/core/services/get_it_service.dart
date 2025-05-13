@@ -23,9 +23,9 @@ Future<void> setupGetIt() async {
   getIt.registerSingleton<Connectivity>(Connectivity());
 
   // cookies
-  Directory tempDir = await getTemporaryDirectory();
+  Directory appDocDir = await getApplicationDocumentsDirectory();
 
-  final tempPath = tempDir.path;
+  final tempPath = appDocDir.path;
   final cookieJar = PersistCookieJar(
     ignoreExpires: true,
     storage: FileStorage(tempPath),

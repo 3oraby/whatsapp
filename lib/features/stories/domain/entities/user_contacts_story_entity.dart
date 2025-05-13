@@ -8,4 +8,11 @@ class UserContactsStoryEntity {
     required this.viewedContacts,
     required this.unViewedContacts,
   });
+
+  factory UserContactsStoryEntity.empty() {
+    return UserContactsStoryEntity(
+      unViewedContacts: [],
+      viewedContacts: [],
+    );
+  }
 }

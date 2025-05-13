@@ -9,4 +9,7 @@ class ApiKeys {
   static const String contacts = "contacts";
   static const String isContact = "is_contact";
   static const String newStory = "newStory";
+  static const String data = "data";
+  static const String viewedContacts = "viewedContacts";
+  static const String unviewedContacts = "unviewedContacts";
 }
