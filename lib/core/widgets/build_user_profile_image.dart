@@ -27,19 +27,30 @@ class BuildUserProfileImage extends StatelessWidget {
                 width: circleAvatarRadius * 2,
                 height: circleAvatarRadius * 2,
                 errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    Icons.person_2,
-                    color: Theme.of(context).colorScheme.secondary,
-                    size: circleAvatarRadius * 1.5,
-                  );
+                  return CustomPersonIcon(
+                      circleAvatarRadius: circleAvatarRadius);
                 },
               )
-            : Icon(
-                Icons.person_2,
-                color: Theme.of(context).colorScheme.secondary,
-                size: circleAvatarRadius * 1.5,
-              ),
+            : CustomPersonIcon(circleAvatarRadius: circleAvatarRadius),
       ),
+    );
+  }
+}
+
+class CustomPersonIcon extends StatelessWidget {
+  const CustomPersonIcon({
+    super.key,
+    required this.circleAvatarRadius,
+  });
+
+  final double circleAvatarRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.person_2,
+      color: Theme.of(context).colorScheme.secondary,
+      size: circleAvatarRadius * 1.5,
     );
   }
 }

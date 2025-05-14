@@ -34,16 +34,14 @@ class CustomStoryRing extends StatelessWidget {
               strokeWidth: strokeWidth,
             ),
           ),
-          ClipOval(
-            child: Padding(
-              padding: const EdgeInsets.all(6),
-              child: SizedBox(
-                width: size - strokeWidth * 2,
-                height: size - strokeWidth * 2,
-                child: BuildUserProfileImage(
-                  circleAvatarRadius: size - strokeWidth * 2,
-                  profilePicUrl: imageUrl,
-                ),
+          Padding(
+            padding: const EdgeInsets.all(6),
+            child: SizedBox(
+              width: size - strokeWidth * 2,
+              height: size - strokeWidth * 2,
+              child: BuildUserProfileImage(
+                circleAvatarRadius: (size - strokeWidth * 2) / 2,
+                profilePicUrl: imageUrl,
               ),
             ),
           ),
