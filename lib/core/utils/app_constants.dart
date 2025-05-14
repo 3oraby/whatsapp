@@ -14,8 +14,9 @@ class AppConstants {
   static const int snackBarDuration = 3;
   static const int splashScreenDuration = 3;
   static const double strokeWidth = 4.0;
-  static const double storyItemAvatarSize = 80;
+  static const double storyItemAvatarSize = 60;
   static const double storyItemHorizontalPadding = 16;
+  static const double myStoryItemAddIconSize = 28;
 
   static List<BottomNavigationBarItemEntity> bottomNavigationBarItems(
           {required BuildContext context}) =>
