@@ -61,11 +61,12 @@ class CustomUserStoryItem extends StatelessWidget {
               ),
             ],
           ),
-          if (showBottomDivider)
-            Padding(
-              padding: EdgeInsets.only(left: dividerLeftPadding),
-              child: const Divider(),
-            ),
+          showBottomDivider
+              ? Padding(
+                  padding: EdgeInsets.only(left: dividerLeftPadding),
+                  child: const Divider(),
+                )
+              : const VerticalGap(8),
         ],
       ),
     );

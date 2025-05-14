@@ -32,7 +32,7 @@ class ShowCurrentStoriesBody extends StatelessWidget {
             MyStoryItem(
               contactStoryEntity: currentUserContactStoryEntity,
             ),
-            const VerticalGap(24),
+            const VerticalGap(32),
             Text(
               "Recent updates",
               style: AppTextStyles.poppinsMedium(context, 18).copyWith(

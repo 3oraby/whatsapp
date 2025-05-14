@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/custom_user_story_item.dart';
@@ -16,8 +15,10 @@ class ShowContactsStoriesList extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: stories.length,
-      itemBuilder: (context, index) =>
-          CustomUserStoryItem(contactStoryEntity: stories[index]),
+      itemBuilder: (context, index) => CustomUserStoryItem(
+        contactStoryEntity: stories[index],
+        showBottomDivider: index != stories.length - 1,
+      ),
     );
   }
 }
