@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
+import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
@@ -18,8 +19,8 @@ class CustomUserStoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double avatarSize = 80;
-    final double horizontalSpacing = 16;
+    final double avatarSize = AppConstants.storyItemAvatarSize;
+    final double horizontalSpacing = AppConstants.storyItemHorizontalPadding;
 
     // This left padding aligns the Divider with the start of the text,
     // which comes after the avatar and the horizontal spacing

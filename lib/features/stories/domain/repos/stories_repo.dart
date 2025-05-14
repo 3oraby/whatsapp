@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:whatsapp/core/errors/failures.dart';
+import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.dart';
 import 'package:whatsapp/features/stories/domain/entities/story_entity.dart';
 import 'package:whatsapp/features/stories/domain/entities/user_contacts_story_entity.dart';
 
@@ -10,5 +11,5 @@ abstract class StoriesRepo {
 
   Future<Either<Failure, UserContactsStoryEntity>> getUserContactsStory();
 
-  Future<Either<Failure, List<StoryEntity>>> getCurrentUserStory();
+  Future<Either<Failure, ContactStoryEntity>> getCurrentUserStory();
 }

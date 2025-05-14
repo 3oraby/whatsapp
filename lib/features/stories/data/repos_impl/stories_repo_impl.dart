@@ -6,11 +6,15 @@ import 'package:whatsapp/core/api/api_keys.dart';
 import 'package:whatsapp/core/api/end_points.dart';
 import 'package:whatsapp/core/errors/exceptions.dart';
 import 'package:whatsapp/core/errors/failures.dart';
+import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
+import 'package:whatsapp/features/stories/data/models/contact_story_model.dart';
 import 'package:whatsapp/features/stories/data/models/story_model.dart';
 import 'package:whatsapp/features/stories/data/models/user_contact_story_model.dart';
+import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.dart';
 import 'package:whatsapp/features/stories/domain/entities/story_entity.dart';
 import 'package:whatsapp/features/stories/domain/entities/user_contacts_story_entity.dart';
 import 'package:whatsapp/features/stories/domain/repos/stories_repo.dart';
+import 'package:whatsapp/features/user/domain/user_entity.dart';
 
 class StoriesRepoImpl extends StoriesRepo {
   final ApiConsumer apiConsumer;
@@ -42,22 +46,25 @@ class StoriesRepoImpl extends StoriesRepo {
   }
 
   @override
-  Future<Either<Failure, List<StoryEntity>>> getCurrentUserStory() async {
+  Future<Either<Failure, ContactStoryEntity>> getCurrentUserStory() async {
     try {
       final result = await apiConsumer.get(
         EndPoints.getCurrentUserStory,
       );
 
-      List<StoryEntity> stories = [];
-      final List data = result[ApiKeys.data];
+      final UserEntity currentUser = getCurrentUserEntity();
 
-      data.map(
-        (story) => stories.add(
-          StoryModel.fromJson(story).toEntity(),
-        ),
-      );
+      final Map<String, dynamic> json = {
+        'id': currentUser.id,
+        'name': currentUser.name,
+        'profile_image': currentUser.profileImage,
+        'statuses': result['data'],
+      };
 
-      return Right(stories);
+      final ContactStoryEntity contactStoryEntity =
+          ContactStoryModel.fromJson(json);
+
+      return Right(contactStoryEntity);
     } on UnAuthorizedException {
       log("throw unAuthorizedException in story repo");
       return Left(UnAuthorizedException());

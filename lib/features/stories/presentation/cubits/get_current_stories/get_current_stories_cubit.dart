@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
 import 'package:whatsapp/core/errors/failures.dart';
-import 'package:whatsapp/features/stories/domain/entities/story_entity.dart';
+import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.dart';
 import 'package:whatsapp/features/stories/domain/entities/user_contacts_story_entity.dart';
 import 'package:whatsapp/features/stories/domain/repos/stories_repo.dart';
 
@@ -23,7 +23,7 @@ class GetCurrentStoriesCubit extends BaseCubit<GetCurrentStoriesState> {
       ]);
 
       final userStoriesResult =
-          results[0] as Either<Failure, List<StoryEntity>>;
+          results[0] as Either<Failure, ContactStoryEntity>;
       final contactsStoriesResult =
           results[1] as Either<Failure, UserContactsStoryEntity>;
 
@@ -41,12 +41,13 @@ class GetCurrentStoriesCubit extends BaseCubit<GetCurrentStoriesState> {
         return;
       }
 
-      final currentUserStories = userStoriesResult.getOrElse(() => []);
+      final currentUserContactStoryEntity =
+          userStoriesResult.getOrElse(() => ContactStoryEntity.empty());
       final contactsStories = contactsStoriesResult
           .getOrElse(() => UserContactsStoryEntity.empty());
 
       emit(GetCurrentStoriesLoadedState(
-        currentUserStories: currentUserStories,
+        currentUserContactStoryEntity: currentUserContactStoryEntity,
         userContactsStories: contactsStories,
       ));
     } catch (e) {

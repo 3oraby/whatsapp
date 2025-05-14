@@ -9,8 +9,8 @@ class ContactStoryEntity {
   ContactStoryEntity({
     required this.contactId,
     required this.name,
-    required this.profileImage,
     required this.stories,
+    this.profileImage,
   });
 
   int get totalStoriesCount => stories.length;
@@ -20,4 +20,15 @@ class ContactStoryEntity {
 
   int get unviewedStoriesCount =>
       stories.where((story) => story.isViewed == false).length;
+
+  factory ContactStoryEntity.empty() {
+    return ContactStoryEntity(
+      contactId: -1,
+      name: "",
+      stories: [],
+    );
+  }
+
+  bool get isEmpty => stories.isEmpty && contactId == -1;
+  bool get isNotEmpty => !isEmpty;
 }

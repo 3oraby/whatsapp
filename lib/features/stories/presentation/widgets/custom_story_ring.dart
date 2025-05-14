@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/story_ring_painter.dart';
 
@@ -18,8 +19,6 @@ class CustomStoryRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const strokeWidth = 4.0;
-
     return SizedBox(
       width: size,
       height: size,
@@ -31,16 +30,16 @@ class CustomStoryRing extends StatelessWidget {
             painter: StoryRingPainter(
               segments: segments,
               viewedSegments: viewedSegments,
-              strokeWidth: strokeWidth,
+              strokeWidth: AppConstants.strokeWidth,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(6),
             child: SizedBox(
-              width: size - strokeWidth * 2,
-              height: size - strokeWidth * 2,
+              width: size - AppConstants.strokeWidth * 2,
+              height: size - AppConstants.strokeWidth * 2,
               child: BuildUserProfileImage(
-                circleAvatarRadius: (size - strokeWidth * 2) / 2,
+                circleAvatarRadius: (size - AppConstants.strokeWidth * 2) / 2,
                 profilePicUrl: imageUrl,
               ),
             ),

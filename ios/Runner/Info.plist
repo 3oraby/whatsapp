@@ -50,6 +50,8 @@
 			<string>en</string>
 			<string>nb</string>
 		</array>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>In order to access your photo library</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>

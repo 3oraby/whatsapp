@@ -5,6 +5,7 @@ enum StorageKeys {
   isArabic,
   userEmail,
   isLoggedIn,
+  currentUser,
 }
 
 extension StorageKeysExt on StorageKeys {
