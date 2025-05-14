@@ -12,4 +12,12 @@ class ContactStoryEntity {
     required this.profileImage,
     required this.stories,
   });
+
+  int get totalStoriesCount => stories.length;
+
+  int get viewedStoriesCount =>
+      stories.where((story) => story.isViewed == true).length;
+
+  int get unviewedStoriesCount =>
+      stories.where((story) => story.isViewed == false).length;
 }
