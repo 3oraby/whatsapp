@@ -4,6 +4,7 @@ import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/widgets/gallery_picker_page.dart';
 import 'package:whatsapp/features/stories/domain/repos/stories_repo.dart';
+import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/get_current_stories/get_current_stories_cubit.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/show_current_stories_bloc_builder_body.dart';
 
@@ -12,10 +13,19 @@ class StoriesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => GetCurrentStoriesCubit(
-        storiesRepo: getIt<StoriesRepo>(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => GetCurrentStoriesCubit(
+            storiesRepo: getIt<StoriesRepo>(),
+          ),
+        ),
+        BlocProvider(
+          create: (_) => CreateNewStoryCubit(
+            storiesRepo: getIt<StoriesRepo>(),
+          ),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,

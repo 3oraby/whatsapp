@@ -8,4 +8,6 @@ class Routes {
   static const String homeRoute = "/home";
   // contacts
   static const String addNewContactsRoute = "/addNewContacts";
+  // stories
+  static const String createNewStoryRoute = "/createNewStory";
 }

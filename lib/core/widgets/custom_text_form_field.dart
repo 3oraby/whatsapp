@@ -35,6 +35,10 @@ class CustomTextFormFieldWidget extends StatelessWidget {
     this.focusedBorderColor,
     this.focusedBorderWidth = 2,
     this.autofocus = false,
+    this.textAlign = TextAlign.start,
+    this.cursorColor,
+    this.cursorHeight,
+    this.scrollController,
   });
 
   final String? labelText;
@@ -52,6 +56,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
   final String? helperText;
   final String? errorText;
   final TextEditingController? controller;
+  final ScrollController? scrollController;
   final FocusNode? focusNode;
   final Color? fillColor;
   final Color? borderColor;
@@ -66,6 +71,9 @@ class CustomTextFormFieldWidget extends StatelessWidget {
   final Color? focusedBorderColor;
   final double focusedBorderWidth;
   final bool autofocus;
+  final TextAlign textAlign;
+  final double? cursorHeight;
+  final Color? cursorColor;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +82,9 @@ class CustomTextFormFieldWidget extends StatelessWidget {
       focusNode: focusNode,
       onChanged: onChanged,
       onSaved: onSaved,
+      scrollController: scrollController,
       validator: validator,
+      cursorHeight: 90,
       keyboardType: keyboardType,
       style: textStyle ?? AppTextStyles.poppinsBold(context, 16),
       inputFormatters: inputFormatters,
@@ -82,6 +92,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
       enabled: isEnabled,
       onTap: onTap,
       autofocus: autofocus,
+      textAlign: textAlign,
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: labelStyle ?? AppTextStyles.poppinsBold(context, 16),

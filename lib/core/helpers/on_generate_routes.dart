@@ -8,6 +8,7 @@ import 'package:whatsapp/features/auth/presentation/screens/signup_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/verify_otp_screen.dart';
 import 'package:whatsapp/features/contacts/presentation/screens/add_new_contacts_screen.dart';
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
+import 'package:whatsapp/features/stories/presentation/screens/create_new_story_screen.dart';
 
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
   log("Navigating to ${settings.name}");
@@ -37,6 +38,10 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
     case Routes.addNewContactsRoute:
       return MaterialPageRoute(
         builder: (context) => AddNewContactsScreen(),
+      );
+    case Routes.createNewStoryRoute:
+      return MaterialPageRoute(
+        builder: (context) => CreateNewStoryScreen(),
       );
     default:
       return MaterialPageRoute(

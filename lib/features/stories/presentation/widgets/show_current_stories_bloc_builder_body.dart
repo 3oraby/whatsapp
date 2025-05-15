@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/widgets/custom_app_padding.dart';
@@ -41,8 +39,6 @@ class _ShowCurrentStoriesBlocBuilderBodyState
               onRetry: getCurrentStories,
             );
           } else if (state is GetCurrentStoriesLoadedState) {
-            log(state.currentUserContactStoryEntity.name);
-            log(state.currentUserContactStoryEntity.stories.toString());
             return ShowCurrentStoriesBody(
               currentUserContactStoryEntity:
                   state.currentUserContactStoryEntity,

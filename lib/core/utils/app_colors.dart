@@ -5,6 +5,7 @@ class AppColors {
   static const Color success = Color(0xFF4CAF50);
   static const Color info = Color(0xFF2196F3);
   static const Color onlineStatus = Color(0xFF00FF00);
+  static const Color iconBackgroundColor = Color(0xFF345a99);
 
   // Light Mode Colors
   static const Color primary = Color(0xFF28a55d);
