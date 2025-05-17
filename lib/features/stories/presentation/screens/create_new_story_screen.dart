@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
+import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_app_padding.dart';
 import 'package:whatsapp/core/widgets/custom_background_icon.dart';
@@ -19,7 +20,7 @@ class CreateNewStoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[600],
+        backgroundColor: AppColors.createStoryBackgroundColor,
         surfaceTintColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
@@ -85,40 +86,45 @@ class _CreateNewStoryBodyState extends State<CreateNewStoryBody> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.grey[600],
-      child: CustomAppPadding(
-        child: Column(
-          children: [
-            Expanded(
-              child: Scrollbar(
-                controller: scrollController,
-                thumbVisibility: true,
-                trackVisibility: true,
-                interactive: true,
-                child: Center(
-                  child: CustomTextFormFieldWidget(
-                    controller: textEditingController,
-                    scrollController: scrollController,
-                    focusNode: focusNode,
-                    fillColor: Colors.transparent,
-                    borderWidth: 0,
-                    borderColor: Colors.transparent,
-                    focusedBorderColor: Colors.transparent,
-                    enabledBorderColor: Colors.transparent,
-                    maxLines: null,
-                    hintText: "Type a status",
-                    hintStyle: AppTextStyles.poppinsMedium(context, 32)
-                        .copyWith(color: Colors.grey[300]),
-                    textAlign: TextAlign.center,
-                    cursorHeight: 55,
-                    cursorColor: Colors.white,
-                    textStyle: AppTextStyles.poppinsMedium(context, 30)
-                        .copyWith(color: Colors.white),
-                  ),
+      child: Column(
+        children: [
+          Expanded(
+            child: Scrollbar(
+              controller: scrollController,
+              thumbVisibility: true,
+              trackVisibility: true,
+              interactive: true,
+              child: Center(
+                child: CustomTextFormFieldWidget(
+                  contentPadding: AppConstants.horizontalPadding,
+                  controller: textEditingController,
+                  scrollController: scrollController,
+                  focusNode: focusNode,
+                  fillColor: Colors.transparent,
+                  borderWidth: 0,
+                  borderColor: Colors.transparent,
+                  focusedBorderColor: Colors.transparent,
+                  enabledBorderColor: Colors.transparent,
+                  maxLines: null,
+                  hintText: "Type a status",
+                  hintStyle: AppTextStyles.poppinsMedium(context, 32)
+                      .copyWith(color: Colors.grey[300]),
+                  textAlign: TextAlign.center,
+                  cursorHeight: 55,
+                  cursorColor: Colors.white,
+                  textStyle: AppTextStyles.poppinsMedium(context, 30)
+                      .copyWith(color: Colors.white),
                 ),
               ),
             ),
-            AnimatedOpacity(
-              opacity: textEditingController.text.trim().isNotEmpty ? 1.0 : 0.0,
+          ),
+          const VerticalGap(24),
+          Container(
+            color: Colors.amber,
+            height: 140,
+            child: AnimatedOpacity(
+              opacity:
+                  textEditingController.text.trim().isNotEmpty ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 50),
               child: Column(
                 children: [
@@ -137,8 +143,8 @@ class _CreateNewStoryBodyState extends State<CreateNewStoryBody> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

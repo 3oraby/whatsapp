@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
@@ -7,6 +7,7 @@ import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
+import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
 
 class MyStoryAddPromptItem extends StatelessWidget {
   const MyStoryAddPromptItem({
@@ -22,7 +23,11 @@ class MyStoryAddPromptItem extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, Routes.createNewStoryRoute);
+        Navigator.pushNamed(
+          context,
+          Routes.createNewStoryRoute,
+          arguments: context.read<CreateNewStoryCubit>(),
+        );
       },
       child: SizedBox(
         width: double.infinity,
