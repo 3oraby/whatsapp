@@ -40,8 +40,8 @@ class _CreateStoryImagePreviewScreenState
     log("Sending story with text: $text");
     widget.createNewStoryCubit.createStoryRequestEntity.content = text;
     widget.createNewStoryCubit.createNewStory();
-    Navigator.of(context).pop();
-    Navigator.of(context).pop();
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   @override
@@ -52,7 +52,7 @@ class _CreateStoryImagePreviewScreenState
           showDiscardConfirmationDialog(
             context: context,
             onConfirm: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
           );
         }
@@ -67,7 +67,7 @@ class _CreateStoryImagePreviewScreenState
               showDiscardConfirmationDialog(
                 context: context,
                 onConfirm: () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               );
             },

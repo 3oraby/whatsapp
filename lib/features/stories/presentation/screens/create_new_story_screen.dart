@@ -75,6 +75,7 @@ class _CreateNewStoryBodyState extends State<CreateNewStoryBody>
     final text = textEditingController.text.trim();
     createNewStoryCubit.createStoryRequestEntity.content = text;
     createNewStoryCubit.createNewStory();
+    Navigator.pop(context);
   }
 
   void onImageSelected(AssetEntity image) async {

@@ -33,18 +33,17 @@ class _MyStoryItemState extends State<MyStoryItem> {
       listener: (context, state) {
         if (state is CreateNewStoryLoadedState) {
           setState(() {
-            currentUserStories.stories.add(state.storyEntity);
+            currentUserStories.stories.insert(0, state.storyEntity);
           });
-        }else if (state is CreateNewStoryFailureState){
+        } else if (state is CreateNewStoryFailureState) {
           showCustomSnackBar(context, state.message);
         }
       },
       child: widget.contactStoryEntity.stories.isEmpty
           ? MyStoryAddPromptItem(
-              currentUserProfileImage: widget.contactStoryEntity.profileImage,
+              currentUserProfileImage: currentUserStories.profileImage,
             )
-          : MyStoryWithStatusItem(
-              contactStoryEntity: widget.contactStoryEntity),
+          : MyStoryWithStatusItem(contactStoryEntity: currentUserStories),
     );
   }
 }

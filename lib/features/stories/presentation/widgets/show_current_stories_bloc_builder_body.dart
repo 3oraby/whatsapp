@@ -88,12 +88,6 @@ class _ShowCurrentStoriesBlocBuilderBodyState
                         state.userContactsStories.viewedContacts,
                   );
                 }
-                //  else if (state is GetCurrentStoriesEmptyState) {
-                //   return const CustomEmptyStateBody(
-                //     title: "No users found",
-                //     icon: Icons.person_search,
-                //   );
-                // }
                 return SizedBox();
               },
             ),
