@@ -84,7 +84,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
       onSaved: onSaved,
       scrollController: scrollController,
       validator: validator,
-      cursorHeight: 90,
+      cursorHeight: cursorHeight,
       keyboardType: keyboardType,
       style: textStyle ?? AppTextStyles.poppinsBold(context, 16),
       inputFormatters: inputFormatters,
@@ -102,7 +102,10 @@ class CustomTextFormFieldWidget extends StatelessWidget {
         errorText: errorText,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
-        contentPadding: EdgeInsets.all(contentPadding),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: contentPadding,
+          vertical: contentPadding / 2,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(

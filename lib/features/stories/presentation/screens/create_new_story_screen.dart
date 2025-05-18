@@ -10,6 +10,7 @@ import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_app_padding.dart';
 import 'package:whatsapp/core/widgets/custom_background_icon.dart';
 import 'package:whatsapp/core/widgets/custom_text_form_field.dart';
+import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/create_story_gallery_picker_tab.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
@@ -122,16 +123,7 @@ class _CreateNewStoryBodyState extends State<CreateNewStoryBody>
           AppBar(
             backgroundColor: AppColors.createStoryBackgroundColor,
             surfaceTintColor: Colors.transparent,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                Icons.cancel_rounded,
-                color: Colors.white,
-                size: 34,
-              ),
-            ),
+            leading: CustomCancelIconButton(),
           ),
           Expanded(
             child: TabBarView(
@@ -161,7 +153,7 @@ class _CreateNewStoryBodyState extends State<CreateNewStoryBody>
                       hintStyle: AppTextStyles.poppinsMedium(context, 32)
                           .copyWith(color: Colors.grey[300]),
                       textAlign: TextAlign.center,
-                      cursorHeight: 55,
+                      cursorHeight: 90,
                       cursorColor: Colors.white,
                       textStyle: AppTextStyles.poppinsMedium(context, 30)
                           .copyWith(color: Colors.white),
@@ -210,11 +202,8 @@ class _CreateNewStoryBodyState extends State<CreateNewStoryBody>
                         ? 1.0
                         : 0.0,
                     duration: const Duration(milliseconds: 100),
-                    child: CustomBackgroundIcon(
+                    child: CustomSendButton(
                       onTap: createStory,
-                      iconData: Icons.send,
-                      iconColor: Colors.white,
-                      backgroundColor: AppColors.primary,
                     ),
                   ),
                 ],
@@ -223,6 +212,44 @@ class _CreateNewStoryBodyState extends State<CreateNewStoryBody>
           ),
         ],
       ),
+    );
+  }
+}
+
+class CustomCancelIconButton extends StatelessWidget {
+  const CustomCancelIconButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      icon: const Icon(
+        Icons.cancel_rounded,
+        color: Colors.white,
+        size: 34,
+      ),
+    );
+  }
+}
+
+class CustomSendButton extends StatelessWidget {
+  const CustomSendButton({
+    super.key,
+    this.onTap,
+  });
+
+  final VoidCallback? onTap;
+  @override
+  Widget build(BuildContext context) {
+    return CustomBackgroundIcon(
+      onTap: onTap,
+      iconData: Icons.send,
+      iconColor: Colors.white,
+      backgroundColor: AppColors.primary,
     );
   }
 }
@@ -261,42 +288,55 @@ class _CreateStoryImagePreviewScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Preview Story'),
-        backgroundColor: Colors.black,
-        actions: [
-          IconButton(
-            onPressed: sendStory,
-            icon: const Icon(Icons.send),
-          ),
-        ],
-      ),
       backgroundColor: Colors.black,
-      body: Column(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: CustomCancelIconButton(),
+      ),
+      body: Stack(
+        clipBehavior: Clip.none,
         children: [
           if (widget.createNewStoryCubit.createStoryRequestEntity.imageFile !=
               null)
-            Expanded(
-              child: Center(
-                child: Image.file(
-                  widget
-                      .createNewStoryCubit.createStoryRequestEntity.imageFile!,
-                  fit: BoxFit.contain,
-                ),
+            Center(
+              child: Image.file(
+                widget.createNewStoryCubit.createStoryRequestEntity.imageFile!,
+                fit: BoxFit.contain,
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: textController,
-              maxLines: null,
-              style: const TextStyle(color: Colors.white, fontSize: 18),
-              decoration: const InputDecoration(
-                hintText: 'Add some text...',
-                hintStyle: TextStyle(color: Colors.white54),
-                filled: true,
-                fillColor: Colors.black54,
-                border: OutlineInputBorder(),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 30,
+            child: CustomAppPadding(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CustomTextFormFieldWidget(
+                      controller: textController,
+                      maxLines: null,
+                      textStyle:
+                          AppTextStyles.poppinsMedium(context, 18).copyWith(
+                        color: Colors.white,
+                      ),
+                      fillColor: Colors.black54,
+                      contentPadding: 16,
+                      hintText: 'Add a caption...',
+                      hintStyle:
+                          AppTextStyles.poppinsMedium(context, 18).copyWith(
+                        color: AppColors.textSecondaryDark,
+                      ),
+                      borderColor: Colors.grey,
+                      borderRadius: 40,
+                      borderWidth: 1,
+                    ),
+                  ),
+                  const HorizontalGap(18),
+                  CustomSendButton(
+                    onTap: sendStory,
+                  )
+                ],
               ),
             ),
           ),
