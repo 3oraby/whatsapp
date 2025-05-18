@@ -11,6 +11,7 @@ import 'package:whatsapp/features/contacts/presentation/screens/add_new_contacts
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
 import 'package:whatsapp/features/stories/presentation/screens/create_new_story_screen.dart';
+import 'package:whatsapp/features/stories/presentation/screens/create_story_image_preview_screen.dart';
 
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
   log("Navigating to ${settings.name}");

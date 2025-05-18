@@ -8,6 +8,7 @@ import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
+import 'package:whatsapp/features/stories/presentation/widgets/create_new_story_loading.dart';
 
 class MyStoryAddPromptItem extends StatelessWidget {
   const MyStoryAddPromptItem({
@@ -21,57 +22,62 @@ class MyStoryAddPromptItem extends StatelessWidget {
     final double avatarSize = AppConstants.storyItemAvatarSize;
     final double horizontalSpacing = AppConstants.storyItemHorizontalPadding;
 
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.createNewStoryRoute,
-          arguments: context.read<CreateNewStoryCubit>(),
-        );
-      },
-      child: SizedBox(
-        width: double.infinity,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                BuildUserProfileImage(
-                  circleAvatarRadius: avatarSize / 2,
-                  profilePicUrl: currentUserProfileImage,
-                ),
-                Positioned(
-                  right: -3,
-                  bottom: -3,
-                  child: Icon(
-                    Icons.add_circle,
-                    color: AppColors.primary,
-                    size: AppConstants.myStoryItemAddIconSize,
-                  ),
-                )
-              ],
-            ),
-            HorizontalGap(horizontalSpacing),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocBuilder<CreateNewStoryCubit, CreateNewStoryState>(
+      builder: (context, state) => InkWell(
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            Routes.createNewStoryRoute,
+            arguments: context.read<CreateNewStoryCubit>(),
+          );
+        },
+        child: SizedBox(
+          width: double.infinity,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
                 children: [
-                  Text(
-                    "My status",
-                    style: AppTextStyles.poppinsBold(context, 22),
+                  BuildUserProfileImage(
+                    circleAvatarRadius: avatarSize / 2,
+                    profilePicUrl: currentUserProfileImage,
                   ),
-                  const VerticalGap(4),
-                  Text(
-                    "Add to my status",
-                    style: AppTextStyles.poppinsRegular(context, 16).copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
+                  Positioned(
+                    right: -3,
+                    bottom: -3,
+                    child: Icon(
+                      Icons.add_circle,
+                      color: AppColors.primary,
+                      size: AppConstants.myStoryItemAddIconSize,
                     ),
-                  ),
+                  )
                 ],
               ),
-            ),
-          ],
+              HorizontalGap(horizontalSpacing),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "My status",
+                      style: AppTextStyles.poppinsBold(context, 22),
+                    ),
+                    const VerticalGap(4),
+                    state is CreateNewStoryLoadingState
+                        ? CreateNewStoryLoading()
+                        : Text(
+                            "Add to my status",
+                            style: AppTextStyles.poppinsRegular(context, 16)
+                                .copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
