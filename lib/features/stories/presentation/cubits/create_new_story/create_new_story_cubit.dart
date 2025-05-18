@@ -1,4 +1,6 @@
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
+import 'package:whatsapp/features/stories/data/models/create_story_request_model.dart';
+import 'package:whatsapp/features/stories/domain/entities/create_story_request_entity.dart';
 import 'package:whatsapp/features/stories/domain/entities/story_entity.dart';
 import 'package:whatsapp/features/stories/domain/repos/stories_repo.dart';
 
@@ -9,12 +11,15 @@ class CreateNewStoryCubit extends BaseCubit<CreateNewStoryState> {
       : super(CreateNewStoryInitial());
 
   final StoriesRepo storiesRepo;
+  CreateStoryRequestEntity createStoryRequestEntity =
+      CreateStoryRequestEntity();
 
-  Future<void> createNewStory({required Map<String, dynamic> data}) async {
+  Future<void> createNewStory() async {
     emit(CreateNewStoryLoadingState());
 
     final result = await storiesRepo.createNewStory(
-      data: data,
+      data:
+          CreateStoryRequestModel.fromEntity(createStoryRequestEntity).toJson(),
     );
 
     result.fold(

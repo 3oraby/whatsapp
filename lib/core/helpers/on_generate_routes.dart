@@ -50,6 +50,17 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
           child: CreateNewStoryScreen(),
         ),
       );
+    case Routes.createStoryImagePreviewRoute:
+      final CreateNewStoryCubit createNewStoryCubit =
+          settings.arguments as CreateNewStoryCubit;
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider.value(
+          value: createNewStoryCubit,
+          child: CreateStoryImagePreviewScreen(
+            createNewStoryCubit: createNewStoryCubit,
+          ),
+        ),
+      );
     default:
       return MaterialPageRoute(
         builder: (context) => const UndefinedRoutePage(),

@@ -1,11 +1,11 @@
 import 'dart:io';
 
 class CreateStoryRequestEntity {
-  final String content;
-  final File? imageFile;
+  String? content;
+  File? imageFile;
 
   CreateStoryRequestEntity({
-    required this.content,
+    this.content,
     this.imageFile,
   });
 }

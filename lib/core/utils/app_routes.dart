@@ -10,4 +10,5 @@ class Routes {
   static const String addNewContactsRoute = "/addNewContacts";
   // stories
   static const String createNewStoryRoute = "/createNewStory";
+  static const String createStoryImagePreviewRoute = "/createStoryImagePreviewScreen";
 }

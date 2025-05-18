@@ -2,7 +2,7 @@ import 'package:whatsapp/features/stories/domain/entities/create_story_request_e
 
 class CreateStoryRequestModel extends CreateStoryRequestEntity {
   CreateStoryRequestModel({
-    required super.content,
+    super.content,
     super.imageFile,
   });
 
