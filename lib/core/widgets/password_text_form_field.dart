@@ -72,7 +72,10 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
         hintText: widget.hintText ?? context.tr("Password"),
         hintStyle:
             widget.hintTextStyle ?? AppTextStyles.poppinsBold(context, 16),
-        contentPadding: EdgeInsets.all(widget.contentPadding),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: widget.contentPadding,
+          vertical: widget.contentPadding / 2,
+        ),
         suffixIcon: IconButton(
           icon: Icon(
             isObscure ? Icons.visibility : Icons.visibility_off,
