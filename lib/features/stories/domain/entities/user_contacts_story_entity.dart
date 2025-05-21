@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.dart';
 
 class UserContactsStoryEntity {
@@ -14,5 +16,27 @@ class UserContactsStoryEntity {
       unViewedContacts: [],
       viewedContacts: [],
     );
+  }
+
+  UserContactsStoryEntity copyWith({
+    List<ContactStoryEntity>? viewedContacts,
+    List<ContactStoryEntity>? unViewedContacts,
+  }) {
+    return UserContactsStoryEntity(
+      viewedContacts: viewedContacts ?? this.viewedContacts,
+      unViewedContacts: unViewedContacts ?? this.unViewedContacts,
+    );
+  }
+
+  List<ContactStoryEntity> getCurrentStoriesList(
+      {required ContactStoryEntity selectedContactStory}) {
+    if (viewedContacts.contains(selectedContactStory)) {
+      return viewedContacts;
+    } else if (unViewedContacts.contains(selectedContactStory)) {
+      return unViewedContacts;
+    } else {
+      log("can not get the story in viewed and unviewed");
+      return [];
+    }
   }
 }

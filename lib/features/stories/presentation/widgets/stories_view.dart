@@ -25,7 +25,6 @@ class StoriesView extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        
         body: ShowCurrentStoriesBlocBuilderBody(),
       ),
     );

@@ -10,8 +10,10 @@ import 'package:whatsapp/features/auth/presentation/screens/verify_otp_screen.da
 import 'package:whatsapp/features/contacts/presentation/screens/add_new_contacts_screen.dart';
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
+import 'package:whatsapp/features/stories/presentation/cubits/get_current_stories/get_current_stories_cubit.dart';
 import 'package:whatsapp/features/stories/presentation/screens/create_new_story_screen.dart';
 import 'package:whatsapp/features/stories/presentation/screens/create_story_image_preview_screen.dart';
+import 'package:whatsapp/features/stories/presentation/screens/user_stories_viewer_screen.dart';
 
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
   log("Navigating to ${settings.name}");
@@ -60,6 +62,15 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
           child: CreateStoryImagePreviewScreen(
             createNewStoryCubit: createNewStoryCubit,
           ),
+        ),
+      );
+    case Routes.userStoriesViewerRoute:
+      final GetCurrentStoriesCubit getCurrentStoriesCubit =
+          settings.arguments as GetCurrentStoriesCubit;
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider.value(
+          value: getCurrentStoriesCubit,
+          child: UserStoriesViewerScreen(),
         ),
       );
     default:

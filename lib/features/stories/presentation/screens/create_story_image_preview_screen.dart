@@ -2,11 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/helpers/show_discard_confirmation_dialog.dart';
-import 'package:whatsapp/core/utils/app_colors.dart';
-import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_app_padding.dart';
 import 'package:whatsapp/core/widgets/custom_cancel_icon_button.dart';
-import 'package:whatsapp/core/widgets/custom_text_form_field.dart';
+import 'package:whatsapp/core/widgets/custom_scrollable_text_field.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/custom_send_story_button.dart';
@@ -94,33 +92,10 @@ class _CreateStoryImagePreviewScreenState
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxHeight: 120,
-                        ),
-                        child: SingleChildScrollView(
-                          controller: textFieldScrollController,
-                          scrollDirection: Axis.vertical,
-                          reverse: true,
-                          child: CustomTextFormFieldWidget(
-                            controller: textController,
-                            maxLines: null,
-                            textStyle: AppTextStyles.poppinsMedium(context, 18)
-                                .copyWith(
-                              color: Colors.white,
-                            ),
-                            fillColor: Colors.black54,
-                            contentPadding: 16,
-                            hintText: 'Add a caption...',
-                            hintStyle: AppTextStyles.poppinsMedium(context, 18)
-                                .copyWith(
-                              color: AppColors.textSecondaryDark,
-                            ),
-                            borderColor: Colors.grey,
-                            borderRadius: 40,
-                            borderWidth: 1,
-                          ),
-                        ),
+                      child: CustomScrollableTextField(
+                        textFieldScrollController: textFieldScrollController,
+                        textController: textController,
+                        hintText: 'Add a caption...',
                       ),
                     ),
                     const HorizontalGap(18),

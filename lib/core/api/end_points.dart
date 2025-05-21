@@ -24,7 +24,7 @@ class EndPoints {
   static const String createStory = "status";
   static const String getCurrentUserStory = "status";
   static const String getUserContactsStory = "status/getUserCotactsStatus";
-  static String viewStory({required String storyId}) => "status/view/$storyId";
+  static String viewStory({required int storyId}) => "status/view/$storyId";
   static String deleteStory({required String storyId}) => "status/$storyId";
   static String reactStory({required String storyId}) =>
       "status/react/$storyId";

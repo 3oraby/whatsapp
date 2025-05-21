@@ -1,9 +1,7 @@
 import 'package:whatsapp/core/api/api_keys.dart';
 import 'package:whatsapp/features/stories/data/models/react_story_model.dart';
 import 'package:whatsapp/features/stories/data/models/view_story_model.dart';
-import 'package:whatsapp/features/stories/domain/entities/react_story_entity.dart';
 import 'package:whatsapp/features/stories/domain/entities/story_entity.dart';
-import 'package:whatsapp/features/stories/domain/entities/view_story_entity.dart';
 
 class StoryModel extends StoryEntity {
   const StoryModel({
@@ -73,30 +71,5 @@ class StoryModel extends StoryEntity {
         isReacted: isReacted,
         views: views,
         reacts: reacts,
-      );
-
-  StoryModel copyWith({
-    int? id,
-    String? content,
-    String? mediaUrl,
-    bool? isActive,
-    DateTime? expiredAt,
-    DateTime? createdAt,
-    bool? isViewed,
-    bool? isReacted,
-    List<ViewStoryEntity>? views,
-    List<ReactStoryEntity>? reacts,
-  }) =>
-      StoryModel(
-        id: id ?? this.id,
-        content: content ?? this.content,
-        mediaUrl: mediaUrl ?? this.mediaUrl,
-        isActive: isActive ?? this.isActive,
-        expiredAt: expiredAt ?? this.expiredAt,
-        createdAt: createdAt ?? this.createdAt,
-        isViewed: isViewed ?? this.isViewed,
-        isReacted: isReacted ?? this.isReacted,
-        views: views ?? this.views,
-        reacts: reacts ?? this.reacts,
       );
 }

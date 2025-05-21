@@ -109,32 +109,42 @@ class CustomTextFormFieldWidget extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
-            color: borderColor ??
-                Theme.of(context).inputDecorationTheme.border!.borderSide.color,
+            color: borderWidth == 0
+                ? Colors.transparent
+                : borderColor ??
+                    Theme.of(context)
+                        .inputDecorationTheme
+                        .border!
+                        .borderSide
+                        .color,
             width: borderWidth,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
-            color: focusedBorderColor ??
-                Theme.of(context)
-                    .inputDecorationTheme
-                    .focusedBorder!
-                    .borderSide
-                    .color,
+            color: focusedBorderWidth == 0
+                ? Colors.transparent
+                : focusedBorderColor ??
+                    Theme.of(context)
+                        .inputDecorationTheme
+                        .focusedBorder!
+                        .borderSide
+                        .color,
             width: focusedBorderWidth,
           ), // Focused border color
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
-            color: enabledBorderColor ??
-                Theme.of(context)
-                    .inputDecorationTheme
-                    .enabledBorder!
-                    .borderSide
-                    .color,
+            color: borderWidth == 0
+                ? Colors.transparent
+                : enabledBorderColor ??
+                    Theme.of(context)
+                        .inputDecorationTheme
+                        .enabledBorder!
+                        .borderSide
+                        .color,
             width: borderWidth,
           ),
         ),

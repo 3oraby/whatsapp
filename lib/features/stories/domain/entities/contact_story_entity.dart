@@ -31,4 +31,36 @@ class ContactStoryEntity {
 
   bool get isEmpty => stories.isEmpty && contactId == -1;
   bool get isNotEmpty => !isEmpty;
+
+  int get firstUnviewedStoryIndex {
+    int index = stories.indexWhere((story) => story.isViewed == false);
+    if (index == -1) {
+      return 0;
+    } else {
+      return index;
+    }
+  }
+
+  bool isStoryViewedAtIndex(int index) {
+    if (index < 0 || index >= stories.length) return false;
+    return stories[index].isViewed == true;
+  }
+
+  int getStoryIndexById(int storyId) {
+    return stories.indexWhere((story) => story.id == storyId);
+  }
+
+  ContactStoryEntity copyWith({
+    int? contactId,
+    String? name,
+    String? profileImage,
+    List<StoryEntity>? stories,
+  }) {
+    return ContactStoryEntity(
+      contactId: contactId ?? this.contactId,
+      name: name ?? this.name,
+      profileImage: profileImage ?? this.profileImage,
+      stories: stories ?? this.stories,
+    );
+  }
 }

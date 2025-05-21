@@ -25,4 +25,29 @@ class StoryEntity {
     this.views,
     this.reacts,
   });
+
+  StoryEntity copyWith({
+    int? id,
+    String? content,
+    String? mediaUrl,
+    bool? isActive,
+    DateTime? expiredAt,
+    DateTime? createdAt,
+    bool? isViewed,
+    bool? isReacted,
+    List<ViewStoryEntity>? views,
+    List<ReactStoryEntity>? reacts,
+  }) =>
+      StoryEntity(
+        id: id ?? this.id,
+        content: content ?? this.content,
+        mediaUrl: mediaUrl ?? this.mediaUrl,
+        isActive: isActive ?? this.isActive,
+        expiredAt: expiredAt ?? this.expiredAt,
+        createdAt: createdAt ?? this.createdAt,
+        isViewed: isViewed ?? this.isViewed,
+        isReacted: isReacted ?? this.isReacted,
+        views: views ?? this.views,
+        reacts: reacts ?? this.reacts,
+      );
 }

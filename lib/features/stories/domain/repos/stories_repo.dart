@@ -12,4 +12,8 @@ abstract class StoriesRepo {
   Future<Either<Failure, UserContactsStoryEntity>> getUserContactsStory();
 
   Future<Either<Failure, ContactStoryEntity>> getCurrentUserStory();
+
+  Future<Either<Failure, void>> viewStory({required int storyId});
+
+  // Future<Either<Failure, void>> reactStory();
 }

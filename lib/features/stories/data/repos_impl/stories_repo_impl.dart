@@ -116,4 +116,23 @@ class StoriesRepoImpl extends StoriesRepo {
           message: "Something went wrong. Please try again later."));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> viewStory({required int storyId}) async {
+    try {
+      await apiConsumer.post(
+        EndPoints.viewStory(storyId: storyId),
+      );
+
+      return Right(null);
+    } on UnAuthorizedException {
+      log("throw unAuthorizedException in story repo");
+      return Left(UnAuthorizedException());
+    } on ConnectionException catch (e) {
+      return Left(CustomException(message: e.message));
+    } on ServerException {
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    }
+  }
 }

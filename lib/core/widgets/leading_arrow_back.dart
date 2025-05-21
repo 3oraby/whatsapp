@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class LeadingArrowBack extends StatelessWidget {
   const LeadingArrowBack({
     super.key,
+    this.color,
   });
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,10 @@ class LeadingArrowBack extends StatelessWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      icon: Icon(Icons.arrow_back_ios),
+      icon: Icon(
+        Icons.arrow_back_ios,
+        color: color,
+      ),
     );
   }
 }

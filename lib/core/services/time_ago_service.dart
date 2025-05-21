@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class TimeAgoService {
   static String getTimeAgo(DateTime dateTime) {
     final now = DateTime.now();
@@ -24,4 +26,23 @@ class TimeAgoService {
   }
 
   static String _plural(int value) => value == 1 ? '' : 's';
+
+  static String formatTimeForDisplay(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return 'just now';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minute${difference.inMinutes == 1 ? '' : 's'} ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hour${difference.inHours == 1 ? '' : 's'} ago';
+    } else if (difference.inDays == 1) {
+      return 'yesterday, ${DateFormat.jm().format(dateTime)}';
+    } else if (difference.inDays < 7) {
+      return '${DateFormat.EEEE().format(dateTime)}, ${DateFormat.jm().format(dateTime)}';
+    } else {
+      return '${DateFormat.MMMd().format(dateTime)}, ${DateFormat.jm().format(dateTime)}';
+    }
+  }
 }
