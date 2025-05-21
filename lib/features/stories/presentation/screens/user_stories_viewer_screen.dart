@@ -11,8 +11,6 @@ import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/leading_arrow_back.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.dart';
-import 'package:whatsapp/features/stories/domain/entities/story_entity.dart';
-import 'package:whatsapp/features/stories/domain/entities/user_contacts_story_entity.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/get_current_stories/get_current_stories_cubit.dart';
 
 class UserStoriesViewerScreen extends StatefulWidget {
@@ -30,13 +28,127 @@ class UserStoriesViewerScreen extends StatefulWidget {
 
 class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
     with SingleTickerProviderStateMixin {
+  late PageController _outerPageController;
+  late int initialIndex;
+  late GetCurrentStoriesCubit getCurrentStoriesCubit;
+  late List<ContactStoryEntity?> contactsStories;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getCurrentStoriesCubit = BlocProvider.of<GetCurrentStoriesCubit>(context);
+
+    if (widget.showCurrentUserStories) {
+      initialIndex = 0;
+      contactsStories = [getCurrentStoriesCubit.currentUserContactStoryEntity];
+    } else {
+      final userContactsStories = getCurrentStoriesCubit.userContactsStories;
+      initialIndex = getCurrentStoriesCubit
+          .selectedContactStoryEntity.firstUnviewedStoryIndex;
+      contactsStories = userContactsStories.getCurrentStoriesList(
+        selectedContactStory: getCurrentStoriesCubit.selectedContactStoryEntity,
+      );
+    }
+
+    _outerPageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    _outerPageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.createStoryBackgroundColor,
+      body: PageView.builder(
+        controller: _outerPageController,
+        itemCount: contactsStories.length,
+        itemBuilder: (context, contactIndex) {
+          final contact = contactsStories[contactIndex];
+
+          if (contact != null) {
+            return ContactStoriesViewer(
+              contactStory: contact,
+              initialIndex: initialIndex,
+              onContactFinished: () {
+                if (contactIndex < contactsStories.length - 1) {
+                  _outerPageController.nextPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+            );
+          }
+          return SizedBox();
+        },
+      ),
+    );
+  }
+}
+
+class StorySegment extends StatelessWidget {
+  final bool isSeen;
+  final bool isCurrent;
+  final AnimationController? controller;
+
+  const StorySegment({
+    super.key,
+    required this.isSeen,
+    required this.isCurrent,
+    this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller ?? AlwaysStoppedAnimation(0.0),
+      builder: (context, child) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(3),
+          child: LinearProgressIndicator(
+            value: isSeen
+                ? 1.0
+                : isCurrent
+                    ? controller?.value ?? 0.0
+                    : 0.0,
+            backgroundColor: Colors.white30,
+            color: Colors.white,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ContactStoriesViewer extends StatefulWidget {
+  final ContactStoryEntity contactStory;
+  final VoidCallback onContactFinished;
+  final int initialIndex;
+
+  const ContactStoriesViewer({
+    super.key,
+    required this.contactStory,
+    required this.onContactFinished,
+    required this.initialIndex,
+  });
+
+  @override
+  State<ContactStoriesViewer> createState() => _ContactStoriesViewerState();
+}
+
+class _ContactStoriesViewerState extends State<ContactStoriesViewer>
+    with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late int _currentIndex;
-  late GetCurrentStoriesCubit getCurrentStoriesCubit;
-  ContactStoryEntity? currentUserStories;
-  UserContactsStoryEntity? userContactsStory;
   double dragOffset = 0.0;
-  late List<StoryEntity> stories;
+  late List<ContactStoryEntity?> contactsStories;
 
   late AnimationController _storyProgressController;
   final TextEditingController textController = TextEditingController();
@@ -46,19 +158,7 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
   void initState() {
     super.initState();
 
-    getCurrentStoriesCubit = BlocProvider.of<GetCurrentStoriesCubit>(context);
-
-    if (widget.showCurrentUserStories) {
-      currentUserStories = getCurrentStoriesCubit.currentUserContactStoryEntity;
-      _currentIndex = 0;
-      stories = currentUserStories?.stories ?? [];
-    } else {
-      userContactsStory = getCurrentStoriesCubit.userContactsStories;
-      _currentIndex = getCurrentStoriesCubit
-          .selectedContactStoryEntity.firstUnviewedStoryIndex;
-      stories = getCurrentStoriesCubit.selectedContactStoryEntity.stories;
-    }
-
+    _currentIndex = widget.initialIndex;
     _pageController = PageController(initialPage: _currentIndex);
 
     _storyProgressController = AnimationController(
@@ -85,9 +185,7 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
   }
 
   void _goToNextStory() {
-    final stories = getCurrentStoriesCubit.selectedContactStoryEntity.stories;
-
-    if (_currentIndex < stories.length - 1) {
+    if (_currentIndex < widget.contactStory.stories.length - 1) {
       setState(() {
         _currentIndex++;
       });
@@ -98,7 +196,7 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
       );
       _storyProgressController.forward(from: 0.0);
     } else {
-      Navigator.pop(context);
+      widget.onContactFinished();
     }
   }
 
@@ -125,14 +223,6 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
     }
   }
 
-  // StoryEntity getCurrentStory(int index) {
-  //   if (widget.showCurrentUserStories) {
-  //     return currentUserStories!.stories[index];
-  //   } else {
-  //     return userContactsStory!.unViewedContacts[_currentIndex].stories[index];
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,7 +247,7 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
                 children: [
                   Row(
                     children: List.generate(
-                      stories.length,
+                      widget.contactStory.stories.length,
                       (index) {
                         return Expanded(
                           child: Padding(
@@ -176,9 +266,7 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
                   Expanded(
                     child: PageView.builder(
                       controller: _pageController,
-                      itemCount: widget.showCurrentUserStories
-                          ? currentUserStories!.stories.length
-                          : userContactsStory!.unViewedContacts.length,
+                      itemCount: widget.contactStory.stories.length,
                       itemBuilder: (context, index) => Column(
                         children: [
                           Row(
@@ -189,10 +277,7 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
                               const HorizontalGap(12),
                               BuildUserProfileImage(
                                 circleAvatarRadius: 20,
-                                profilePicUrl: widget.showCurrentUserStories
-                                    ? currentUserStories!.profileImage
-                                    : userContactsStory!
-                                        .unViewedContacts[index].profileImage,
+                                profilePicUrl: widget.contactStory.profileImage,
                               ),
                               const HorizontalGap(16),
                               Column(
@@ -220,40 +305,23 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
                             ],
                           ),
                           const VerticalGap(16),
-                          if (widget.showCurrentUserStories
-                              ? currentUserStories!.stories[index].mediaUrl !=
-                                  null
-                              : userContactsStory!.unViewedContacts[index]
-                                      .stories[index].mediaUrl !=
-                                  null)
+                          if (widget.contactStory.stories[index].mediaUrl !=
+                              null)
                             Expanded(
                               child: CachedNetworkImage(
                                 width: double.infinity,
                                 fit: BoxFit.cover,
-                                imageUrl: (widget.showCurrentUserStories
-                                    ? currentUserStories!
-                                        .stories[index].mediaUrl!
-                                    : userContactsStory!.unViewedContacts[index]
-                                        .stories[index].mediaUrl!),
+                                imageUrl: widget
+                                    .contactStory.stories[index].mediaUrl!,
                               ),
                             ),
-                          if (widget.showCurrentUserStories
-                              ? currentUserStories!.stories[index].content !=
-                                  null
-                              : userContactsStory!.unViewedContacts[index]
-                                      .stories[index].content !=
-                                  null)
+                          if (widget.contactStory.stories[index].content !=
+                              null)
                             Column(
                               children: [
                                 const VerticalGap(16),
                                 Text(
-                                  widget.showCurrentUserStories
-                                      ? currentUserStories!
-                                          .stories[index].content!
-                                      : userContactsStory!
-                                          .unViewedContacts[index]
-                                          .stories[index]
-                                          .content!,
+                                  widget.contactStory.stories[index].content!,
                                   style:
                                       AppTextStyles.poppinsMedium(context, 16)
                                           .copyWith(
@@ -293,40 +361,6 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
           ),
         );
       }),
-    );
-  }
-}
-
-class StorySegment extends StatelessWidget {
-  final bool isSeen;
-  final bool isCurrent;
-  final AnimationController? controller;
-
-  const StorySegment({
-    super.key,
-    required this.isSeen,
-    required this.isCurrent,
-    this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller ?? AlwaysStoppedAnimation(0.0),
-      builder: (context, child) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(3),
-          child: LinearProgressIndicator(
-            value: isSeen
-                ? 1.0
-                : isCurrent
-                    ? controller?.value ?? 0.0
-                    : 0.0,
-            backgroundColor: Colors.white30,
-            color: Colors.white,
-          ),
-        );
-      },
     );
   }
 }
