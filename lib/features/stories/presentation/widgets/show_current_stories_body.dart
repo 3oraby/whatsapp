@@ -33,24 +33,16 @@ class ShowCurrentStoriesBody extends StatelessWidget {
               contactStoryEntity: currentUserContactStoryEntity,
             ),
             const VerticalGap(32),
-            Text(
-              "Recent updates",
-              style: AppTextStyles.poppinsMedium(context, 18).copyWith(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
+            ShowContactsStoriesList(
+              description: "Recent updates",
+              stories: unViewedContactsStories,
             ),
-            const VerticalGap(24),
-            ShowContactsStoriesList(stories: unViewedContactsStories),
-            const VerticalGap(24),
-            Text(
-              "Viewed updates",
-              style: AppTextStyles.poppinsMedium(context, 18).copyWith(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
+            if (unViewedContactsStories.isNotEmpty) const VerticalGap(24),
+            ShowContactsStoriesList(
+              description: "Viewed updates",
+              stories: viewedContactsStories,
             ),
-            const VerticalGap(24),
-            ShowContactsStoriesList(stories: viewedContactsStories),
-            const VerticalGap(24),
+            if (viewedContactsStories.isNotEmpty) const VerticalGap(24),
           ],
         ),
       ),

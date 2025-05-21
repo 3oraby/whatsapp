@@ -65,12 +65,21 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
         ),
       );
     case Routes.userStoriesViewerRoute:
-      final GetCurrentStoriesCubit getCurrentStoriesCubit =
-          settings.arguments as GetCurrentStoriesCubit;
+      final data = settings.arguments;
+      GetCurrentStoriesCubit getCurrentStoriesCubit;
+      bool showCurrentUserStories = false;
+      if (data is Map) {
+        getCurrentStoriesCubit = data['cubit'];
+        showCurrentUserStories = true;
+      } else {
+        getCurrentStoriesCubit = data as GetCurrentStoriesCubit;
+      }
       return MaterialPageRoute(
         builder: (context) => BlocProvider.value(
           value: getCurrentStoriesCubit,
-          child: UserStoriesViewerScreen(),
+          child: UserStoriesViewerScreen(
+            showCurrentUserStories: showCurrentUserStories,
+          ),
         ),
       );
     default:

@@ -13,6 +13,15 @@ class ContactStoryEntity {
     this.profileImage,
   });
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ContactStoryEntity && other.contactId == contactId;
+  }
+
+  @override
+  int get hashCode => contactId.hashCode;
+
   int get totalStoriesCount => stories.length;
 
   int get viewedStoriesCount =>

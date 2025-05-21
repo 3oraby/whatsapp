@@ -30,6 +30,9 @@ class UserContactsStoryEntity {
 
   List<ContactStoryEntity> getCurrentStoriesList(
       {required ContactStoryEntity selectedContactStory}) {
+        unViewedContacts.forEach((element) => log(element.contactId.toString()),);
+        log("message");
+        log('selected ${selectedContactStory.contactId}');
     if (viewedContacts.contains(selectedContactStory)) {
       return viewedContacts;
     } else if (unViewedContacts.contains(selectedContactStory)) {

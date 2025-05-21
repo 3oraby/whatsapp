@@ -31,6 +31,8 @@ class CustomUserStoryItem extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        BlocProvider.of<GetCurrentStoriesCubit>(context)
+            .selectedContactStoryEntity = contactStoryEntity;
         Navigator.pushNamed(
           context,
           Routes.userStoriesViewerRoute,

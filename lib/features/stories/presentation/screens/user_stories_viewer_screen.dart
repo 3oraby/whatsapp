@@ -16,7 +16,7 @@ import 'package:whatsapp/features/stories/presentation/cubits/get_current_storie
 class UserStoriesViewerScreen extends StatefulWidget {
   const UserStoriesViewerScreen({
     super.key,
-    this.showCurrentUserStories = true,
+    required this.showCurrentUserStories,
   });
 
   final bool showCurrentUserStories;
@@ -231,6 +231,12 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTapDown: (details) => _onTapDown(details, constraints),
+          onLongPress: () {
+            _storyProgressController.stop();
+          },
+          onLongPressUp: () {
+            _storyProgressController.forward();
+          },
           onVerticalDragUpdate: (details) {
             dragOffset += details.delta.dy;
           },

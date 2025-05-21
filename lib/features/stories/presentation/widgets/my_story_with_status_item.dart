@@ -32,7 +32,10 @@ class MyStoryWithStatusItem extends StatelessWidget {
           Navigator.pushNamed(
             context,
             Routes.userStoriesViewerRoute,
-            arguments: BlocProvider.of<GetCurrentStoriesCubit>(context),
+            arguments: {
+              'cubit': BlocProvider.of<GetCurrentStoriesCubit>(context),
+              'showCurrentUserStories': true,
+            } as Map,
           );
         },
         child: SizedBox(
