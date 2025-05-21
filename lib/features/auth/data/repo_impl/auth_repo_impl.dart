@@ -18,8 +18,18 @@ class AuthRepoImpl extends AuthRepo {
   AuthRepoImpl({required this.apiConsumer});
 
   @override
-  Future<Either<Failure, void>> logOut() {
-    throw UnimplementedError();
+  Future<Either<Failure, void>> logOut() async {
+    try {
+      await AppStorageHelper.deleteSecureData(
+          StorageKeys.accessToken.toString());
+
+      await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), false);
+
+      return Right(null);
+    } catch (e) {
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    }
   }
 
   @override
