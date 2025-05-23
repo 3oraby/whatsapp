@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
 import 'package:whatsapp/core/errors/failures.dart';
@@ -68,8 +70,15 @@ class GetCurrentStoriesCubit extends BaseCubit<GetCurrentStoriesState> {
     required int storyId,
   }) async {
     final currentState = state;
+    log(currentState.toString());
     if (currentState is GetCurrentStoriesLoadedState) {
-      if (!contactStoryEntity.isStoryViewedAtIndex(storyId)) {
+      log("message1");
+      final storyIndex = contactStoryEntity.getStoryIndexById(storyId);
+      if (storyIndex == -1) return; // story not found
+
+      final story = contactStoryEntity.stories[storyIndex];
+      if (!story.isViewed!) {
+        log("message2");
         final result = await storiesRepo.viewStory(storyId: storyId);
         final storyIndex = contactStoryEntity.getStoryIndexById(storyId);
 
@@ -95,12 +104,23 @@ class GetCurrentStoriesCubit extends BaseCubit<GetCurrentStoriesState> {
             final viewedIndex = viewedUpdated.indexWhere(
                 (c) => c.contactId == updatedContactStory.contactId);
 
+            final allViewed = updatedStories.last.isViewed ?? false;
+
             if (viewedIndex != -1) {
+              log("there is no viewed index");
               viewedUpdated[viewedIndex] = updatedContactStory;
-            } else {
+            } else if (allViewed) {
+              log("all stories for this contact viewed now");
               viewedUpdated.add(updatedContactStory);
               unViewedUpdated.removeWhere(
                   (c) => c.contactId == updatedContactStory.contactId);
+            } else {
+              log("view story for this contact");
+              final unViewedIndex = unViewedUpdated.indexWhere(
+                  (c) => c.contactId == updatedContactStory.contactId);
+              if (unViewedIndex != -1) {
+                unViewedUpdated[unViewedIndex] = updatedContactStory;
+              }
             }
 
             userContactsStories = UserContactsStoryEntity(

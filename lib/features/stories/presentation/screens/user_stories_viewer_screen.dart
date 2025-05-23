@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
@@ -93,12 +94,12 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
   }
 }
 
-class StorySegment extends StatelessWidget {
+class StoryProgressBarSegment extends StatelessWidget {
   final bool isSeen;
   final bool isCurrent;
   final AnimationController? controller;
 
-  const StorySegment({
+  const StoryProgressBarSegment({
     super.key,
     required this.isSeen,
     required this.isCurrent,
@@ -153,11 +154,13 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
   late AnimationController _storyProgressController;
   final TextEditingController textController = TextEditingController();
   final ScrollController textFieldScrollController = ScrollController();
+  late GetCurrentStoriesCubit getCurrentStoriesCubit;
 
   @override
   void initState() {
     super.initState();
 
+    getCurrentStoriesCubit = BlocProvider.of<GetCurrentStoriesCubit>(context);
     _currentIndex = widget.initialIndex;
     _pageController = PageController(initialPage: _currentIndex);
 
@@ -167,6 +170,7 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
     );
 
     _storyProgressController.addStatusListener((status) {
+      markStoryAsViewed();
       if (status == AnimationStatus.completed) {
         _goToNextStory();
       }
@@ -195,9 +199,18 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
         curve: Curves.easeInOut,
       );
       _storyProgressController.forward(from: 0.0);
+
+      markStoryAsViewed();
     } else {
       widget.onContactFinished();
     }
+  }
+
+  void markStoryAsViewed() {
+    getCurrentStoriesCubit.markStoryAsViewed(
+      contactStoryEntity: widget.contactStory,
+      storyId: widget.contactStory.stories[_currentIndex].id,
+    );
   }
 
   void _goToPreviousStory() {
@@ -258,7 +271,7 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
                         return Expanded(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: StorySegment(
+                            child: StoryProgressBarSegment(
                               isSeen: index < _currentIndex,
                               isCurrent: index == _currentIndex,
                               controller: _storyProgressController,
@@ -298,8 +311,8 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
                                     ),
                                   ),
                                   Text(
-                                    "yesterday",
-                                    // "TimeAgoService.formatTimeForDisplay(dateTime)",
+                                    TimeAgoService.formatTimeForDisplay(widget
+                                        .contactStory.stories[index].createdAt),
                                     style: AppTextStyles.poppinsRegular(
                                             context, 14)
                                         .copyWith(
