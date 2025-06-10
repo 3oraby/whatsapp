@@ -45,4 +45,31 @@ class TimeAgoService {
       return '${DateFormat.MMMd().format(dateTime)}, ${DateFormat.jm().format(dateTime)}';
     }
   }
+
+  static String formatForStoryViewers(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (_isSameDay(now, dateTime)) {
+      return 'today ${DateFormat.jm().format(dateTime)}';
+    } else if (_isYesterday(dateTime)) {
+      return 'yesterday ${DateFormat.jm().format(dateTime)}';
+    } else if (difference.inDays < 7) {
+      return '${DateFormat.EEEE().format(dateTime)} ${DateFormat.jm().format(dateTime)}';
+    } else {
+      return '${DateFormat.MMMd().format(dateTime)} ${DateFormat.jm().format(dateTime)}';
+    }
+  }
+
+  static bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  static bool _isYesterday(DateTime date) {
+    final now = DateTime.now();
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    return date.year == yesterday.year &&
+        date.month == yesterday.month &&
+        date.day == yesterday.day;
+  }
 }

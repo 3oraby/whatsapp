@@ -70,15 +70,13 @@ class GetCurrentStoriesCubit extends BaseCubit<GetCurrentStoriesState> {
     required int storyId,
   }) async {
     final currentState = state;
-    log(currentState.toString());
     if (currentState is GetCurrentStoriesLoadedState) {
-      log("message1");
       final storyIndex = contactStoryEntity.getStoryIndexById(storyId);
+      
       if (storyIndex == -1) return; // story not found
 
       final story = contactStoryEntity.stories[storyIndex];
       if (!story.isViewed!) {
-        log("message2");
         final result = await storiesRepo.viewStory(storyId: storyId);
         final storyIndex = contactStoryEntity.getStoryIndexById(storyId);
 

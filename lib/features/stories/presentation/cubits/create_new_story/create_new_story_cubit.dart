@@ -22,14 +22,14 @@ class CreateNewStoryCubit extends BaseCubit<CreateNewStoryState> {
           CreateStoryRequestModel.fromEntity(createStoryRequestEntity).toJson(),
     );
 
-    result.fold(
-      (failure) {
-        handleFailure(failure);
-        emit(CreateNewStoryFailureState(message: failure.message!));
-      },
-      (story) => emit(CreateNewStoryLoadedState(
+    result.fold((failure) {
+      handleFailure(failure);
+      emit(CreateNewStoryFailureState(message: failure.message!));
+    }, (story) {
+      emit(CreateNewStoryLoadedState(
         storyEntity: story,
-      )),
-    );
+      ));
+      createStoryRequestEntity = CreateStoryRequestEntity();
+    });
   }
 }
