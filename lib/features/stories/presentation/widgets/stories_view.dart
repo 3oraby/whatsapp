@@ -4,7 +4,7 @@ import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/features/stories/domain/repos/stories_repo.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/get_current_stories/get_current_stories_cubit.dart';
-import 'package:whatsapp/features/stories/presentation/widgets/show_current_stories_bloc_builder_body.dart';
+import 'package:whatsapp/features/stories/presentation/widgets/show_current_stories_view.dart';
 
 class StoriesView extends StatelessWidget {
   const StoriesView({super.key});
@@ -24,9 +24,7 @@ class StoriesView extends StatelessWidget {
           ),
         ),
       ],
-      child: Scaffold(
-        body: ShowCurrentStoriesBlocBuilderBody(),
-      ),
+      child: ShowCurrentStoriesView(),
     );
   }
 }

@@ -102,15 +102,8 @@ class GetCurrentStoriesCubit extends BaseCubit<GetCurrentStoriesState> {
         final updatedStories =
             List<StoryEntity>.from(contactStoryEntity.stories);
         final oldStory = updatedStories[storyIndex];
-        log("before");
-        for (var story in updatedStories) {
-          log("story with id in cubit: ${story.id} ${story.isViewed}");
-        }
         updatedStories[storyIndex] = oldStory.copyWith(isViewed: true);
-        log("after");
-        for (var story in updatedStories) {
-          log("story with id in cubit: ${story.id} ${story.isViewed}");
-        }
+
         final updatedContactStory = contactStoryEntity.copyWith(
           stories: updatedStories,
         );
