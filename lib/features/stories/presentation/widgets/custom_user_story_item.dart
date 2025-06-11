@@ -8,6 +8,7 @@ import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/get_current_stories/get_current_stories_cubit.dart';
+import 'package:whatsapp/features/stories/presentation/routes/user_stories_viewer_args.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/custom_story_ring.dart';
 
 class CustomUserStoryItem extends StatelessWidget {
@@ -36,7 +37,10 @@ class CustomUserStoryItem extends StatelessWidget {
         Navigator.pushNamed(
           context,
           Routes.userStoriesViewerRoute,
-          arguments: BlocProvider.of<GetCurrentStoriesCubit>(context),
+          arguments: UserStoriesViewerArgs(
+            cubit: context.read<GetCurrentStoriesCubit>(),
+            showCurrentUserStories: false,
+          ),
         );
       },
       child: SizedBox(

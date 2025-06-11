@@ -15,18 +15,29 @@ import 'package:whatsapp/features/stories/presentation/widgets/create_story_tab_
 import 'package:whatsapp/features/stories/presentation/widgets/custom_send_story_button.dart';
 
 class CreateNewStoryScreen extends StatelessWidget {
-  const CreateNewStoryScreen({super.key});
+  const CreateNewStoryScreen({
+    super.key,
+    required this.initialTab,
+  });
 
+  final int initialTab;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CreateNewStoryBody(),
+      body: CreateNewStoryBody(
+        initialTab: initialTab,
+      ),
     );
   }
 }
 
 class CreateNewStoryBody extends StatefulWidget {
-  const CreateNewStoryBody({super.key});
+  const CreateNewStoryBody({
+    super.key,
+    required this.initialTab,
+  });
+
+  final int initialTab;
 
   @override
   State<CreateNewStoryBody> createState() => _CreateNewStoryBodyState();
@@ -49,7 +60,7 @@ class _CreateNewStoryBodyState extends State<CreateNewStoryBody>
     tabController = TabController(
       length: 2,
       vsync: this,
-      initialIndex: 1,
+      initialIndex: widget.initialTab,
     );
 
     textEditingController.addListener(() {

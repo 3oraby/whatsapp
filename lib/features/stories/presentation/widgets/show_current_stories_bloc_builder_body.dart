@@ -9,6 +9,7 @@ import 'package:whatsapp/core/widgets/custom_error_body_widget.dart';
 import 'package:whatsapp/core/widgets/custom_loading_body_widget.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/get_current_stories/get_current_stories_cubit.dart';
+import 'package:whatsapp/features/stories/presentation/routes/create_new_story_args.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/show_current_stories_body.dart';
 
 class ShowCurrentStoriesBlocBuilderBody extends StatefulWidget {
@@ -49,7 +50,10 @@ class _ShowCurrentStoriesBlocBuilderBodyState
                   Navigator.pushNamed(
                     context,
                     Routes.createNewStoryRoute,
-                    arguments: context.read<CreateNewStoryCubit>(),
+                    arguments: CreateNewStoryArgs(
+                      cubit: context.read<CreateNewStoryCubit>(),
+                      initialTab: 1,
+                    ),
                   );
                 },
               ),
@@ -60,11 +64,13 @@ class _ShowCurrentStoriesBlocBuilderBodyState
                   size: 36,
                 ),
                 onPressed: () {
-                  //! make default for the photo not text
                   Navigator.pushNamed(
                     context,
                     Routes.createNewStoryRoute,
-                    arguments: context.read<CreateNewStoryCubit>(),
+                    arguments: CreateNewStoryArgs(
+                      cubit: context.read<CreateNewStoryCubit>(),
+                      initialTab: 0,
+                    ),
                   );
                 },
               ),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/show_discard_confirmation_dialog.dart';
 import 'package:whatsapp/core/widgets/custom_app_padding.dart';
 import 'package:whatsapp/core/widgets/custom_cancel_icon_button.dart';
@@ -10,12 +11,8 @@ import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/c
 import 'package:whatsapp/features/stories/presentation/widgets/custom_send_story_button.dart';
 
 class CreateStoryImagePreviewScreen extends StatefulWidget {
-  const CreateStoryImagePreviewScreen({
-    super.key,
-    required this.createNewStoryCubit,
-  });
+  const CreateStoryImagePreviewScreen({super.key});
 
-  final CreateNewStoryCubit createNewStoryCubit;
   @override
   State<CreateStoryImagePreviewScreen> createState() =>
       _CreateStoryImagePreviewScreenState();
@@ -25,6 +22,13 @@ class _CreateStoryImagePreviewScreenState
     extends State<CreateStoryImagePreviewScreen> {
   final TextEditingController textController = TextEditingController();
   final ScrollController textFieldScrollController = ScrollController();
+  late CreateNewStoryCubit createNewStoryCubit;
+
+  @override
+  void initState() {
+    createNewStoryCubit = BlocProvider.of<CreateNewStoryCubit>(context);
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -36,8 +40,8 @@ class _CreateStoryImagePreviewScreenState
   void sendStory() {
     final text = textController.text.trim();
     log("Sending story with text: $text");
-    widget.createNewStoryCubit.createStoryRequestEntity.content = text;
-    widget.createNewStoryCubit.createNewStory();
+    createNewStoryCubit.createStoryRequestEntity.content = text;
+    createNewStoryCubit.createNewStory();
     Navigator.pop(context);
     Navigator.pop(context);
   }
@@ -74,12 +78,10 @@ class _CreateStoryImagePreviewScreenState
         body: Stack(
           clipBehavior: Clip.none,
           children: [
-            if (widget.createNewStoryCubit.createStoryRequestEntity.imageFile !=
-                null)
+            if (createNewStoryCubit.createStoryRequestEntity.imageFile != null)
               Center(
                 child: Image.file(
-                  widget
-                      .createNewStoryCubit.createStoryRequestEntity.imageFile!,
+                  createNewStoryCubit.createStoryRequestEntity.imageFile!,
                   fit: BoxFit.contain,
                 ),
               ),

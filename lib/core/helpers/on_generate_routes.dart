@@ -10,7 +10,8 @@ import 'package:whatsapp/features/auth/presentation/screens/verify_otp_screen.da
 import 'package:whatsapp/features/contacts/presentation/screens/add_new_contacts_screen.dart';
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
-import 'package:whatsapp/features/stories/presentation/cubits/get_current_stories/get_current_stories_cubit.dart';
+import 'package:whatsapp/features/stories/presentation/routes/create_new_story_args.dart';
+import 'package:whatsapp/features/stories/presentation/routes/user_stories_viewer_args.dart';
 import 'package:whatsapp/features/stories/presentation/screens/create_new_story_screen.dart';
 import 'package:whatsapp/features/stories/presentation/screens/create_story_image_preview_screen.dart';
 import 'package:whatsapp/features/stories/presentation/screens/user_stories_viewer_screen.dart';
@@ -45,12 +46,13 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
         builder: (context) => AddNewContactsScreen(),
       );
     case Routes.createNewStoryRoute:
-      final CreateNewStoryCubit createNewStoryCubit =
-          settings.arguments as CreateNewStoryCubit;
+      final args = settings.arguments as CreateNewStoryArgs;
       return MaterialPageRoute(
         builder: (context) => BlocProvider.value(
-          value: createNewStoryCubit,
-          child: CreateNewStoryScreen(),
+          value: args.cubit,
+          child: CreateNewStoryScreen(
+            initialTab: args.initialTab,
+          ),
         ),
       );
     case Routes.createStoryImagePreviewRoute:
@@ -59,29 +61,20 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => BlocProvider.value(
           value: createNewStoryCubit,
-          child: CreateStoryImagePreviewScreen(
-            createNewStoryCubit: createNewStoryCubit,
-          ),
+          child: CreateStoryImagePreviewScreen(),
         ),
       );
     case Routes.userStoriesViewerRoute:
-      final data = settings.arguments;
-      GetCurrentStoriesCubit getCurrentStoriesCubit;
-      bool showCurrentUserStories = false;
-      if (data is Map) {
-        getCurrentStoriesCubit = data['cubit'];
-        showCurrentUserStories = true;
-      } else {
-        getCurrentStoriesCubit = data as GetCurrentStoriesCubit;
-      }
+      final args = settings.arguments as UserStoriesViewerArgs;
       return MaterialPageRoute(
         builder: (context) => BlocProvider.value(
-          value: getCurrentStoriesCubit,
+          value: args.cubit,
           child: UserStoriesViewerScreen(
-            showCurrentUserStories: showCurrentUserStories,
+            showCurrentUserStories: args.showCurrentUserStories,
           ),
         ),
       );
+
     default:
       return MaterialPageRoute(
         builder: (context) => const UndefinedRoutePage(),
