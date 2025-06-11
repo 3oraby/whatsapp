@@ -28,15 +28,15 @@ class UserContactsStoryEntity {
     );
   }
 
-  List<ContactStoryEntity> getCurrentStoriesList(
+  String getCurrentStories(
       {required ContactStoryEntity selectedContactStory}) {
     if (viewedContacts.contains(selectedContactStory)) {
-      return viewedContacts;
+      return "viewedContacts";
     } else if (unViewedContacts.contains(selectedContactStory)) {
-      return unViewedContacts;
+      return "unViewedContacts";
     } else {
       log("can not get the story in viewed and unviewed");
-      return [];
+      return "none";
     }
   }
 }

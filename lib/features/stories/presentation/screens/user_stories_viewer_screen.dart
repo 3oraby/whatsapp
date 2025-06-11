@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
@@ -24,6 +26,7 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
   late int initialIndex;
   late GetCurrentStoriesCubit getCurrentStoriesCubit;
   late List<ContactStoryEntity?> contactsStories;
+  late String key;
 
   @override
   void initState() {
@@ -36,14 +39,27 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
       contactsStories = [getCurrentStoriesCubit.currentUserContactStoryEntity];
     } else {
       final userContactsStories = getCurrentStoriesCubit.userContactsStories;
-      initialIndex = getCurrentStoriesCubit
-          .selectedContactStoryEntity.firstUnviewedStoryIndex;
-      contactsStories = userContactsStories.getCurrentStoriesList(
+
+      key = userContactsStories.getCurrentStories(
         selectedContactStory: getCurrentStoriesCubit.selectedContactStoryEntity,
       );
-    }
+      if (key == "viewedContacts") {
+        contactsStories = userContactsStories.viewedContacts;
+      } else if (key == "unViewedContacts") {
+        contactsStories = userContactsStories.unViewedContacts;
+      } else {
+        contactsStories = [];
+      }
 
-    _outerPageController = PageController(initialPage: 0);
+      initialIndex = contactsStories.indexWhere(
+        (contactStoryEntity) =>
+            contactStoryEntity?.contactId ==
+            getCurrentStoriesCubit.selectedContactStoryEntity.contactId,
+      );
+    }
+    log('initial outer index: $initialIndex');
+
+    _outerPageController = PageController(initialPage: initialIndex);
   }
 
   @override
@@ -65,8 +81,9 @@ class _UserStoriesViewerScreenState extends State<UserStoriesViewerScreen>
           if (contact != null) {
             return ContactStoriesViewer(
               contactStory: contact,
-              initialIndex: initialIndex,
               showCurrentUserStories: widget.showCurrentUserStories,
+              showUnviewedStories:
+                  !widget.showCurrentUserStories && key == "unViewedContacts",
               onContactFinished: () {
                 if (contactIndex < contactsStories.length - 1) {
                   _outerPageController.nextPage(

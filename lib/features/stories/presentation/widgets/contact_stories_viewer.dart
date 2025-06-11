@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,15 +22,15 @@ import 'package:whatsapp/features/stories/presentation/widgets/story_progress_ba
 class ContactStoriesViewer extends StatefulWidget {
   final ContactStoryEntity contactStory;
   final VoidCallback onContactFinished;
-  final int initialIndex;
   final bool showCurrentUserStories;
+  final bool showUnviewedStories;
 
   const ContactStoriesViewer({
     super.key,
     required this.contactStory,
     required this.onContactFinished,
-    required this.initialIndex,
     required this.showCurrentUserStories,
+    required this.showUnviewedStories,
   });
 
   @override
@@ -52,7 +54,8 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
     super.initState();
 
     getCurrentStoriesCubit = BlocProvider.of<GetCurrentStoriesCubit>(context);
-    _currentIndex = widget.initialIndex;
+    _currentIndex = widget.contactStory.firstUnviewedStoryIndex;
+    log("initial inner index : $_currentIndex");
     _pageController = PageController(initialPage: _currentIndex);
 
     _storyProgressController = AnimationController(
@@ -61,7 +64,6 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
     );
 
     _storyProgressController.addStatusListener((status) {
-      markStoryAsViewed();
       if (status == AnimationStatus.completed) {
         _goToNextStory();
       }
@@ -69,6 +71,7 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _storyProgressController.forward();
+      markStoryAsViewed();
     });
   }
 
@@ -98,9 +101,10 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
   }
 
   void markStoryAsViewed() {
-    if (!widget.showCurrentUserStories) {
+    if (widget.showUnviewedStories) {
+      log("mark story as viewed : : : ${widget.contactStory.stories[_currentIndex].id}");
       getCurrentStoriesCubit.markStoryAsViewed(
-        contactStoryEntity: widget.contactStory,
+        contactId: widget.contactStory.contactId,
         storyId: widget.contactStory.stories[_currentIndex].id,
       );
     }
@@ -322,8 +326,7 @@ class ShowCurrentUserStoryViews extends StatelessWidget {
               Expanded(
                 child: ListView.separated(
                   itemCount: views.length,
-                  separatorBuilder: (context, index) =>
-                      const VerticalGap(4),
+                  separatorBuilder: (context, index) => const VerticalGap(4),
                   itemBuilder: (context, index) {
                     final view = views[index];
                     return Row(
@@ -338,18 +341,19 @@ class ShowCurrentUserStoryViews extends StatelessWidget {
                             children: [
                               const VerticalGap(12),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     view.user.name,
-                                    style:
-                                        AppTextStyles.poppinsMedium(context, 18),
+                                    style: AppTextStyles.poppinsMedium(
+                                        context, 18),
                                   ),
                                   Text(
                                     TimeAgoService.formatForStoryViewers(
                                         view.createdAt),
-                                    style:
-                                        AppTextStyles.poppinsMedium(context, 14),
+                                    style: AppTextStyles.poppinsMedium(
+                                        context, 14),
                                   ),
                                 ],
                               ),

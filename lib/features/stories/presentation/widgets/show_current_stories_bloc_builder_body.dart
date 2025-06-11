@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
@@ -79,6 +81,14 @@ class _ShowCurrentStoriesBlocBuilderBodyState
                     onRetry: getCurrentStories,
                   );
                 } else if (state is GetCurrentStoriesLoadedState) {
+                  log("un viewed: ");
+                  for (var contact
+                      in state.userContactsStories.unViewedContacts) {
+                    for (var story in contact.stories) {
+                      log("story with id: ${story.id} ${story.isViewed}");
+                    }
+                  }
+
                   return ShowCurrentStoriesBody(
                     currentUserContactStoryEntity:
                         state.currentUserContactStoryEntity,
