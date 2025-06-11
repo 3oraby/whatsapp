@@ -74,6 +74,16 @@ class _ShowCurrentStoriesBlocBuilderBodyState
                   );
                 },
               ),
+              IconButton(
+                icon: Icon(
+                  Icons.replay_outlined,
+                  color: Theme.of(context).iconTheme.color,
+                  size: 36,
+                ),
+                onPressed: () {
+                  getCurrentStories();
+                },
+              ),
             ],
           ),
           Expanded(
