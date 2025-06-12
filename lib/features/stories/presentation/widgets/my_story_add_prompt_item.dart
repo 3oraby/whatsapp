@@ -8,6 +8,7 @@ import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/stories/presentation/cubits/create_new_story/create_new_story_cubit.dart';
+import 'package:whatsapp/features/stories/presentation/routes/create_new_story_args.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/create_new_story_loading.dart';
 
 class MyStoryAddPromptItem extends StatelessWidget {
@@ -28,7 +29,10 @@ class MyStoryAddPromptItem extends StatelessWidget {
           Navigator.pushNamed(
             context,
             Routes.createNewStoryRoute,
-            arguments: context.read<CreateNewStoryCubit>(),
+            arguments: CreateNewStoryArgs(
+              cubit: context.read<CreateNewStoryCubit>(),
+              initialTab: 1,
+            ),
           );
         },
         child: SizedBox(

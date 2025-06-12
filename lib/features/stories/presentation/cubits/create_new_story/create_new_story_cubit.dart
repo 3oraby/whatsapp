@@ -17,9 +17,10 @@ class CreateNewStoryCubit extends BaseCubit<CreateNewStoryState> {
   Future<void> createNewStory() async {
     emit(CreateNewStoryLoadingState());
 
+    final storyModel = createStoryRequestEntity;
+    createStoryRequestEntity = CreateStoryRequestEntity();
     final result = await storiesRepo.createNewStory(
-      data:
-          CreateStoryRequestModel.fromEntity(createStoryRequestEntity).toJson(),
+      data: CreateStoryRequestModel.fromEntity(storyModel).toJson(),
     );
 
     result.fold((failure) {
@@ -29,7 +30,6 @@ class CreateNewStoryCubit extends BaseCubit<CreateNewStoryState> {
       emit(CreateNewStoryLoadedState(
         storyEntity: story,
       ));
-      createStoryRequestEntity = CreateStoryRequestEntity();
     });
   }
 }

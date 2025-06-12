@@ -81,29 +81,27 @@ class _ShowCurrentStoriesViewState extends State<ShowCurrentStoriesView> {
         ],
       ),
       body: CustomAppPadding(
-        child: Expanded(
-          child: BlocBuilder<GetCurrentStoriesCubit, GetCurrentStoriesState>(
-            builder: (context, state) {
-              if (state is GetCurrentStoriesLoadingState) {
-                return CustomLoadingBodyWidget();
-              } else if (state is GetCurrentStoriesFailureState) {
-                return CustomErrorBodyWidget(
-                  errorMessage: state.message,
-                  onRetry: getCurrentStories,
-                );
-              } else if (state is GetCurrentStoriesLoadedState) {
-                return ShowCurrentStoriesBody(
-                  currentUserContactStoryEntity:
-                      state.currentUserContactStoryEntity,
-                  unViewedContactsStories:
-                      state.userContactsStories.unViewedContacts,
-                  viewedContactsStories:
-                      state.userContactsStories.viewedContacts,
-                );
-              }
-              return SizedBox();
-            },
-          ),
+        child: BlocBuilder<GetCurrentStoriesCubit, GetCurrentStoriesState>(
+          builder: (context, state) {
+            if (state is GetCurrentStoriesLoadingState) {
+              return CustomLoadingBodyWidget();
+            } else if (state is GetCurrentStoriesFailureState) {
+              return CustomErrorBodyWidget(
+                errorMessage: state.message,
+                onRetry: getCurrentStories,
+              );
+            } else if (state is GetCurrentStoriesLoadedState) {
+              return ShowCurrentStoriesBody(
+                currentUserContactStoryEntity:
+                    state.currentUserContactStoryEntity,
+                unViewedContactsStories:
+                    state.userContactsStories.unViewedContacts,
+                viewedContactsStories:
+                    state.userContactsStories.viewedContacts,
+              );
+            }
+            return SizedBox();
+          },
         ),
       ),
     );
