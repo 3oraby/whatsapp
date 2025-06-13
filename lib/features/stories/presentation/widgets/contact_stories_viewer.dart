@@ -184,13 +184,14 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
                             StoryFooter(
                               showCurrentUserStories:
                                   widget.showCurrentUserStories,
-                              views: story.views,
+                              storyEntity: story,
                               textController: textController,
                               scrollController: textFieldScrollController,
                               onSheetOpened: () =>
                                   _storyProgressController.stop(),
                               onSheetClosed: () =>
                                   _storyProgressController.forward(),
+                              currentStoryIndex: index,
                             ),
                             const VerticalGap(16),
                           ],

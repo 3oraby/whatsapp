@@ -15,5 +15,6 @@ abstract class StoriesRepo {
 
   Future<Either<Failure, void>> viewStory({required int storyId});
 
-  // Future<Either<Failure, void>> reactStory();
+  Future<Either<Failure, void>> reactStory({required int storyId});
+  Future<Either<Failure, void>> deleteStory({required int storyId});
 }

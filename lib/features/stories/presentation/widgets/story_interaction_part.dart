@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapp/core/widgets/custom_background_icon.dart';
 import 'package:whatsapp/core/widgets/custom_scrollable_text_field.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
+import 'package:whatsapp/features/stories/domain/entities/story_entity.dart';
+import 'package:whatsapp/features/stories/presentation/widgets/custom_react_story_button.dart';
 
 class StoryInteractionPart extends StatelessWidget {
   const StoryInteractionPart({
     super.key,
     required this.textFieldScrollController,
     required this.textController,
+    required this.storyEntity,
+    required this.currentStoryIndex,
   });
 
   final ScrollController textFieldScrollController;
   final TextEditingController textController;
+  final StoryEntity storyEntity;
+  final int currentStoryIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +31,10 @@ class StoryInteractionPart extends StatelessWidget {
           ),
         ),
         const HorizontalGap(16),
-        CustomBackgroundIcon(
-          backgroundColor: Colors.black54,
-          iconColor: Colors.white,
-          iconData: Icons.favorite_border,
-        )
+        CustomReactStoryButton(
+          story: storyEntity,
+          currentStoryIndex: currentStoryIndex,
+        ),
       ],
     );
   }
