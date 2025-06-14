@@ -1,5 +1,7 @@
 import 'package:whatsapp/features/stories/data/models/story_model.dart';
 import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.dart';
+import 'package:whatsapp/features/stories/domain/entities/story_entity.dart';
+
 class ContactStoryModel extends ContactStoryEntity {
   ContactStoryModel({
     required super.contactId,
@@ -39,4 +41,19 @@ class ContactStoryModel extends ContactStoryEntity {
         profileImage: profileImage,
         stories: stories,
       );
+
+  @override
+  ContactStoryModel copyWith({
+    int? contactId,
+    String? name,
+    String? profileImage,
+    List<StoryEntity>? stories,
+  }) {
+    return ContactStoryModel(
+      contactId: contactId ?? this.contactId,
+      name: name ?? this.name,
+      profileImage: profileImage ?? this.profileImage,
+      stories: stories ?? this.stories,
+    );
+  }
 }

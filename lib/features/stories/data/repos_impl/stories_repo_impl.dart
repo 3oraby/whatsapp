@@ -62,7 +62,7 @@ class StoriesRepoImpl extends StoriesRepo {
       };
 
       final ContactStoryEntity contactStoryEntity =
-          ContactStoryModel.fromJson(json);
+          ContactStoryModel.fromJson(json).toEntity();
 
       return Right(contactStoryEntity);
     } on UnAuthorizedException {
@@ -103,7 +103,7 @@ class StoriesRepoImpl extends StoriesRepo {
       }
 
       UserContactsStoryEntity userContactsStoryEntity =
-          UserContactsStoryModel.fromJson(result);
+          UserContactsStoryModel.fromJson(result).toEntity();
 
       return Right(userContactsStoryEntity);
     } on UnAuthorizedException {
