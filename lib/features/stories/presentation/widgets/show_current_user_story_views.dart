@@ -54,6 +54,7 @@ class ShowCurrentUserStoryViews extends StatelessWidget {
                 ],
               ),
               const Divider(),
+              const VerticalGap(8),
               Expanded(
                 child: ListView.separated(
                   itemCount: views.length,
@@ -70,7 +71,10 @@ class ShowCurrentUserStoryViews extends StatelessWidget {
                         Expanded(
                           child: Column(
                             children: [
-                              const VerticalGap(12),
+                              Visibility(
+                                visible: index < views.length - 1,
+                                child: const VerticalGap(12),
+                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -88,8 +92,11 @@ class ShowCurrentUserStoryViews extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              const Divider(
-                                height: 16,
+                              Visibility(
+                                visible: index < views.length - 1,
+                                child: const Divider(
+                                  height: 16,
+                                ),
                               ),
                             ],
                           ),
@@ -99,6 +106,7 @@ class ShowCurrentUserStoryViews extends StatelessWidget {
                   },
                 ),
               ),
+              const VerticalGap(16),
             ],
           ),
         );
