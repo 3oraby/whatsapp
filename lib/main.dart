@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -21,7 +23,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await AppStorageHelper.init();
-
   await setupGetIt();
   Bloc.observer = CustomBlocObserver();
   runApp(
@@ -40,8 +41,42 @@ Future<void> main() async {
   );
 }
 
-class Whatsapp extends StatelessWidget {
+class Whatsapp extends StatefulWidget {
   const Whatsapp({super.key});
+
+  @override
+  State<Whatsapp> createState() => _WhatsappState();
+}
+
+class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      log("✅ App resumed (foreground) – user is online");
+      // send socket event: user is online
+    } else if (state == AppLifecycleState.paused) {
+      log("⏸️ App paused (background but still alive) – user might be offline");
+      // send socket event: user is offline
+    } else if (state == AppLifecycleState.inactive) {
+      log("🚫 App inactive (e.g. incoming call or minimized) – user is probably inactive");
+      // optional: treat as offline
+    } else if (state == AppLifecycleState.detached) {
+      log("❌ App detached (fully closed or removed from task manager) – user is offline");
+      // send socket event: user is offline
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +96,8 @@ class Whatsapp extends StatelessWidget {
         themeMode: ThemeMode.system,
         onGenerateRoute: onGenerateRoutes,
         home: getInitialRoute() == Routes.homeRoute
-            ? HomeScreen()
-            : SignInScreen(),
+            ? const HomeScreen()
+            : const SignInScreen(),
       ),
     );
   }

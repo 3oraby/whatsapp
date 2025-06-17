@@ -1,6 +1,6 @@
 class EndPoints {
   static const String baseUrl = "http://10.0.2.2:5000/api/";
-  static const String webSocketUrl = "http://10.0.2.2:5000/api/";
+  static const String webSocketUrl = "http://10.0.2.2:3000/api/";
 
   // auth
   static const String login = "auth/login";
@@ -31,4 +31,14 @@ class EndPoints {
       "status/reacts/$storyId";
   static String getViewsOnStory({required String storyId}) =>
       "status/views/$storyId";
+
+  // chats
+  static const String createChat = "chat";
+  static const String getChats = "chat";
+  static const String uploadChatImage = "chat/uploadChatImage";
+  static String pinChat({required int chatId}) => "chat/pin/$chatId";
+  static String unPinChat({required int chatId}) => "chat/unPin/$chatId";
+  static String getChatMessages({required int chatId}) => "chat/messages/$chatId";
+  static String getMessageHistory({required int messageId}) => "chat/message/$messageId/history";
+  static String getMessageReacts({required int messageId}) => "chat/message/$messageId/reacts";
 }
