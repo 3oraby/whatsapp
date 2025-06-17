@@ -3,42 +3,42 @@ class EndPoints {
   static const String webSocketUrl = "http://10.0.2.2:3000/api/";
 
   // auth
-  static const String login = "auth/login";
-  static const String signup = "auth/signup";
-  static const String verifyOTP = "auth/verifyOTP";
-  static const String resendOTP = "auth/resendOTP";
-  static const String refreshToken = "auth/refreshToken";
+  static const String login = "${baseUrl}auth/login";
+  static const String signup = "${baseUrl}auth/signup";
+  static const String verifyOTP = "${baseUrl}auth/verifyOTP";
+  static const String resendOTP = "${baseUrl}auth/resendOTP";
+  static const String refreshToken = "${baseUrl}auth/refreshToken";
 
   // user
-  static const String searchInUsers = "user/search";
-  static const String getUser = "user";
-  static const String updateUser = "user";
-  static const String uploadProfileImage = "user/image";
-  static const String getUserCurrentStatus = "user/currentStatus";
+  static const String searchInUsers = "${baseUrl}user/search";
+  static const String getUser = "${baseUrl}user";
+  static const String updateUser = "${baseUrl}user";
+  static const String uploadProfileImage = "${baseUrl}user/image";
+  static const String getUserCurrentStatus = "${baseUrl}user/currentStatus";
 
   // contacts
-  static const String getUserContacts = "contact";
-  static const String createContact = "contact";
+  static const String getUserContacts = "${baseUrl}contact";
+  static const String createContact = "${baseUrl}contact";
 
   // stories
-  static const String createStory = "status";
-  static const String getCurrentUserStory = "status";
-  static const String getUserContactsStory = "status/getUserCotactsStatus";
-  static String viewStory({required int storyId}) => "status/view/$storyId";
-  static String deleteStory({required int storyId}) => "status/$storyId";
-  static String reactStory({required int storyId}) => "status/react/$storyId";
+  static const String createStory = "${baseUrl}status";
+  static const String getCurrentUserStory = "${baseUrl}status";
+  static const String getUserContactsStory = "${baseUrl}status/getUserCotactsStatus";
+  static String viewStory({required int storyId}) => "${baseUrl}status/view/$storyId";
+  static String deleteStory({required int storyId}) => "${baseUrl}status/$storyId";
+  static String reactStory({required int storyId}) => "${baseUrl}status/react/$storyId";
   static String getReactsOnStory({required String storyId}) =>
-      "status/reacts/$storyId";
+      "${baseUrl}status/reacts/$storyId";
   static String getViewsOnStory({required String storyId}) =>
-      "status/views/$storyId";
+      "${baseUrl}status/views/$storyId";
 
-  // chats
-  static const String createChat = "chat";
-  static const String getChats = "chat";
-  static const String uploadChatImage = "chat/uploadChatImage";
-  static String pinChat({required int chatId}) => "chat/pin/$chatId";
-  static String unPinChat({required int chatId}) => "chat/unPin/$chatId";
-  static String getChatMessages({required int chatId}) => "chat/messages/$chatId";
-  static String getMessageHistory({required int messageId}) => "chat/message/$messageId/history";
-  static String getMessageReacts({required int messageId}) => "chat/message/$messageId/reacts";
+  // chats (uses webSocketUrl instead of baseUrl)
+  static const String createChat = "${webSocketUrl}chat";
+  static const String getUserChats = "${webSocketUrl}chat";
+  static const String uploadChatImage = "${webSocketUrl}chat/uploadChatImage";
+  static String pinChat({required int chatId}) => "${webSocketUrl}chat/pin/$chatId";
+  static String unPinChat({required int chatId}) => "${webSocketUrl}chat/unPin/$chatId";
+  static String getChatMessages({required int chatId}) => "${webSocketUrl}chat/messages/$chatId";
+  static String getMessageHistory({required int messageId}) => "${webSocketUrl}chat/message/$messageId/history";
+  static String getMessageReacts({required int messageId}) => "${webSocketUrl}chat/message/$messageId/reacts";
 }

@@ -1,25 +1,31 @@
-class ChatModel {
-  final int id;
-  final String type;
-  final ChatUser anotherUser;
-  final bool isPinned;
-  final DateTime? pinnedAt;
-  final DateTime? lastMessageCreatedAt;
+import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 
+import '../../domain/entities/chat_entity.dart';
+
+class ChatModel extends ChatEntity {
   ChatModel({
-    required this.id,
-    required this.type,
-    required this.anotherUser,
-    required this.isPinned,
-    required this.pinnedAt,
-    required this.lastMessageCreatedAt,
+    required super.id,
+    required super.type,
+    required super.anotherUser,
+    required super.isPinned,
+    required super.pinnedAt,
+    required super.lastMessageCreatedAt,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) {
+    final int currentUserId = getCurrentUserEntity().id;
+    final usersList =
+        (json['users'] as List).map((u) => ChatUser.fromJson(u)).toList();
+
+    final anotherUser = usersList.firstWhere(
+      (user) => user.id != currentUserId,
+      orElse: () => throw Exception('Another user not found'),
+    );
+
     return ChatModel(
       id: json['id'],
       type: json['type'],
-      anotherUser: ChatUser.fromJson(json['users'][0]),
+      anotherUser: anotherUser,
       isPinned: json['is_pinned'] ?? false,
       pinnedAt: json['pinned_at'] != null
           ? DateTime.tryParse(json['pinned_at'])
@@ -29,19 +35,36 @@ class ChatModel {
           : null,
     );
   }
+
+  factory ChatModel.fromEntity(ChatEntity entity) {
+    return ChatModel(
+      id: entity.id,
+      type: entity.type,
+      anotherUser: ChatUser.fromEntity(entity.anotherUser),
+      isPinned: entity.isPinned,
+      pinnedAt: entity.pinnedAt,
+      lastMessageCreatedAt: entity.lastMessageCreatedAt,
+    );
+  }
+
+  ChatEntity toEntity() {
+    return ChatEntity(
+      id: id,
+      type: type,
+      anotherUser: ChatUser.fromEntity(anotherUser).toEntity(),
+      isPinned: isPinned,
+      pinnedAt: pinnedAt,
+      lastMessageCreatedAt: lastMessageCreatedAt,
+    );
+  }
 }
 
-class ChatUser {
-  final int id;
-  final String name;
-  final String? profileImage;
-  final UserChatMetadata chatMetadata;
-
+class ChatUser extends ChatUserEntity {
   ChatUser({
-    required this.id,
-    required this.name,
-    this.profileImage,
-    required this.chatMetadata,
+    required super.id,
+    required super.name,
+    super.profileImage,
+    required UserChatMetadata super.chatMetadata,
   });
 
   factory ChatUser.fromJson(Map<String, dynamic> json) {
@@ -52,17 +75,31 @@ class ChatUser {
       chatMetadata: UserChatMetadata.fromJson(json['chat']),
     );
   }
+
+  factory ChatUser.fromEntity(ChatUserEntity entity) {
+    return ChatUser(
+      id: entity.id,
+      name: entity.name,
+      profileImage: entity.profileImage,
+      chatMetadata: UserChatMetadata.fromEntity(entity.chatMetadata),
+    );
+  }
+
+  ChatUserEntity toEntity() {
+    return ChatUserEntity(
+      id: id,
+      name: name,
+      profileImage: profileImage,
+      chatMetadata: UserChatMetadata.fromEntity(chatMetadata).toEntity(),
+    );
+  }
 }
 
-class UserChatMetadata {
-  final bool isPinned;
-  final bool isFavorite;
-  final DateTime? pinnedAt;
-
+class UserChatMetadata extends UserChatMetadataEntity {
   UserChatMetadata({
-    required this.isPinned,
-    required this.isFavorite,
-    required this.pinnedAt,
+    required super.isPinned,
+    required super.isFavorite,
+    required super.pinnedAt,
   });
 
   factory UserChatMetadata.fromJson(Map<String, dynamic> json) {
@@ -72,6 +109,22 @@ class UserChatMetadata {
       pinnedAt: json['pinned_at'] != null
           ? DateTime.tryParse(json['pinned_at'])
           : null,
+    );
+  }
+
+  factory UserChatMetadata.fromEntity(UserChatMetadataEntity entity) {
+    return UserChatMetadata(
+      isPinned: entity.isPinned,
+      isFavorite: entity.isFavorite,
+      pinnedAt: entity.pinnedAt,
+    );
+  }
+
+  UserChatMetadataEntity toEntity() {
+    return UserChatMetadataEntity(
+      isPinned: isPinned,
+      isFavorite: isFavorite,
+      pinnedAt: pinnedAt,
     );
   }
 }

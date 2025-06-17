@@ -7,7 +7,7 @@ import 'package:whatsapp/core/widgets/undefined_route_page.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signup_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/verify_otp_screen.dart';
-import 'package:whatsapp/features/chats/data/models/chat_model.dart';
+import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/presentation/screens/chat_screen.dart';
 import 'package:whatsapp/features/contacts/presentation/screens/add_new_contacts_screen.dart';
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
@@ -78,7 +78,7 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       );
 
     case Routes.chatScreenRoute:
-      final chat = settings.arguments as ChatModel;
+      final chat = settings.arguments as ChatEntity;
       return MaterialPageRoute(
         builder: (_) => ChatScreen(chat: chat),
       );

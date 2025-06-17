@@ -3,10 +3,10 @@ import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
-import 'package:whatsapp/features/chats/data/models/chat_model.dart'; // الموديل الحقيقي
+import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 
 class ChatScreen extends StatefulWidget {
-  final ChatModel chat;
+  final ChatEntity chat;
 
   const ChatScreen({super.key, required this.chat});
 
@@ -18,7 +18,6 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  // مؤقتًا: لستة رسايل وهمية
   List<String> messages = [
     'Hello!',
     'How are you?',
