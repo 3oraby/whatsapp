@@ -1,4 +1,6 @@
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
+import 'package:whatsapp/features/chats/data/models/message_model.dart';
+import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 
 import '../../domain/entities/chat_entity.dart';
 
@@ -10,10 +12,12 @@ class ChatModel extends ChatEntity {
     required super.isPinned,
     required super.pinnedAt,
     required super.lastMessageCreatedAt,
+    required super.messages,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) {
     final int currentUserId = getCurrentUserEntity().id;
+
     final usersList =
         (json['users'] as List).map((u) => ChatUser.fromJson(u)).toList();
 
@@ -21,6 +25,10 @@ class ChatModel extends ChatEntity {
       (user) => user.id != currentUserId,
       orElse: () => throw Exception('Another user not found'),
     );
+
+    final List<MessageEntity> messages = (json['messages'] as List)
+        .map((m) => MessageModel.fromJson(m).toEntity())
+        .toList();
 
     return ChatModel(
       id: json['id'],
@@ -33,6 +41,7 @@ class ChatModel extends ChatEntity {
       lastMessageCreatedAt: json['lastMessageCreatedAt'] != null
           ? DateTime.tryParse(json['lastMessageCreatedAt'])
           : null,
+      messages: messages,
     );
   }
 
@@ -44,6 +53,8 @@ class ChatModel extends ChatEntity {
       isPinned: entity.isPinned,
       pinnedAt: entity.pinnedAt,
       lastMessageCreatedAt: entity.lastMessageCreatedAt,
+      messages:
+          entity.messages.map((m) => MessageModel.fromEntity(m)).toList(),
     );
   }
 
@@ -55,6 +66,7 @@ class ChatModel extends ChatEntity {
       isPinned: isPinned,
       pinnedAt: pinnedAt,
       lastMessageCreatedAt: lastMessageCreatedAt,
+      messages: messages,
     );
   }
 }

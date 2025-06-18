@@ -1,3 +1,4 @@
+import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 
 class ChatEntity {
   final int id;
@@ -6,6 +7,7 @@ class ChatEntity {
   final bool isPinned;
   final DateTime? pinnedAt;
   final DateTime? lastMessageCreatedAt;
+  final List<MessageEntity> messages;
 
   const ChatEntity({
     required this.id,
@@ -14,6 +16,7 @@ class ChatEntity {
     required this.isPinned,
     required this.pinnedAt,
     required this.lastMessageCreatedAt,
+    required this.messages,
   });
 }
 
