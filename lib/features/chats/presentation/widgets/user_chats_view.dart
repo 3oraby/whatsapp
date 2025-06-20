@@ -6,6 +6,7 @@ import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_app_padding.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
+import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_user_chats_cubit/get_user_chats_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/custom_chat_item.dart';
 
@@ -17,6 +18,7 @@ class UserChatsView extends StatelessWidget {
     return BlocProvider(
       create: (context) => GetUserChatsCubit(
         chatsRepo: getIt<ChatsRepo>(),
+        socketRepo: getIt<SocketRepo>(),
       ),
       child: Column(
         children: [
@@ -95,7 +97,7 @@ class _ShowUserChatsBodyState extends State<ShowUserChatsBody> {
                   );
                 }
 
-                return const SizedBox(); 
+                return const SizedBox();
               },
             ),
           ),

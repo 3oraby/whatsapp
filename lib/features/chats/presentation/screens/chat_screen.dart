@@ -30,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    messages = List.from(widget.chat.messages);
+    messages = [];
     _initSocketConnection();
   }
 

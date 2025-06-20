@@ -2,13 +2,39 @@ import 'package:whatsapp/core/cubit/base/base_cubit.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
+import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 
 part 'get_user_chats_state.dart';
 
 class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
-  GetUserChatsCubit({required this.chatsRepo}) : super(GetUserChatsInitial());
+  GetUserChatsCubit({
+    required this.chatsRepo,
+    required this.socketRepo,
+  }) : super(GetUserChatsInitial()) {
+    _initSocketListeners();
+  }
 
   final ChatsRepo chatsRepo;
+  final SocketRepo socketRepo;
+  
+  void _initSocketListeners() {
+    socketRepo.onReceiveMessage((data) {
+      final chatId = data['chat_id'];
+
+      final message = MessageEntity(
+        id: data["id"],
+        content: data["content"],
+        chatId: chatId,
+        senderId: data["user_id"],
+        receiverId: data["reciever_id"],
+        type: data["type"] ?? "text",
+        createdAt: DateTime.parse(data["createdAt"]),
+        status: data["status"] ?? "sent",
+      );
+
+      updateChatListOnNewMessage(message);
+    });
+  }
 
   Future<void> getUserChats() async {
     emit(GetUserChatsLoadingState());
@@ -28,7 +54,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     );
   }
 
-  // void updateChatListOnNewMessage(MessageEntity message) {
+  void updateChatListOnNewMessage(MessageEntity message) {
   //   final currentState = state;
   //   if (currentState is! GetUserChatsLoadedState) return;
 
@@ -83,5 +109,5 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
 
   //   // ✅ لو في pinning system، ضيف ترتيب لاحقًا
   //   emit(GetUserChatsLoadedState(chats: chats));
-  // }
+  }
 }

@@ -16,7 +16,7 @@ class UserModel extends UserEntity {
       name: json['name'],
       phoneNumber: json['phone_number'],
       description: json['discription'],
-      email: json['email'],
+      email: json['email'] ?? "",
       profileImage: json['profile_image'],
     );
   }

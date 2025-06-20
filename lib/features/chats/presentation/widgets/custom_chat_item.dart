@@ -13,7 +13,7 @@ class CustomChatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final anotherUser = chat.anotherUser;
-    final lastTime = chat.lastMessageCreatedAt;
+    final lastTime = chat.lastMessage.createdAt;
 
     return ListTile(
       contentPadding: EdgeInsets.zero,
