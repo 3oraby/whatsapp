@@ -7,13 +7,13 @@ import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:whatsapp/core/api/api_consumer.dart';
 import 'package:whatsapp/core/api/dio_consumer.dart';
-import 'package:whatsapp/core/repos/web_socket_repo/web_socket_repo.dart';
-import 'package:whatsapp/core/repos/web_socket_repo/web_socket_repo_impl.dart';
 import 'package:whatsapp/core/services/web_socket_service.dart';
 import 'package:whatsapp/features/auth/data/repo_impl/auth_repo_impl.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 import 'package:whatsapp/features/chats/data/repo_impl/chats_repo_impl.dart';
+import 'package:whatsapp/features/chats/data/repo_impl/socket_repo_impl.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
+import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/contacts/data/repos_impl/contacts_repo_impl.dart';
 import 'package:whatsapp/features/contacts/domain/repos/contacts_repo.dart';
 import 'package:whatsapp/features/stories/data/repos_impl/stories_repo_impl.dart';
@@ -46,9 +46,9 @@ Future<void> setupGetIt() async {
   ));
 
   getIt.registerSingleton<WebSocketService>(
-      WebSocketService()..initSocketConnection());
+      WebSocketService()..connect());
 
-  getIt.registerSingleton<WebSocketRepo>(WebSocketRepoImpl(
+  getIt.registerSingleton<SocketRepo>(SocketRepoImpl(
     webSocketService: getIt<WebSocketService>(),
   ));
 

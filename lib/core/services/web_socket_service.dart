@@ -1,63 +1,50 @@
 import 'dart:developer';
 
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:whatsapp/core/api/end_points.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+import 'package:whatsapp/core/constants/storage_keys.dart';
+import 'package:whatsapp/core/storage/app_storage_helper.dart';
 
 class WebSocketService {
-  static final WebSocketService _instance = WebSocketService._internal();
-  factory WebSocketService() => _instance;
+  Socket? _socket;
 
-  late IO.Socket socket;
+  void connect() async {
+    final accessToken = await AppStorageHelper.getSecureData(
+        StorageKeys.accessToken.toString());
 
-  WebSocketService._internal();
+    if (accessToken == null) {
+      log("❌ No access token found, socket not connected.");
+      return;
+    }
 
-  void initSocketConnection() {
-    socket = IO.io(
-      EndPoints.webSocketUrl,
-      IO.OptionBuilder()
+    _socket = io(
+      'http://10.0.2.2:3000',
+      OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
+          .setAuth({'token': accessToken})
           .build(),
     );
 
-    socket.connect();
+    _socket!.connect();
 
-    socket.onConnect((_) => log('✅ Connected to socket'));
-    socket.onDisconnect((_) => log('❌ Disconnected from socket'));
-    socket.onConnectError((err) => log('⚠️ Connect error: $err'));
+    _socket!.onConnect((_) => log("Connected to socket server ✅"));
+    _socket!.onDisconnect((_) => log("Disconnected from socket server ❗"));
+    _socket!.onConnectError((data) => log("Socket connection error: $data ❌"));
+    _socket!.onError((err) => log("General socket error: $err ❌"));
   }
 
-  void sendMessage(Map<String, dynamic> messageData) {
-    if (socket.connected) {
-      socket.emit('send_message', messageData);
-    } else {
-      log("❌ Can't send message: Socket not connected");
+  void disconnect() {
+    if (_socket?.connected == true) {
+      _socket!.disconnect();
+      log("Disconnected from socket server 🔌");
     }
   }
 
-  void listenToMessages(Function(Map<String, dynamic>) onMessage) {
-    socket.on('new_message', (data) {
-      if (data is Map<String, dynamic>) {
-        onMessage(data);
-      } else {
-        log("⚠️ Unexpected message data: $data");
-      }
-    });
+  void on(String event, Function(dynamic) callback) {
+    _socket?.on(event, callback);
   }
 
-  void updateStatus(String userId, String status) {
-    socket.emit('update_status', {'userId': userId, 'status': status});
-  }
-
-  void onStatusUpdate(Function(Map<String, dynamic>) callback) {
-    socket.on('user_status', (data) => callback(data));
-  }
-
-  void markMessageAsSeen(String messageId) {
-    socket.emit('message_seen', {'messageId': messageId});
-  }
-
-  void dispose() {
-    socket.dispose();
+  void emit(String event, dynamic data) {
+    _socket?.emit(event, data);
   }
 }

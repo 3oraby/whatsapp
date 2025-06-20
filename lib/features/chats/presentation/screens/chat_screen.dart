@@ -1,16 +1,15 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:whatsapp/core/constants/storage_keys.dart';
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
-import 'package:whatsapp/core/storage/app_storage_helper.dart';
+import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/user/domain/user_entity.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -25,7 +24,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  late IO.Socket socket;
   late List<MessageEntity> messages;
   late UserEntity currentUser = getCurrentUserEntity();
 
@@ -37,37 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _initSocketConnection() async {
-    final String? accessToken = await AppStorageHelper.getSecureData(
-        StorageKeys.accessToken.toString());
-
-    socket = IO.io(
-      'http://10.0.2.2:3000',
-      IO.OptionBuilder()
-          .setTransports(['websocket'])
-          .disableAutoConnect()
-          .setAuth({
-            'token': accessToken,
-          })
-          .build(),
-    );
-
-    socket.connect();
-
-    socket.onConnect((_) {
-      log("Connected to socket server ✅");
-    });
-
-    socket.onConnectError((data) {
-      log("Socket connection error: $data ❌");
-    });
-
-    socket.onError((err) {
-      log("General socket error: $err ❌");
-    });
-
-    socket.on('receive_message', (data) {
-      print('receive message');
-      print('recieved data: $data');
+    getIt<SocketRepo>().onReceiveMessage((data) {
       if (data["chat_id"] == widget.chat.id) {
         log('receive message done');
 
@@ -102,7 +70,6 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
-    socket.dispose();
     super.dispose();
   }
 
@@ -116,7 +83,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void sendMessage() {
     final text = _messageController.text.trim();
-    print('send message ');
 
     if (text.isNotEmpty) {
       log(text);
@@ -138,7 +104,7 @@ class _ChatScreenState extends State<ChatScreen> {
           "media_url": null,
         }
       };
-      socket.emit("send_message", messageData);
+      getIt<SocketRepo>().sendMessage(messageData);
 
       log("Sent message: $messageData");
       setState(() {
