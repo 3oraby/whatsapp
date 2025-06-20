@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
@@ -19,6 +21,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
   
   void _initSocketListeners() {
     socketRepo.onReceiveMessage((data) {
+      log("receive message in init of GetUserChatsCubit");
       final chatId = data['chat_id'];
 
       final message = MessageEntity(

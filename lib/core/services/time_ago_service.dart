@@ -72,4 +72,18 @@ class TimeAgoService {
         date.month == yesterday.month &&
         date.day == yesterday.day;
   }
+
+  static String getSmartChatTimestamp(DateTime dateTime) {
+    final now = DateTime.now();
+
+    if (_isSameDay(now, dateTime)) {
+      return DateFormat.jm().format(dateTime); // e.g. 3:15 PM
+    } else if (_isYesterday(dateTime)) {
+      return 'yesterday';
+    } else if (now.difference(dateTime).inDays < 7) {
+      return DateFormat.EEEE().format(dateTime); // e.g. Sunday
+    } else {
+      return DateFormat('dd/MM/yyyy').format(dateTime); // e.g. 10/11/2025
+    }
+  }
 }
