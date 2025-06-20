@@ -1,3 +1,5 @@
+import 'package:whatsapp/features/user/domain/user_entity.dart';
+
 class MessageEntity {
   final int id;
   final String? content;
@@ -12,6 +14,9 @@ class MessageEntity {
   final bool? isDeleted;
   final DateTime createdAt;
   final DateTime? updatedAt;
+  final bool isFromMe;
+  final int reactsCount;
+  final UserEntity? sender;
 
   MessageEntity({
     required this.id,
@@ -27,5 +32,8 @@ class MessageEntity {
     this.isDeleted,
     required this.createdAt,
     this.updatedAt,
+    required this.isFromMe,
+    required this.reactsCount,
+    this.sender,
   });
 }

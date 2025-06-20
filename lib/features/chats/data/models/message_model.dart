@@ -1,4 +1,5 @@
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/user/data/models/user_model.dart';
 
 class MessageModel extends MessageEntity {
   MessageModel({
@@ -15,6 +16,9 @@ class MessageModel extends MessageEntity {
     super.isDeleted,
     required super.createdAt,
     super.updatedAt,
+    required super.isFromMe,
+    required super.reactsCount,
+    super.sender,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -25,14 +29,19 @@ class MessageModel extends MessageEntity {
       chatId: json['chat_id'],
       senderId: json['user_id'],
       receiverId: json['reciever_id'],
-      status: json['status'],
+      status: json['status'] ?? "sent",
       parentId: json['parent_id'],
-      type: json['type'],
+      type: json['type'] ?? "text",
       statusId: json['statusId'],
       isDeleted: json['isDeleted'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt:
           json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      isFromMe: json['isFromMe'] ?? false,
+      reactsCount: json['reacts_count'] ?? 0,
+      sender: json['user'] != null
+          ? UserModel.fromJson(json['user']).toEntity()
+          : null,
     );
   }
 
@@ -51,6 +60,9 @@ class MessageModel extends MessageEntity {
       isDeleted: entity.isDeleted,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
+      isFromMe: entity.isFromMe,
+      reactsCount: entity.reactsCount,
+      sender: entity.sender,
     );
   }
 
@@ -69,6 +81,9 @@ class MessageModel extends MessageEntity {
       isDeleted: isDeleted,
       createdAt: createdAt,
       updatedAt: updatedAt,
+      isFromMe: isFromMe,
+      reactsCount: reactsCount,
+      sender: sender,
     );
   }
 }

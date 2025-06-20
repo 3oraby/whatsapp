@@ -6,7 +6,9 @@ import 'package:whatsapp/core/api/end_points.dart';
 import 'package:whatsapp/core/errors/exceptions.dart';
 import 'package:whatsapp/core/errors/failures.dart';
 import 'package:whatsapp/features/chats/data/models/chat_model.dart';
+import 'package:whatsapp/features/chats/data/models/message_model.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
+import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 
 class ChatsRepoImpl extends ChatsRepo {
@@ -33,6 +35,35 @@ class ChatsRepoImpl extends ChatsRepo {
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     } catch (e) {
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<MessageEntity>>> getChatMessages({
+    required int chatId,
+  }) async {
+    try {
+      final result = await apiConsumer.get(
+        EndPoints.getChatMessages(chatId: chatId),
+      );
+
+      final List<MessageEntity> messages = (result['messages'] as List)
+          .map((json) => MessageModel.fromJson(json).toEntity())
+          .toList();
+
+      return Right(messages);
+    } on UnAuthorizedException {
+      log("UnAuthorized in getUserChats");
+      return Left(UnAuthorizedException());
+    } on ConnectionException catch (e) {
+      return Left(CustomException(message: e.message));
+    } on ServerException {
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    } catch (e) {
+      log("error in get chat messages: $e");
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     }

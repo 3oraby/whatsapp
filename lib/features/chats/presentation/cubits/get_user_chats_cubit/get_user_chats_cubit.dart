@@ -24,18 +24,18 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
       log("receive message in init of GetUserChatsCubit");
       final chatId = data['chat_id'];
 
-      final message = MessageEntity(
-        id: data["id"],
-        content: data["content"],
-        chatId: chatId,
-        senderId: data["user_id"],
-        receiverId: data["reciever_id"],
-        type: data["type"] ?? "text",
-        createdAt: DateTime.parse(data["createdAt"]),
-        status: data["status"] ?? "sent",
-      );
+      // final message = MessageEntity(
+      //   id: data["id"],
+      //   content: data["content"],
+      //   chatId: chatId,
+      //   senderId: data["user_id"],
+      //   receiverId: data["reciever_id"],
+      //   type: data["type"] ?? "text",
+      //   createdAt: DateTime.parse(data["createdAt"]),
+      //   status: data["status"] ?? "sent",
+      // );
 
-      updateChatListOnNewMessage(message);
+      // updateChatListOnNewMessage(message);
     });
   }
 
