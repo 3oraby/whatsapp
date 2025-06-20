@@ -32,6 +32,9 @@ class ChatsRepoImpl extends ChatsRepo {
     } on ServerException {
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
+    } catch (e) {
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
     }
   }
 }

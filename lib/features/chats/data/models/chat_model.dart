@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:whatsapp/features/chats/data/models/last_message_model.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/user/data/models/user_model.dart';
@@ -14,18 +16,24 @@ class ChatModel extends ChatEntity {
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) {
-    return ChatModel(
-      id: json['chatId'],
-      anotherUser: UserModel.fromJson(
-        (json['participants'] as List).first,
-      ).toEntity(),
-      isPinned: json['isPinned'] ?? false,
-      isFavorite: json['isFavorite'] ?? false,
-      pinnedAt:
-          json['pinnedAt'] != null ? DateTime.tryParse(json['pinnedAt']) : null,
-      unreadCount: json['unreadCount'] ?? 0,
-      lastMessage: LastMessageModel.fromJson(json['lastMessage']).toEntity(),
-    );
+    try {
+      final participantJson = (json['participants'] as List).first;
+
+      return ChatModel(
+        id: json['chatId'] ?? json['id'],
+        anotherUser: UserModel.fromJson(participantJson).toEntity(),
+        isPinned: json['isPinned'] ?? false,
+        isFavorite: json['isFavorite'] ?? false,
+        pinnedAt: json['pinnedAt'] != null
+            ? DateTime.tryParse(json['pinnedAt'])
+            : null,
+        unreadCount: json['unreadCount'] ?? 0,
+        lastMessage: LastMessageModel.fromJson(json['lastMessage']).toEntity(),
+      );
+    } catch (e) {
+      log("❌ Error in ChatModel.fromJson: $e");
+      throw Exception(e);
+    }
   }
 
   factory ChatModel.fromEntity(ChatEntity entity) {
