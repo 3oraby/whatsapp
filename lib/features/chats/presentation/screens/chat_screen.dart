@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
-import 'package:whatsapp/core/utils/app_colors.dart';
+import 'package:whatsapp/core/utils/app_images.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
@@ -26,8 +26,7 @@ class ChatScreen extends StatelessWidget {
       ),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
+          backgroundColor: Colors.grey.shade300,
           leading: const BackButton(),
           title: Row(
             children: [
@@ -43,8 +42,16 @@ class ChatScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: ShowChatMessagesBlocConsumerBody(
-          chat: chat,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                AppImages.imagesWhatsappWallpaper8,
+                fit: BoxFit.cover,
+              ),
+            ),
+            ShowChatMessagesBlocConsumerBody(chat: chat),
+          ],
         ),
       ),
     );
