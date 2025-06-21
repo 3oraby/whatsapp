@@ -51,6 +51,7 @@ class ChatScreen extends StatelessWidget {
               child: Image.asset(
                 AppImages.imagesWhatsappWallpaper8,
                 fit: BoxFit.cover,
+                filterQuality: FilterQuality.low,
               ),
             ),
             SafeArea(
