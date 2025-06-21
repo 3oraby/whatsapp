@@ -25,9 +25,10 @@ class ChatScreen extends StatelessWidget {
         chatsRepo: getIt<ChatsRepo>(),
       ),
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.grey.shade300,
-          leading: const BackButton(),
+          backgroundColor: Colors.transparent,
+          leading: const BackButton(color: Colors.white),
           title: Row(
             children: [
               BuildUserProfileImage(
@@ -37,7 +38,9 @@ class ChatScreen extends StatelessWidget {
               const HorizontalGap(10),
               Text(
                 chat.anotherUser.name,
-                style: AppTextStyles.poppinsMedium(context, 18).copyWith(),
+                style: AppTextStyles.poppinsMedium(context, 18).copyWith(
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -50,7 +53,11 @@ class ChatScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            ShowChatMessagesBlocConsumerBody(chat: chat),
+            SafeArea(
+              top: true,
+              bottom: false,
+              child: ShowChatMessagesBlocConsumerBody(chat: chat),
+            ),
           ],
         ),
       ),

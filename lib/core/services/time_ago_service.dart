@@ -86,4 +86,8 @@ class TimeAgoService {
       return DateFormat('dd/MM/yyyy').format(dateTime); // e.g. 10/11/2025
     }
   }
+
+  static String formatTimeOnly(DateTime dateTime) {
+    return DateFormat.jm().format(dateTime); // e.g. 3:15 PM
+  }
 }

@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
+import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
+import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
@@ -133,10 +135,11 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const Divider(),
         Expanded(
           child: _buildMessageList(),
         ),
-        const Divider(height: 1),
+        const Divider(),
         _buildMessageInput(),
       ],
     );
@@ -145,30 +148,20 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   Widget _buildMessageList() {
     return ListView.builder(
       controller: _scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        vertical: 8,
+        horizontal: 16,
+      ),
       itemCount: messages.length,
       itemBuilder: (context, index) {
         final msg = messages[index];
-        final isMe =
-            msg.senderId == currentUser.id; // replace with auth ID check
+        final isFromMe = msg.senderId == currentUser.id;
 
         return Align(
-          alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            decoration: BoxDecoration(
-              color: isMe
-                  ? AppColors.primary.withOpacity(0.9)
-                  : Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              msg.content ?? "content",
-              style: TextStyle(
-                color: isMe ? Colors.white : Colors.black,
-              ),
-            ),
+          alignment: isFromMe ? Alignment.centerRight : Alignment.centerLeft,
+          child: CustomBubbleMessageItem(
+            isFromMe: isFromMe,
+            msg: msg,
           ),
         );
       },
@@ -177,24 +170,94 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
 
   Widget _buildMessageInput() {
     return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        color: Colors.grey.shade100,
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _messageController,
-                decoration: const InputDecoration(
-                  hintText: "Type a message",
-                  border: InputBorder.none,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(30),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _messageController,
+                  style: const TextStyle(color: Colors.black87),
+                  decoration: const InputDecoration(
+                    hintText: "Type a message",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: InputBorder.none,
+                  ),
+                  onSubmitted: (_) => sendMessage(),
                 ),
-                onSubmitted: (_) => sendMessage(),
               ),
+              const SizedBox(width: 6),
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary,
+                ),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.send,
+                    color: Colors.white,
+                  ),
+                  onPressed: sendMessage,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomBubbleMessageItem extends StatelessWidget {
+  const CustomBubbleMessageItem({
+    super.key,
+    required this.isFromMe,
+    required this.msg,
+  });
+
+  final bool isFromMe;
+  final MessageEntity msg;
+
+  @override
+  Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.sizeOf(context).width;
+    return Align(
+      alignment: isFromMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: screenWidth / 2,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        decoration: BoxDecoration(
+          color: isFromMe ? AppColors.myMessageLight : Colors.grey.shade100,
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(12),
+            topRight: const Radius.circular(12),
+            bottomLeft: Radius.circular(isFromMe ? 12 : 0),
+            bottomRight: Radius.circular(isFromMe ? 0 : 12),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment:
+              isFromMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Text(
+              msg.content ?? "content",
+              style: AppTextStyles.poppinsMedium(context, 16),
             ),
-            IconButton(
-              icon: const Icon(Icons.send, color: AppColors.primary),
-              onPressed: sendMessage,
+            const SizedBox(height: 4),
+            Text(
+              TimeAgoService.formatTimeOnly(msg.createdAt),
+              style: AppTextStyles.poppinsMedium(context, 12).copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
           ],
         ),

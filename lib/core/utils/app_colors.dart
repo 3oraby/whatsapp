@@ -17,7 +17,7 @@ class AppColors {
   static const Color highlightBackgroundColor = Color(0xFFe8e8e8);
   static const Color lightChatBackground = Color(0xFFECE5DD);
   static const Color lightInputBackground = Color(0xFFF0F0F0);
-  static const Color myMessageLight = Color(0xFFDCF8C6);
+  static const Color myMessageLight = Color(0xFFd8fdd2);
   static const Color otherMessageLight = Color(0xFFFFFFFF);
   static const Color messageTextLight = Color(0xFF000000);
   static const Color messageTimeLight = Color(0xFF888888);
