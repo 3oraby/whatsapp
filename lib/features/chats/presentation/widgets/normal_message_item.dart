@@ -23,7 +23,12 @@ class NormalMessageItem extends StatelessWidget {
           color: bgColor,
           borderRadius: BorderRadius.circular(14),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.only(
+          top: 4,
+          bottom: 4,
+          left: 24,
+          right: 8,
+        ),
         child: CustomMessageContent(
           isFromMe: isFromMe,
           msg: msg,

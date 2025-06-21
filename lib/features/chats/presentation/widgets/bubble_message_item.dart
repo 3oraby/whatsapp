@@ -22,7 +22,12 @@ class BubbleMessageItem extends StatelessWidget {
           ? ChatBubbleClipper3(type: BubbleType.sendBubble)
           : ChatBubbleClipper3(type: BubbleType.receiverBubble),
       alignment: isFromMe ? Alignment.topRight : Alignment.topLeft,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.only(
+        top: 4,
+        bottom: 4,
+        left: 24,
+        right: 16,
+      ),
       margin: EdgeInsets.all(0),
       backGroundColor: bgColor,
       child: CustomMessageContent(

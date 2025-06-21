@@ -22,7 +22,7 @@ class ShowChatMessagesList extends StatelessWidget {
       controller: _scrollController,
       padding: const EdgeInsets.symmetric(
         vertical: 8,
-        horizontal: 16,
+        horizontal: 8,
       ),
       itemCount: messages.length,
       separatorBuilder: (context, index) => const VerticalGap(6),

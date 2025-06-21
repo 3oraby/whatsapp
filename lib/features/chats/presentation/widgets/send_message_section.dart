@@ -1,80 +1,51 @@
-import 'dart:developer';
-
+import 'package:chat_bubbles/message_bars/message_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
-class SendMessageSection extends StatelessWidget {
+import 'package:whatsapp/core/utils/app_text_styles.dart';
+
+class SendMessageSection extends StatefulWidget {
   const SendMessageSection({
     super.key,
-    required this.messageController,
     required this.sendMessage,
   });
 
-  final TextEditingController messageController;
-  final VoidCallback sendMessage;
+  final void Function(String) sendMessage;
 
-  void _pickImage() {
-    // TODO: Add image picker logic
-    log("Pick image tapped");
-  }
+  @override
+  State<SendMessageSection> createState() => _SendMessageSectionState();
+}
 
+class _SendMessageSectionState extends State<SendMessageSection> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: _pickImage,
-                      icon: const Icon(Icons.attach_file, color: Colors.grey),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: TextField(
-                        controller: messageController,
-                        minLines: 1,
-                        maxLines: 5,
-                        keyboardType: TextInputType.multiline,
-                        style: const TextStyle(color: Colors.black87),
-                        decoration: const InputDecoration(
-                          hintText: "Type a message",
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: InputBorder.none,
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 10),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+      child: MessageBar(
+        onSend: widget.sendMessage,
+        sendButtonColor: AppColors.primary,
+        textFieldTextStyle: AppTextStyles.poppinsMedium(context, 16),
+        messageBarHintStyle: AppTextStyles.poppinsRegular(context, 14),
+        messageBarHintText: "Type your message..",
+        actions: [
+          InkWell(
+            child: Icon(
+              Icons.add,
+              color: Colors.black,
+              size: 24,
             ),
-            const SizedBox(width: 6),
-            Container(
-              height: 45,
-              width: 45,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primary,
+            onTap: () {},
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 8, right: 8),
+            child: InkWell(
+              child: Icon(
+                Icons.camera_alt,
+                color: Colors.green,
+                size: 24,
               ),
-              child: IconButton(
-                icon: const Icon(Icons.send, size: 20, color: Colors.white),
-                onPressed: sendMessage,
-              ),
+              onTap: () {},
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

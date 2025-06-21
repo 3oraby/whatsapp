@@ -25,7 +25,6 @@ class ShowChatMessagesBody extends StatefulWidget {
 }
 
 class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
-  final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   late List<MessageEntity> messages;
   late UserEntity currentUser = getCurrentUserEntity();
@@ -71,7 +70,6 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
 
   @override
   void dispose() {
-    _messageController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -84,9 +82,9 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     });
   }
 
-  void sendMessage() {
-    final text = _messageController.text.trim();
-
+  void sendMessage(String content) {
+    final text = content.trim();
+    log("new message content: $text");
     if (text.isNotEmpty) {
       log(text);
       // final messageData = {
@@ -142,10 +140,8 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
             currentUser: currentUser,
           ),
         ),
-        const Divider(),
         SendMessageSection(
-          messageController: _messageController,
-          sendMessage: sendMessage,
+          sendMessage: (content) => sendMessage(content),
         ),
       ],
     );

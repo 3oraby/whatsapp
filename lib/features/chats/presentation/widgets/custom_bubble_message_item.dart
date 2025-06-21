@@ -26,10 +26,16 @@ class CustomBubbleMessageItem extends StatelessWidget {
             bgColor: bgColor,
             msg: msg,
           )
-        : NormalMessageItem(
-            isFromMe: isFromMe,
-            bgColor: bgColor,
-            msg: msg,
+        : Padding(
+            padding: EdgeInsets.only(
+              right: isFromMe ? 8 : 0,
+              left: isFromMe ? 0 : 8,
+            ),
+            child: NormalMessageItem(
+              isFromMe: isFromMe,
+              bgColor: bgColor,
+              msg: msg,
+            ),
           );
   }
 }
