@@ -22,7 +22,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
   void _initSocketListeners() {
     socketRepo.onReceiveMessage((data) {
       log("receive message in init of GetUserChatsCubit");
-      final chatId = data['chat_id'];
+      // final chatId = data['chat_id'];
 
       // final message = MessageEntity(
       //   id: data["id"],

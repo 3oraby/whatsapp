@@ -3,12 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
-import 'package:whatsapp/core/services/time_ago_service.dart';
-import 'package:whatsapp/core/utils/app_colors.dart';
-import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/send_message_section.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_list.dart';
 import 'package:whatsapp/features/user/domain/user_entity.dart';
 
 class ShowChatMessagesBody extends StatefulWidget {
@@ -137,131 +136,18 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
       children: [
         const Divider(),
         Expanded(
-          child: _buildMessageList(),
+          child: ShowChatMessagesList(
+            scrollController: _scrollController,
+            messages: messages,
+            currentUser: currentUser,
+          ),
         ),
         const Divider(),
-        _buildMessageInput(),
+        SendMessageSection(
+          messageController: _messageController,
+          sendMessage: sendMessage,
+        ),
       ],
-    );
-  }
-
-  Widget _buildMessageList() {
-    return ListView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 16,
-      ),
-      itemCount: messages.length,
-      itemBuilder: (context, index) {
-        final msg = messages[index];
-        final isFromMe = msg.senderId == currentUser.id;
-
-        return Align(
-          alignment: isFromMe ? Alignment.centerRight : Alignment.centerLeft,
-          child: CustomBubbleMessageItem(
-            isFromMe: isFromMe,
-            msg: msg,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildMessageInput() {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(30),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _messageController,
-                  style: const TextStyle(color: Colors.black87),
-                  decoration: const InputDecoration(
-                    hintText: "Type a message",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: InputBorder.none,
-                  ),
-                  onSubmitted: (_) => sendMessage(),
-                ),
-              ),
-              const SizedBox(width: 6),
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary,
-                ),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.send,
-                    color: Colors.white,
-                  ),
-                  onPressed: sendMessage,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomBubbleMessageItem extends StatelessWidget {
-  const CustomBubbleMessageItem({
-    super.key,
-    required this.isFromMe,
-    required this.msg,
-  });
-
-  final bool isFromMe;
-  final MessageEntity msg;
-
-  @override
-  Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.sizeOf(context).width;
-    return Align(
-      alignment: isFromMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        constraints: BoxConstraints(
-          maxWidth: screenWidth / 2,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        decoration: BoxDecoration(
-          color: isFromMe ? AppColors.myMessageLight : Colors.grey.shade100,
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(12),
-            topRight: const Radius.circular(12),
-            bottomLeft: Radius.circular(isFromMe ? 12 : 0),
-            bottomRight: Radius.circular(isFromMe ? 0 : 12),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment:
-              isFromMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            Text(
-              msg.content ?? "content",
-              style: AppTextStyles.poppinsMedium(context, 16),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              TimeAgoService.formatTimeOnly(msg.createdAt),
-              style: AppTextStyles.poppinsMedium(context, 12).copyWith(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

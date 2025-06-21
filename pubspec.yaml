@@ -36,6 +36,8 @@ dependencies:
   intl: ^0.20.2
   cached_network_image: ^3.4.1
   palette_generator: ^0.3.3+7
+  chat_bubbles: ^1.7.0
+  flutter_chat_bubble: ^2.0.2
 
 dev_dependencies:
   flutter_test:
