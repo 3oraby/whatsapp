@@ -1,3 +1,5 @@
+import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 import 'package:whatsapp/features/user/domain/user_entity.dart';
 
 class MessageEntity {
@@ -7,9 +9,9 @@ class MessageEntity {
   final int? chatId;
   final int senderId;
   final int? receiverId;
-  final String status;
+  final MessageStatus status;
   final int? parentId;
-  final String type;
+  final MessageType type;
   final int? statusId;
   final bool? isDeleted;
   final DateTime createdAt;
@@ -25,15 +27,15 @@ class MessageEntity {
     required this.chatId,
     required this.senderId,
     required this.receiverId,
-    required this.status,
+    this.status = MessageStatus.sent,
     this.parentId,
-    required this.type,
+    this.type = MessageType.text,
     this.statusId,
     this.isDeleted,
     required this.createdAt,
     this.updatedAt,
     required this.isFromMe,
-    required this.reactsCount,
+    this.reactsCount = 0,
     this.sender,
   });
 }

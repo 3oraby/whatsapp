@@ -1,4 +1,6 @@
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 import 'package:whatsapp/features/user/data/models/user_model.dart';
 
 class MessageModel extends MessageEntity {
@@ -29,9 +31,9 @@ class MessageModel extends MessageEntity {
       chatId: json['chat_id'],
       senderId: json['user_id'],
       receiverId: json['reciever_id'],
-      status: json['status'] ?? "sent",
+      status: MessageStatusExtension.fromString(json['status'] ?? 'sent'),
       parentId: json['parent_id'],
-      type: json['type'] ?? "text",
+      type: MessageTypeExtension.fromString(json['type'] ?? 'text'),
       statusId: json['statusId'],
       isDeleted: json['isDeleted'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),

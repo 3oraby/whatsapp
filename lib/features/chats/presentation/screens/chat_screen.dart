@@ -7,6 +7,7 @@ import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
+import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_bloc_consumer_body.dart';
 
@@ -23,6 +24,7 @@ class ChatScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => GetChatMessagesCubit(
         chatsRepo: getIt<ChatsRepo>(),
+        socketRepo: getIt<SocketRepo>(),
       ),
       child: Scaffold(
         extendBodyBehindAppBar: true,
