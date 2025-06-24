@@ -74,4 +74,25 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
     msgs[idx] = msgs[idx].copyWith(status: newStatus);
     emit(GetChatMessagesLoadedState(messages: msgs));
   }
+
+void markAllMyMessagesAsRead() {
+  if (state is! GetChatMessagesLoadedState) return;
+
+  final currentState = state as GetChatMessagesLoadedState;
+
+  final needsUpdate = currentState.messages.any(
+    (msg) => msg.isFromMe && msg.status != MessageStatus.read,
+  );
+
+  if (!needsUpdate) return;
+
+  final updatedMessages = currentState.messages.map((msg) {
+    if (msg.isFromMe && msg.status != MessageStatus.read) {
+      return msg.copyWith(status: MessageStatus.read);
+    }
+    return msg;
+  }).toList();
+
+  emit(GetChatMessagesLoadedState(messages: updatedMessages));
+}
 }

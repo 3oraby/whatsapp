@@ -5,6 +5,7 @@ import 'package:whatsapp/core/widgets/custom_error_body_widget.dart';
 import 'package:whatsapp/core/widgets/custom_loading_body_widget.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_body.dart';
 
 class ShowChatMessagesBlocConsumerBody extends StatefulWidget {
@@ -26,6 +27,8 @@ class _ShowChatMessagesBlocConsumerBodyState
   void initState() {
     super.initState();
     _loadInitialChatMessages();
+
+    context.read<MessageStreamCubit>().markChatAsRead();
   }
 
   _loadInitialChatMessages() {

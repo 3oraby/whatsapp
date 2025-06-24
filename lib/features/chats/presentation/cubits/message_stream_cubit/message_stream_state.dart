@@ -24,3 +24,9 @@ class UpdateMessageStatusState extends MessageStreamState {
     required this.newStatus,
   });
 }
+
+class AllMessagesReadInChatState extends MessageStreamState {
+  final int chatId;
+
+  AllMessagesReadInChatState({required this.chatId});
+}

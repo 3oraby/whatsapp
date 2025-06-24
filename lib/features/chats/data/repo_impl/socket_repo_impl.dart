@@ -40,4 +40,25 @@ class SocketRepoImpl implements SocketRepo {
   void onMessageStatusUpdate(Function(dynamic data) callback) {
     webSocketService.on('status_update', callback);
   }
+
+  @override
+  void emitMarkChatAsRead(int chatId) {
+    webSocketService.emit('mark_chat_as_read', {
+      'chatId': chatId,
+    });
+  }
+
+  @override
+  void emitMessageRead(int messageId, int chatId, int senderId) {
+    webSocketService.emit('message_read', {
+      'messageId': messageId,
+      'chatId': chatId,
+      'senderId': senderId,
+    });
+  }
+
+  @override
+  void onAllMessagesRead(Function(dynamic data) callback) {
+    webSocketService.on('all messages readed successfully', callback);
+  }
 }

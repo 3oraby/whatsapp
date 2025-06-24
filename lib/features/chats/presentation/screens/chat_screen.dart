@@ -32,7 +32,7 @@ class ChatScreen extends StatelessWidget {
           BlocProvider(
             create: (context) => MessageStreamCubit(
               socketRepo: getIt<SocketRepo>(),
-
+              chatId: chat.id
             ),
           ),
         ],
