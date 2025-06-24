@@ -10,7 +10,7 @@ extension MessageStatusExtension on MessageStatus {
       case MessageStatus.sent:
         return "sent";
       case MessageStatus.delivered:
-        return "deliverd"; 
+        return "deliverd";
       case MessageStatus.read:
         return "read";
     }
@@ -27,5 +27,14 @@ extension MessageStatusExtension on MessageStatus {
       default:
         return MessageStatus.sent;
     }
+  }
+}
+
+extension MessageStatusParser on String {
+  MessageStatus toMessageStatus() {
+    return MessageStatus.values.firstWhere(
+      (e) => e.name.toLowerCase() == toLowerCase(),
+      orElse: () => MessageStatus.sent,
+    );
   }
 }

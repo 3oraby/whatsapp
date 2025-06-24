@@ -70,6 +70,13 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
                   : (state as NewOutgoingMessageState).message;
               context.read<GetChatMessagesCubit>().addMessageToList(message);
             }
+
+            if (state is UpdateMessageStatusState) {
+              context.read<GetChatMessagesCubit>().updateTempMessage(
+                    newId: state.newId,
+                    newStatus: state.newStatus,
+                  );
+            }
           },
         ),
         BlocListener<GetChatMessagesCubit, GetChatMessagesState>(

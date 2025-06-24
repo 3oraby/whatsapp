@@ -35,4 +35,9 @@ class SocketRepoImpl implements SocketRepo {
   void emitTyping(Map<String, dynamic> payload) {
     webSocketService.emit('typing', payload);
   }
+
+  @override
+  void onMessageStatusUpdate(Function(dynamic data) callback) {
+    webSocketService.on('status_update', callback);
+  }
 }

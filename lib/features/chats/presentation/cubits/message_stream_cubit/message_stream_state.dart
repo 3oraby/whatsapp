@@ -15,3 +15,12 @@ class NewOutgoingMessageState extends MessageStreamState {
 
   NewOutgoingMessageState(this.message);
 }
+
+class UpdateMessageStatusState extends MessageStreamState {
+  final int newId;
+  final MessageStatus newStatus;
+  UpdateMessageStatusState({
+    required this.newId,
+    required this.newStatus,
+  });
+}

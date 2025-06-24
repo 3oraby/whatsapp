@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/features/chats/data/models/message_model.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 
 part 'message_stream_state.dart';
@@ -19,6 +20,20 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     socketRepo.onReceiveMessage((data) {
       final message = MessageModel.fromJson(data).toEntity();
       emit(NewIncomingMessageState(message));
+    });
+
+    socketRepo.onMessageStatusUpdate((data) {
+      print('new status data: $data');
+      final messageId = data["messageId"];
+
+      final newStatus = (data["status"] as String).toMessageStatus();
+
+      emit(
+        UpdateMessageStatusState(
+          newId: messageId,
+          newStatus: newStatus,
+        ),
+      );
     });
   }
 

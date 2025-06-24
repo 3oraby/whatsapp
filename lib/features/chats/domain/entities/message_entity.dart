@@ -38,4 +38,42 @@ class MessageEntity {
     this.reactsCount = 0,
     this.sender,
   });
+
+  MessageEntity copyWith({
+    int? id,
+    String? content,
+    String? mediaUrl,
+    int? chatId,
+    int? senderId,
+    int? receiverId,
+    MessageStatus? status,
+    int? parentId,
+    MessageType? type,
+    int? statusId,
+    bool? isDeleted,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? isFromMe,
+    int? reactsCount,
+    UserEntity? sender,
+  }) {
+    return MessageEntity(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      mediaUrl: mediaUrl ?? this.mediaUrl,
+      chatId: chatId ?? this.chatId,
+      senderId: senderId ?? this.senderId,
+      receiverId: receiverId ?? this.receiverId,
+      status: status ?? this.status,
+      parentId: parentId ?? this.parentId,
+      type: type ?? this.type,
+      statusId: statusId ?? this.statusId,
+      isDeleted: isDeleted ?? this.isDeleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isFromMe: isFromMe ?? this.isFromMe,
+      reactsCount: reactsCount ?? this.reactsCount,
+      sender: sender ?? this.sender,
+    );
+  }
 }

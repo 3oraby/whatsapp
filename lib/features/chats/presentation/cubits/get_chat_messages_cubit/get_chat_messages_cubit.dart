@@ -1,5 +1,6 @@
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 
 part 'get_chat_messages_state.dart';
@@ -38,5 +39,25 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
         ..add(message);
       emit(GetChatMessagesLoadedState(messages: updatedMessages));
     }
+  }
+
+  void updateTempMessage({
+    required int newId,
+    required MessageStatus newStatus,
+  }) {
+    if (state is! GetChatMessagesLoadedState) return;
+
+    final currentState = state as GetChatMessagesLoadedState;
+    final updatedMessages = currentState.messages.map((msg) {
+      if (msg.id == -1) {
+        return msg.copyWith(
+          id: newId,
+          status: newStatus,
+        );
+      }
+      return msg;
+    }).toList();
+
+    emit(GetChatMessagesLoadedState(messages: updatedMessages));
   }
 }
