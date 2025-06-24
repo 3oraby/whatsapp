@@ -51,6 +51,17 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
         emit(AllMessagesReadInChatState(chatId: chatId));
       }
     });
+
+    socketRepo.onMessageRead((data) {
+      final int messageId = data['messageId'];
+
+      if (!isClosed) {
+        emit(UpdateMessageStatusState(
+          newId: messageId,
+          newStatus: MessageStatus.read,
+        ));
+      }
+    });
   }
 
   void sendMessage({

@@ -88,10 +88,6 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
                     );
               }
             }
-
-            if (state is AllMessagesReadInChatState) {
-              context.read<GetChatMessagesCubit>().markAllMyMessagesAsRead();
-            }
           },
         ),
         BlocListener<GetChatMessagesCubit, GetChatMessagesState>(

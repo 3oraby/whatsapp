@@ -14,4 +14,6 @@ abstract class SocketRepo {
   void emitMessageRead(int messageId, int chatId, int senderId);
 
   void onAllMessagesRead(Function(dynamic data) callback);
+
+  void onMessageRead(Function(dynamic data) callback); 
 }

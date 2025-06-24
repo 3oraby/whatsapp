@@ -61,4 +61,9 @@ class SocketRepoImpl implements SocketRepo {
   void onAllMessagesRead(Function(dynamic data) callback) {
     webSocketService.on('all messages readed successfully', callback);
   }
+
+  @override
+  void onMessageRead(Function(dynamic data) callback) {
+    webSocketService.on('message_read', callback);
+  }
 }
