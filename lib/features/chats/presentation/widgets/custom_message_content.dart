@@ -20,23 +20,23 @@ class CustomMessageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth: MediaQuery.sizeOf(context).width * 0.6,
+        maxWidth: MediaQuery.sizeOf(context).width * 0.7,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
             msg.content ?? "content",
-            style: AppTextStyles.poppinsMedium(context, 16),
+            style: AppTextStyles.poppinsMedium(context, 20),
           ),
-          const VerticalGap(4),
+          const VerticalGap(3),
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 TimeAgoService.formatTimeOnly(msg.createdAt),
-                style: AppTextStyles.poppinsMedium(context, 11).copyWith(
+                style: AppTextStyles.poppinsMedium(context, 14).copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
@@ -74,7 +74,7 @@ class CustomMessageContent extends StatelessWidget {
 
     return Icon(
       iconData,
-      size: 16,
+      size: 20,
       color: color,
     );
   }

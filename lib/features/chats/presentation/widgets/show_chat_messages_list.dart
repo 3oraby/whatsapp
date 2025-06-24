@@ -25,7 +25,7 @@ class ShowChatMessagesList extends StatelessWidget {
         horizontal: 8,
       ),
       itemCount: messages.length,
-      separatorBuilder: (context, index) => const VerticalGap(6),
+      separatorBuilder: (context, index) => const VerticalGap(8),
       itemBuilder: (context, index) {
         final msg = messages[index];
         final isFromMe = msg.senderId == currentUser.id;

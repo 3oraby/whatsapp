@@ -24,9 +24,9 @@ class NormalMessageItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
         ),
         padding: const EdgeInsets.only(
-          top: 4,
+          top: 6,
           bottom: 4,
-          left: 24,
+          left: 26,
           right: 8,
         ),
         child: CustomMessageContent(
