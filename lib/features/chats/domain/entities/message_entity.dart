@@ -27,7 +27,7 @@ class MessageEntity {
     required this.chatId,
     required this.senderId,
     required this.receiverId,
-    this.status = MessageStatus.sent,
+    this.status = MessageStatus.pending,
     this.parentId,
     this.type = MessageType.text,
     this.statusId,

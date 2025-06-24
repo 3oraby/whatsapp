@@ -4,6 +4,7 @@ import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/send_message_section.dart';
@@ -72,10 +73,20 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
             }
 
             if (state is UpdateMessageStatusState) {
-              context.read<GetChatMessagesCubit>().updateTempMessage(
-                    newId: state.newId,
-                    newStatus: state.newStatus,
-                  );
+              final messageId = state.newId;
+              final newStatus = state.newStatus;
+              debugPrint("new status: ${state.newStatus.value}");
+              if (newStatus == MessageStatus.sent) {
+                context.read<GetChatMessagesCubit>().updateTempMessage(
+                      newId: messageId,
+                      newStatus: newStatus,
+                    );
+              } else {
+                context.read<GetChatMessagesCubit>().updateMessageStatus(
+                      id: messageId,
+                      newStatus: newStatus,
+                    );
+              }
             }
           },
         ),

@@ -1,4 +1,5 @@
 enum MessageStatus {
+  pending,
   sent,
   delivered,
   read,
@@ -7,6 +8,8 @@ enum MessageStatus {
 extension MessageStatusExtension on MessageStatus {
   String get value {
     switch (this) {
+      case MessageStatus.pending:
+        return "pending";
       case MessageStatus.sent:
         return "sent";
       case MessageStatus.delivered:
@@ -18,6 +21,8 @@ extension MessageStatusExtension on MessageStatus {
 
   static MessageStatus fromString(String value) {
     switch (value) {
+      case "pending":
+        return MessageStatus.pending;
       case "sent":
         return MessageStatus.sent;
       case "deliverd":
@@ -34,7 +39,7 @@ extension MessageStatusParser on String {
   MessageStatus toMessageStatus() {
     return MessageStatus.values.firstWhere(
       (e) => e.name.toLowerCase() == toLowerCase(),
-      orElse: () => MessageStatus.sent,
+      orElse: () => MessageStatus.pending,
     );
   }
 }
