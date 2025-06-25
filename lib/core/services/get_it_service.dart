@@ -46,7 +46,7 @@ Future<void> setupGetIt() async {
   ));
 
   getIt.registerSingleton<WebSocketService>(
-      WebSocketService()..connect());
+      WebSocketService());
 
   getIt.registerSingleton<SocketRepo>(SocketRepoImpl(
     webSocketService: getIt<WebSocketService>(),

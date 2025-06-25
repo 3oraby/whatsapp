@@ -4,7 +4,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:whatsapp/core/constants/storage_keys.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
 
-class WebSocketService {
+class  WebSocketService {
   Socket? _socket;
 
   void connect() async {
@@ -12,7 +12,7 @@ class WebSocketService {
         StorageKeys.accessToken.toString());
 
     if (accessToken == null) {
-      log("❌ No access token found, socket not connected.");
+      log("No access token found, socket not connected.");
       return;
     }
 
@@ -28,7 +28,7 @@ class WebSocketService {
     _socket!.connect();
 
     _socket!.onConnect((_) => log("Connected to socket server ✅"));
-    _socket!.onDisconnect((_) => log("Disconnected from socket server ❗"));
+    _socket!.onDisconnect((_) => log("onDisconnect from socket server ❗"));
     _socket!.onConnectError((data) => log("Socket connection error: $data ❌"));
     _socket!.onError((err) => log("General socket error: $err ❌"));
   }
