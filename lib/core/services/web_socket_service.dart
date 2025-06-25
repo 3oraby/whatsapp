@@ -4,7 +4,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:whatsapp/core/constants/storage_keys.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
 
-class  WebSocketService {
+class WebSocketService {
   Socket? _socket;
 
   void connect() async {
@@ -27,6 +27,7 @@ class  WebSocketService {
 
     _socket!.connect();
 
+    _socket!.onReconnect((_) => log("Reconnected to socket server"));
     _socket!.onConnect((_) => log("Connected to socket server ✅"));
     _socket!.onDisconnect((_) => log("onDisconnect from socket server ❗"));
     _socket!.onConnectError((data) => log("Socket connection error: $data ❌"));
