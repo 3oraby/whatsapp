@@ -88,9 +88,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   const VerticalGap(2),
                   if (state is ChatFriendStatusUpdated)
                     Text(
-                      state.status.isOnline
+                      state.isOnline
                           ? 'Online'
-                          : 'Last seen ${TimeAgoService.getTimeAgo(state.status.lastSeen)}',
+                          : 'Last seen ${TimeAgoService.getTimeAgo(state.lastSeen)}',
                       style: AppTextStyles.poppinsRegular(context, 12).copyWith(
                         color: Colors.white70,
                         fontSize: 13,

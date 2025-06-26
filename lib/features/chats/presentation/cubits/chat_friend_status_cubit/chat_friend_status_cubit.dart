@@ -1,7 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
-import 'package:whatsapp/features/user/data/models/user_current_status_model.dart';
-import 'package:whatsapp/features/user/domain/entities/user_current_status_entity.dart';
 import 'package:whatsapp/features/user/domain/repos/user_repo.dart';
 
 part 'chat_friend_status_state.dart';
@@ -23,10 +21,12 @@ class ChatFriendStatusCubit extends Cubit<ChatFriendStatusState> {
   void _listenToSocket() {
     socketRepo.onFriendStatusUpdate((data) {
       print(data);
-      final UserCurrentStatusEntity updatedStatus =
-          UserCurrentStatusModel.fromJson(data).toEntity();
+      final isOnline = data['status'] == 'online';
 
-      emit(ChatFriendStatusUpdated(updatedStatus));
+      emit(ChatFriendStatusUpdated(
+        isOnline: isOnline,
+        lastSeen: DateTime.now(),
+      ));
     });
   }
 
@@ -35,14 +35,10 @@ class ChatFriendStatusCubit extends Cubit<ChatFriendStatusState> {
         await userRepo.getUserCurrentStatus(userId: currentChatUserId);
     result.fold(
       (failure) => null,
-      (statusEntity) => emit(ChatFriendStatusUpdated(statusEntity)),
+      (statusEntity) => emit(ChatFriendStatusUpdated(
+        isOnline: statusEntity.isOnline,
+        lastSeen: statusEntity.lastSeen,
+      )),
     );
-  }
-
-  UserCurrentStatusEntity? getCurrentFriendStatus(ChatFriendStatusState state) {
-    if (state is ChatFriendStatusUpdated) {
-      return state.status;
-    }
-    return null;
   }
 }

@@ -5,7 +5,11 @@ abstract class ChatFriendStatusState {}
 class ChatFriendStatusInitial extends ChatFriendStatusState {}
 
 class ChatFriendStatusUpdated extends ChatFriendStatusState {
-  final UserCurrentStatusEntity status;
+  final bool isOnline;
+  final DateTime lastSeen;
 
-  ChatFriendStatusUpdated(this.status);
+  ChatFriendStatusUpdated({
+    required this.isOnline,
+    required this.lastSeen,
+  });
 }
