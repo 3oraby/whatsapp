@@ -11,7 +11,7 @@ import 'package:whatsapp/core/helpers/save_current_user_data_locally.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 import 'package:whatsapp/features/user/data/models/user_model.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class AuthRepoImpl extends AuthRepo {
   final ApiConsumer apiConsumer;

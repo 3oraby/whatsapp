@@ -1,5 +1,5 @@
 
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class ReactStoryEntity {
   final int id;

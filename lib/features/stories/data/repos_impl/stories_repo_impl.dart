@@ -14,7 +14,7 @@ import 'package:whatsapp/features/stories/domain/entities/contact_story_entity.d
 import 'package:whatsapp/features/stories/domain/entities/story_entity.dart';
 import 'package:whatsapp/features/stories/domain/entities/user_contacts_story_entity.dart';
 import 'package:whatsapp/features/stories/domain/repos/stories_repo.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class StoriesRepoImpl extends StoriesRepo {
   final ApiConsumer apiConsumer;

@@ -17,6 +17,11 @@ class SocketRepoImpl implements SocketRepo {
   }
 
   @override
+  void onFriendStatusUpdate(Function(dynamic data) callback) {
+    webSocketService.on('friend_status_update', callback);
+  }
+
+  @override
   void sendMessage(Map<String, dynamic> payload) {
     webSocketService.emit('send_message', payload);
   }

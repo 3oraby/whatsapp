@@ -1,6 +1,6 @@
 import 'package:whatsapp/features/contacts/domain/entities/user_with_contact_status_entity.dart';
 import 'package:whatsapp/features/user/data/models/user_model.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class UserWithContactStatusModel extends UserWithContactStatusEntity {
   UserWithContactStatusModel({

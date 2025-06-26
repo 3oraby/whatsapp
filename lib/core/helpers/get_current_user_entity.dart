@@ -5,7 +5,7 @@ import 'package:whatsapp/core/constants/storage_keys.dart';
 import 'package:whatsapp/core/errors/failures.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
 import 'package:whatsapp/features/user/data/models/user_model.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 
 UserEntity getCurrentUserEntity() {

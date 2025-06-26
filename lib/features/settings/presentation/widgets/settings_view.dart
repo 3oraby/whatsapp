@@ -11,7 +11,7 @@ import 'package:whatsapp/core/widgets/custom_modal_progress_hud.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 import 'package:whatsapp/features/contacts/presentation/widgets/custom_user_info_card.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});

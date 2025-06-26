@@ -14,7 +14,8 @@ class EndPoints {
   static const String getUser = "${baseUrl}user";
   static const String updateUser = "${baseUrl}user";
   static const String uploadProfileImage = "${baseUrl}user/image";
-  static const String getUserCurrentStatus = "${baseUrl}user/currentStatus";
+  static String getUserCurrentStatus({required int userId}) =>
+      "${baseUrl}user/currentStatus/$userId";
 
   // contacts
   static const String getUserContacts = "${baseUrl}contact";
@@ -23,10 +24,14 @@ class EndPoints {
   // stories
   static const String createStory = "${baseUrl}status";
   static const String getCurrentUserStory = "${baseUrl}status";
-  static const String getUserContactsStory = "${baseUrl}status/getUserCotactsStatus";
-  static String viewStory({required int storyId}) => "${baseUrl}status/view/$storyId";
-  static String deleteStory({required int storyId}) => "${baseUrl}status/$storyId";
-  static String reactStory({required int storyId}) => "${baseUrl}status/react/$storyId";
+  static const String getUserContactsStory =
+      "${baseUrl}status/getUserCotactsStatus";
+  static String viewStory({required int storyId}) =>
+      "${baseUrl}status/view/$storyId";
+  static String deleteStory({required int storyId}) =>
+      "${baseUrl}status/$storyId";
+  static String reactStory({required int storyId}) =>
+      "${baseUrl}status/react/$storyId";
   static String getReactsOnStory({required String storyId}) =>
       "${baseUrl}status/reacts/$storyId";
   static String getViewsOnStory({required String storyId}) =>
@@ -36,9 +41,14 @@ class EndPoints {
   static const String createChat = "${webSocketUrl}chat";
   static const String getUserChats = "${webSocketUrl}chat";
   static const String uploadChatImage = "${webSocketUrl}chat/uploadChatImage";
-  static String pinChat({required int chatId}) => "${webSocketUrl}chat/pin/$chatId";
-  static String unPinChat({required int chatId}) => "${webSocketUrl}chat/unPin/$chatId";
-  static String getChatMessages({required int chatId}) => "${webSocketUrl}chat/messages/$chatId";
-  static String getMessageHistory({required int messageId}) => "${webSocketUrl}chat/message/$messageId/history";
-  static String getMessageReacts({required int messageId}) => "${webSocketUrl}chat/message/$messageId/reacts";
+  static String pinChat({required int chatId}) =>
+      "${webSocketUrl}chat/pin/$chatId";
+  static String unPinChat({required int chatId}) =>
+      "${webSocketUrl}chat/unPin/$chatId";
+  static String getChatMessages({required int chatId}) =>
+      "${webSocketUrl}chat/messages/$chatId";
+  static String getMessageHistory({required int messageId}) =>
+      "${webSocketUrl}chat/message/$messageId/history";
+  static String getMessageReacts({required int messageId}) =>
+      "${webSocketUrl}chat/message/$messageId/reacts";
 }

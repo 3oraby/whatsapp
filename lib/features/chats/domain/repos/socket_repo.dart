@@ -15,5 +15,7 @@ abstract class SocketRepo {
 
   void onAllMessagesRead(Function(dynamic data) callback);
 
-  void onMessageRead(Function(dynamic data) callback); 
+  void onMessageRead(Function(dynamic data) callback);
+
+  void onFriendStatusUpdate(Function(dynamic data) callback);
 }

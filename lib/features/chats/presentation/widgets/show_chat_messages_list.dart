@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/custom_bubble_message_item.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class ShowChatMessagesList extends StatelessWidget {
   const ShowChatMessagesList({

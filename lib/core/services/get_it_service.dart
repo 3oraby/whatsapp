@@ -18,6 +18,8 @@ import 'package:whatsapp/features/contacts/data/repos_impl/contacts_repo_impl.da
 import 'package:whatsapp/features/contacts/domain/repos/contacts_repo.dart';
 import 'package:whatsapp/features/stories/data/repos_impl/stories_repo_impl.dart';
 import 'package:whatsapp/features/stories/domain/repos/stories_repo.dart';
+import 'package:whatsapp/features/user/data/repo_impl/user_repo_impl.dart';
+import 'package:whatsapp/features/user/domain/repos/user_repo.dart';
 
 final getIt = GetIt.instance;
 
@@ -42,6 +44,10 @@ Future<void> setupGetIt() async {
   ));
 
   getIt.registerSingleton<AuthRepo>(AuthRepoImpl(
+    apiConsumer: getIt<ApiConsumer>(),
+  ));
+
+  getIt.registerSingleton<UserRepo>(UserRepoImpl(
     apiConsumer: getIt<ApiConsumer>(),
   ));
 

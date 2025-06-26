@@ -9,7 +9,7 @@ import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cu
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/send_message_section.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_list.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class ShowChatMessagesBody extends StatefulWidget {
   final List<MessageEntity> messages;

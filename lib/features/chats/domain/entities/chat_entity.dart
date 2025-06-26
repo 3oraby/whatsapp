@@ -1,5 +1,5 @@
 import 'package:whatsapp/features/chats/domain/entities/last_message_entity.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class ChatEntity {
   final int id;

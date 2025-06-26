@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/features/contacts/presentation/widgets/contact_interaction_button.dart';
-import 'package:whatsapp/features/user/domain/user_entity.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class CustomUserInfoCard extends StatelessWidget {
   const CustomUserInfoCard({
