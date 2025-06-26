@@ -23,10 +23,12 @@ class ChatFriendStatusCubit extends Cubit<ChatFriendStatusState> {
       print(data);
       final isOnline = data['status'] == 'online';
 
-      emit(ChatFriendStatusUpdated(
-        isOnline: isOnline,
-        lastSeen: DateTime.now(),
-      ));
+      if (!isClosed) {
+        emit(ChatFriendStatusUpdated(
+          isOnline: isOnline,
+          lastSeen: DateTime.now(),
+        ));
+      }
     });
   }
 

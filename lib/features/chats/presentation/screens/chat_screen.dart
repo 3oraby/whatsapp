@@ -106,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     AppImages.imagesWhatsappWallpaper8,
                     fit: BoxFit.cover,
                     filterQuality: FilterQuality.low,
-                  ),
+                  ), 
                 ),
                 SafeArea(
                   top: true,
