@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
+import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_images.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
@@ -64,8 +65,8 @@ class _ChatScreenState extends State<ChatScreen> {
           builder: (context, state) => Scaffold(
             extendBodyBehindAppBar: true,
             appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              leading: const BackButton(color: Colors.white),
+              backgroundColor: AppColors.lightChatAppBarColor,
+              leading: const BackButton(),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -76,26 +77,29 @@ class _ChatScreenState extends State<ChatScreen> {
                         circleAvatarRadius: 16,
                       ),
                       const HorizontalGap(10),
-                      Text(
-                        widget.chat.anotherUser.name,
-                        style:
-                            AppTextStyles.poppinsMedium(context, 18).copyWith(
-                          color: Colors.white,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.chat.anotherUser.name,
+                            style: AppTextStyles.poppinsMedium(context, 18),
+                          ),
+                          const VerticalGap(2),
+                          if (state is ChatFriendStatusUpdated)
+                            Text(
+                              state.isOnline
+                                  ? 'Online'
+                                  : 'Last seen ${TimeAgoService.getTimeAgo(state.lastSeen)}',
+                              style: AppTextStyles.poppinsRegular(context, 12)
+                                  .copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 13,
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ),
-                  const VerticalGap(2),
-                  if (state is ChatFriendStatusUpdated)
-                    Text(
-                      state.isOnline
-                          ? 'Online'
-                          : 'Last seen ${TimeAgoService.getTimeAgo(state.lastSeen)}',
-                      style: AppTextStyles.poppinsRegular(context, 12).copyWith(
-                        color: Colors.white70,
-                        fontSize: 13,
-                      ),
-                    ),
                 ],
               ),
             ),
@@ -106,7 +110,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     AppImages.imagesWhatsappWallpaper8,
                     fit: BoxFit.cover,
                     filterQuality: FilterQuality.low,
-                  ), 
+                  ),
                 ),
                 SafeArea(
                   top: true,

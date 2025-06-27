@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
-import 'package:whatsapp/features/chats/presentation/widgets/custom_bubble_message_item.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/swipe_to_reply_message_item.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class ShowChatMessagesList extends StatelessWidget {
@@ -10,11 +10,14 @@ class ShowChatMessagesList extends StatelessWidget {
     required ScrollController scrollController,
     required this.messages,
     required this.currentUser,
+    this.onReplyRequested,
   }) : _scrollController = scrollController;
 
   final ScrollController _scrollController;
   final List<MessageEntity> messages;
   final UserEntity currentUser;
+
+  final void Function(MessageEntity message)? onReplyRequested;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +34,11 @@ class ShowChatMessagesList extends StatelessWidget {
         final isFromMe = msg.senderId == currentUser.id;
         final bool isLastFromSameSender = index == messages.length - 1 ||
             messages[index + 1].senderId != msg.senderId;
-
-        return CustomBubbleMessageItem(
-          isFromMe: isFromMe,
+        return SwipeToReplyMessageItem(
           msg: msg,
+          isFromMe: isFromMe,
           showClipper: isLastFromSameSender,
+          onReply: (msg) => onReplyRequested?.call(msg),
         );
       },
     );

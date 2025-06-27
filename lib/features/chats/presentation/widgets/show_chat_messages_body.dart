@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
+import 'package:whatsapp/core/utils/app_colors.dart';
+import 'package:whatsapp/core/utils/app_constants.dart';
+import 'package:whatsapp/core/utils/app_text_styles.dart';
+import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
@@ -28,6 +32,7 @@ class ShowChatMessagesBody extends StatefulWidget {
 class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   final ScrollController _scrollController = ScrollController();
   late UserEntity currentUser = getCurrentUserEntity();
+  MessageEntity? _replyingTo;
 
   @override
   void dispose() {
@@ -38,24 +43,39 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   void _scrollToBottom() {
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        _scrollController.jumpTo(
+          _scrollController.position.maxScrollExtent,
+        );
       }
     });
   }
 
   void sendMessage(String content) {
     final text = content.trim();
-    if (text.isNotEmpty) {
-      final dto = SendMessageDto(
-        receiverId: widget.chat.anotherUser.id,
-        chatId: widget.chat.id,
-        content: text,
-      );
-      context.read<MessageStreamCubit>().sendMessage(
-            dto: dto,
-            currentUserId: currentUser.id,
-          );
-    }
+    if (text.isEmpty) return;
+
+    final dto = SendMessageDto(
+      receiverId: widget.chat.anotherUser.id,
+      chatId: widget.chat.id,
+      content: text,
+      parentId: _replyingTo?.id,
+    );
+
+    context.read<MessageStreamCubit>().sendMessage(
+          dto: dto,
+          currentUserId: currentUser.id,
+        );
+
+    setState(() {
+      _replyingTo = null;
+    });
+  }
+
+  void _onReplyRequested(MessageEntity message) {
+    setState(() {
+      _replyingTo = message;
+    });
+    _scrollToBottom();
   }
 
   @override
@@ -71,11 +91,9 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
                   : (state as NewOutgoingMessageState).message;
               context.read<GetChatMessagesCubit>().addMessageToList(message);
             }
-
             if (state is UpdateMessageStatusState) {
               final messageId = state.newId;
               final newStatus = state.newStatus;
-              debugPrint("new status: ${state.newStatus.value}");
               if (newStatus == MessageStatus.sent) {
                 context.read<GetChatMessagesCubit>().updateTempMessage(
                       newId: messageId,
@@ -100,14 +118,68 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
       ],
       child: Column(
         children: [
-          const Divider(),
           Expanded(
             child: ShowChatMessagesList(
               scrollController: _scrollController,
               messages: widget.messages,
               currentUser: currentUser,
+              onReplyRequested: _onReplyRequested,
             ),
           ),
+          if (_replyingTo != null) ...[
+            Container(
+              height: 70,
+              color: AppColors.lightChatAppBarColor,
+              padding: EdgeInsets.only(
+                right: AppConstants.horizontalPadding,
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 10,
+                    color: _replyingTo!.senderId == currentUser.id
+                        ? Colors.deepOrange
+                        : AppColors.primary,
+                  ),
+                  const HorizontalGap(14),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 2,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _replyingTo!.sender!.name,
+                          maxLines: 1,
+                          style:
+                              AppTextStyles.poppinsBold(context, 16).copyWith(
+                            color: _replyingTo!.senderId == currentUser.id
+                                ? Colors.deepOrange
+                                : AppColors.primary,
+                          ),
+                        ),
+                        Text(
+                          _replyingTo!.content!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () => setState(
+                      () => _replyingTo = null,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+          ],
           SendMessageSection(
             sendMessage: sendMessage,
           ),

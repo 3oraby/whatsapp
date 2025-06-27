@@ -14,7 +14,7 @@ class AppColors {
   static const Color actionColor = Color(0xFF25D366);
   static const Color appBackgroundLight = Color(0xFFFFFFFF);
   static const Color lightBackgroundColor = Color(0xFFf3f3f3);
-  static const Color highlightBackgroundColor = Color(0xFFe8e8e8);
+  static const Color highlightBackgroundColor = Color(0xFFBFC3C9);
   static const Color lightChatBackground = Color(0xFFECE5DD);
   static const Color lightInputBackground = Color(0xFFF0F0F0);
   static const Color myMessageLight = Color(0xFFd8fdd2);
@@ -27,6 +27,7 @@ class AppColors {
   static const Color dividerLight = Color(0xFFDDDDDD);
   static const Color inputBorderLight = Color(0xFFCCCCCC);
   static const Color iconLight = Color(0xFF555555);
+  static Color lightChatAppBarColor = Colors.grey.shade100;
 
   // Dark Mode Colors
   static const Color primaryDark = Color(0xFF054C44);

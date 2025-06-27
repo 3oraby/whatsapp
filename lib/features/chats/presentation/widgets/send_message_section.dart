@@ -20,6 +20,7 @@ class _SendMessageSectionState extends State<SendMessageSection> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: MessageBar(
+        messageBarColor: AppColors.lightChatAppBarColor,
         onSend: widget.sendMessage,
         sendButtonColor: AppColors.primary,
         textFieldTextStyle: AppTextStyles.poppinsMedium(context, 16),
