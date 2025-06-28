@@ -74,6 +74,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       senderId: currentUserId,
       receiverId: dto.receiverId,
       chatId: dto.chatId,
+      parentId: dto.parentId,
       createdAt: DateTime.now(),
       type: dto.type,
       mediaUrl: dto.mediaUrl,

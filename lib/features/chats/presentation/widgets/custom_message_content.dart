@@ -5,26 +5,33 @@ import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/replied_message_box.dart';
 
 class CustomMessageContent extends StatelessWidget {
   const CustomMessageContent({
     super.key,
     required this.isFromMe,
     required this.msg,
+    this.repliedMsg,
   });
 
   final bool isFromMe;
   final MessageEntity msg;
+  final MessageEntity? repliedMsg;
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth: MediaQuery.sizeOf(context).width * 0.7,
+        maxWidth: MediaQuery.sizeOf(context).width * 0.6,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          if (repliedMsg != null)
+            RepliedMessageBox(
+              msg: repliedMsg!,
+            ),
           Text(
             msg.content ?? "content",
             style: AppTextStyles.poppinsMedium(context, 20),

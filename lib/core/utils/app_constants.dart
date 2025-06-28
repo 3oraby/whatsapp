@@ -17,6 +17,8 @@ class AppConstants {
   static const double storyItemAvatarSize = 60;
   static const double storyItemHorizontalPadding = 16;
   static const double myStoryItemAddIconSize = 28;
+  static const double messageBorderRadius = 14;
+
 
   static List<BottomNavigationBarItemEntity> bottomNavigationBarItems(
           {required BuildContext context}) =>

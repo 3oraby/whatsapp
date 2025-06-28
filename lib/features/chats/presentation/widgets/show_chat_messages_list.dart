@@ -34,11 +34,23 @@ class ShowChatMessagesList extends StatelessWidget {
         final isFromMe = msg.senderId == currentUser.id;
         final bool isLastFromSameSender = index == messages.length - 1 ||
             messages[index + 1].senderId != msg.senderId;
+
+        final bool isRepliedMessage = msg.parentId != null;
+        MessageEntity? repliedMsg;
+        if (isRepliedMessage) {
+          repliedMsg = messages.firstWhere(
+            (message) {
+              return message.id == msg.parentId;
+            },
+          );
+        }
+
         return SwipeToReplyMessageItem(
           msg: msg,
           isFromMe: isFromMe,
           showClipper: isLastFromSameSender,
           onReply: (msg) => onReplyRequested?.call(msg),
+          repliedMsg: repliedMsg,
         );
       },
     );

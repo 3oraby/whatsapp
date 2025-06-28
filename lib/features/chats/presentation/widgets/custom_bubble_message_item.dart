@@ -10,11 +10,13 @@ class CustomBubbleMessageItem extends StatelessWidget {
     required this.isFromMe,
     required this.msg,
     required this.showClipper,
+    this.repliedMsg,
   });
 
   final bool isFromMe;
   final MessageEntity msg;
   final bool showClipper;
+  final MessageEntity? repliedMsg;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class CustomBubbleMessageItem extends StatelessWidget {
             isFromMe: isFromMe,
             bgColor: bgColor,
             msg: msg,
+            repliedMsg: repliedMsg,
           )
         : Padding(
             padding: EdgeInsets.only(
@@ -35,6 +38,7 @@ class CustomBubbleMessageItem extends StatelessWidget {
               isFromMe: isFromMe,
               bgColor: bgColor,
               msg: msg,
+              repliedMsg: repliedMsg,
             ),
           );
   }

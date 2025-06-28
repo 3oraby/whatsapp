@@ -9,6 +9,7 @@ class SwipeToReplyMessageItem extends StatefulWidget {
   final bool isFromMe;
   final bool showClipper;
   final void Function(MessageEntity msg) onReply;
+  final MessageEntity? repliedMsg;
 
   const SwipeToReplyMessageItem({
     super.key,
@@ -16,6 +17,7 @@ class SwipeToReplyMessageItem extends StatefulWidget {
     required this.isFromMe,
     required this.showClipper,
     required this.onReply,
+    this.repliedMsg,
   });
 
   @override
@@ -84,6 +86,7 @@ class _SwipeToReplyMessageItemState extends State<SwipeToReplyMessageItem> {
               isFromMe: widget.isFromMe,
               msg: widget.msg,
               showClipper: widget.showClipper,
+              repliedMsg: widget.repliedMsg,
             ),
           ),
         ],
