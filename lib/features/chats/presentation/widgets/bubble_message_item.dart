@@ -35,8 +35,16 @@ class BubbleMessageItem extends StatelessWidget {
       padding: EdgeInsets.only(
         top: isRepliedMessage ? 4 : 6,
         bottom: 4,
-        left: isRepliedMessage ? 4 : 26,
-        right: isRepliedMessage? 12 : 16,
+        left: isRepliedMessage
+            ? 4
+            : msg.isFromMe
+                ? 26
+                : 32,
+        right: isRepliedMessage
+            ? 12
+            : msg.isFromMe
+                ? 16
+                : 9,
       ),
       margin: EdgeInsets.all(0),
       backGroundColor: bgColor,
