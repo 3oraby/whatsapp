@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
+import 'package:whatsapp/core/widgets/horizontal_gap.dart';
+import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 
 class RepliedMessageBox extends StatelessWidget {
@@ -25,10 +27,9 @@ class RepliedMessageBox extends StatelessWidget {
       ),
       child: IntrinsicHeight(
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              width: 7,
+              width: 6,
               decoration: BoxDecoration(
                 color: sectionColor,
                 borderRadius: BorderRadius.only(
@@ -41,14 +42,15 @@ class RepliedMessageBox extends StatelessWidget {
                 ),
               ),
             ),
-            Flexible(
+            const HorizontalGap(8),
+            Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 12,
+                padding: const EdgeInsets.only(
+                  top: 12,
+                  bottom: 12,
+                  right: 8,
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -57,8 +59,8 @@ class RepliedMessageBox extends StatelessWidget {
                         color: sectionColor,
                       ),
                     ),
+                    const VerticalGap(4),
                     Text(
-                      // "msgfhgahjkfgashfgakhfgksjfgaskhjf",
                       msg.content ?? "",
                       style: AppTextStyles.poppinsMedium(context, 14).copyWith(
                         color: Theme.of(context).colorScheme.secondary,
@@ -69,7 +71,7 @@ class RepliedMessageBox extends StatelessWidget {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

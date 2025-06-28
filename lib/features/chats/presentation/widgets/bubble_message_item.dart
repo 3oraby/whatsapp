@@ -39,12 +39,12 @@ class BubbleMessageItem extends StatelessWidget {
             ? 4
             : msg.isFromMe
                 ? 26
-                : 32,
+                : 33,
         right: isRepliedMessage
             ? 12
             : msg.isFromMe
                 ? 16
-                : 9,
+                : 10,
       ),
       margin: EdgeInsets.all(0),
       backGroundColor: bgColor,

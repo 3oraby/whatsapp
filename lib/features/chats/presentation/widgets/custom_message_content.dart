@@ -21,37 +21,39 @@ class CustomMessageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: MediaQuery.sizeOf(context).width * 0.6,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (repliedMsg != null)
-            RepliedMessageBox(
-              msg: repliedMsg!,
-            ),
-          Text(
-            msg.content ?? "content",
-            style: AppTextStyles.poppinsMedium(context, 20),
-          ),
-          const VerticalGap(3),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                TimeAgoService.formatTimeOnly(msg.createdAt),
-                style: AppTextStyles.poppinsMedium(context, 14).copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
+    return IntrinsicWidth(
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.sizeOf(context).width * 0.6,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (repliedMsg != null)
+              RepliedMessageBox(
+                msg: repliedMsg!,
               ),
-              const HorizontalGap(4),
-              if (isFromMe) _buildStatusIcon(msg.status),
-            ],
-          ),
-        ],
+            Text(
+              msg.content ?? "content",
+              style: AppTextStyles.poppinsMedium(context, 20),
+            ),
+            const VerticalGap(3),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  TimeAgoService.formatTimeOnly(msg.createdAt),
+                  style: AppTextStyles.poppinsMedium(context, 14).copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                const HorizontalGap(4),
+                if (isFromMe) _buildStatusIcon(msg.status),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
