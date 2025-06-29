@@ -53,6 +53,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     });
 
     socketRepo.onMessageRead((data) {
+      print('data');
       final int messageId = data['messageId'];
 
       if (!isClosed) {

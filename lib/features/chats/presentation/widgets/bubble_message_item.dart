@@ -36,12 +36,16 @@ class BubbleMessageItem extends StatelessWidget {
         top: isRepliedMessage ? 4 : 6,
         bottom: 4,
         left: isRepliedMessage
-            ? 4
+            ? msg.isFromMe
+                ? 4
+                : 12
             : msg.isFromMe
                 ? 26
                 : 33,
         right: isRepliedMessage
-            ? 12
+            ? msg.isFromMe
+                ? 12
+                : 4
             : msg.isFromMe
                 ? 16
                 : 10,
