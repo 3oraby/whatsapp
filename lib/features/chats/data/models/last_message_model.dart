@@ -1,9 +1,10 @@
 import 'package:whatsapp/features/chats/domain/entities/last_message_entity.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 
 class LastMessageModel extends LastMessageEntity {
   const LastMessageModel({
     required super.content,
-    required super.status,
+    required super.messageStatus,
     required super.createdAt,
     required super.type,
     required super.senderId,
@@ -13,7 +14,8 @@ class LastMessageModel extends LastMessageEntity {
   factory LastMessageModel.fromJson(Map<String, dynamic> json) {
     return LastMessageModel(
       content: json['content'] ?? '',
-      status: json['status'] ?? 'sent',
+      messageStatus:
+          MessageStatusExtension.fromString(json['status'] ?? 'sent'),
       createdAt: DateTime.parse(json['createdAt']),
       type: json['type'] ?? 'text',
       senderId: json['senderId'],
@@ -24,7 +26,7 @@ class LastMessageModel extends LastMessageEntity {
   factory LastMessageModel.fromEntity(LastMessageEntity entity) {
     return LastMessageModel(
       content: entity.content,
-      status: entity.status,
+      messageStatus: entity.messageStatus,
       createdAt: entity.createdAt,
       type: entity.type,
       senderId: entity.senderId,
@@ -35,7 +37,7 @@ class LastMessageModel extends LastMessageEntity {
   LastMessageEntity toEntity() {
     return LastMessageEntity(
       content: content,
-      status: status,
+      messageStatus: messageStatus,
       createdAt: createdAt,
       type: type,
       senderId: senderId,

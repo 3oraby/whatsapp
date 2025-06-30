@@ -4,7 +4,7 @@ import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
-import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/build_message_status_icon.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/replied_message_box.dart';
 
 class CustomMessageContent extends StatelessWidget {
@@ -49,42 +49,15 @@ class CustomMessageContent extends StatelessWidget {
                   ),
                 ),
                 const HorizontalGap(4),
-                if (isFromMe) _buildStatusIcon(msg.status),
+                if (isFromMe)
+                  BuildMessageStatusIcon(
+                    messageStatus: msg.status,
+                  ),
               ],
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildStatusIcon(MessageStatus status) {
-    IconData iconData;
-    Color color;
-
-    switch (status) {
-      case MessageStatus.pending:
-        iconData = Icons.schedule;
-        color = Colors.grey;
-        break;
-      case MessageStatus.sent:
-        iconData = Icons.check;
-        color = Colors.grey;
-        break;
-      case MessageStatus.delivered:
-        iconData = Icons.done_all;
-        color = Colors.grey;
-        break;
-      case MessageStatus.read:
-        iconData = Icons.done_all;
-        color = Colors.blue;
-        break;
-    }
-
-    return Icon(
-      iconData,
-      size: 20,
-      color: color,
     );
   }
 }

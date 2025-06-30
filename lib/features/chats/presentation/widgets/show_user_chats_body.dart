@@ -7,7 +7,7 @@ import 'package:whatsapp/core/widgets/custom_error_body_widget.dart';
 import 'package:whatsapp/core/widgets/custom_loading_body_widget.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_user_chats_cubit/get_user_chats_cubit.dart';
-import 'package:whatsapp/features/chats/presentation/widgets/custom_chat_item.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/show_user_chats_list.dart';
 
 class ShowUserChatsBody extends StatefulWidget {
   const ShowUserChatsBody({super.key});
@@ -52,13 +52,7 @@ class _ShowUserChatsBodyState extends State<ShowUserChatsBody> {
                   return const CustomEmptyStateBody(title: "No chats yet.");
                 } else if (state is GetUserChatsLoadedState) {
                   final chats = state.chats;
-                  return ListView.builder(
-                    padding: EdgeInsets.all(0),
-                    itemCount: chats.length,
-                    itemBuilder: (context, index) {
-                      return CustomChatItem(chat: chats[index]);
-                    },
-                  );
+                  return ShowUserChatsList(chats: chats);
                 }
 
                 return const SizedBox();
