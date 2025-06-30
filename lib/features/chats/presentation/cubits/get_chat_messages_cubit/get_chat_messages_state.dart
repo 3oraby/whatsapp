@@ -6,8 +6,6 @@ class GetChatMessagesInitial extends GetChatMessagesState {}
 
 class GetChatMessagesLoadingState extends GetChatMessagesState {}
 
-class GetChatMessagesEmptyState extends GetChatMessagesState {}
-
 class GetChatMessagesLoadedState extends GetChatMessagesState {
   final List<MessageEntity> messages;
 

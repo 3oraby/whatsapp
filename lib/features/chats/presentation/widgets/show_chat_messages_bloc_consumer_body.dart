@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:whatsapp/core/widgets/custom_empty_state_body.dart';
 import 'package:whatsapp/core/widgets/custom_error_body_widget.dart';
 import 'package:whatsapp/core/widgets/custom_loading_body_widget.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
@@ -48,15 +47,13 @@ class _ShowChatMessagesBlocConsumerBodyState
             errorMessage: state.message,
             onRetry: _loadInitialChatMessages,
           );
-        } else if (state is GetChatMessagesEmptyState) {
-          return const CustomEmptyStateBody(title: "No messages yet.");
         } else if (state is GetChatMessagesLoadedState) {
           return ShowChatMessagesBody(
             messages: state.messages,
             chat: widget.chat,
           );
         }
-
+    
         return const SizedBox();
       },
     );

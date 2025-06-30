@@ -23,11 +23,7 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
         emit(GetChatMessagesFailureState(message: failure.message ?? ''));
       },
       (messages) {
-        if (messages.isEmpty) {
-          emit(GetChatMessagesEmptyState());
-        } else {
-          emit(GetChatMessagesLoadedState(messages: messages));
-        }
+        emit(GetChatMessagesLoadedState(messages: messages));
       },
     );
   }

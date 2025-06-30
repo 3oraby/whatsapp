@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
+import 'package:whatsapp/core/utils/app_images.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
@@ -113,15 +114,20 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
           },
         ),
       ],
-      child: Column(
+      child: Stack(
         children: [
-          Expanded(
-            child: ShowChatMessagesList(
-              scrollController: _scrollController,
-              messages: widget.messages,
-              currentUser: currentUser,
-              onReplyRequested: _onReplyRequested,
+          Positioned.fill(
+            child: Image.asset(
+              AppImages.imagesWhatsappWallpaper8,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.low,
             ),
+          ),
+          ShowChatMessagesList(
+            scrollController: _scrollController,
+            messages: widget.messages,
+            currentUser: currentUser,
+            onReplyRequested: _onReplyRequested,
           ),
           if (_replyMessage != null) ...[
             ReplyToMessageBanner(
