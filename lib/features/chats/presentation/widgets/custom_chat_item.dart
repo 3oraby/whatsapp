@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp/core/helpers/is_light_theme.dart';
+import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
@@ -32,9 +34,10 @@ class CustomChatItem extends StatelessWidget {
         );
       },
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 24),
+            padding: const EdgeInsets.only(top: 16),
             child: BuildUserProfileImage(
               circleAvatarRadius: 25,
               profilePicUrl: anotherUser.profileImage,
@@ -43,9 +46,14 @@ class CustomChatItem extends StatelessWidget {
           const HorizontalGap(12),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Divider(),
+                Divider(
+                  height: 16,
+                  color: isLightTheme(context)
+                      ? AppColors.dividerLight
+                      : AppColors.dividerDark,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -57,14 +65,15 @@ class CustomChatItem extends StatelessWidget {
                       Text(
                         TimeAgoService.getSmartChatTimestamp(
                             lastMessage.createdAt),
-                        style: AppTextStyles.poppinsMedium(context, 12)
-                            .copyWith(
+                        style:
+                            AppTextStyles.poppinsMedium(context, 12).copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (chat.lastMessage != null && chat.lastMessage!.isMine)
                       Row(
@@ -76,19 +85,26 @@ class CustomChatItem extends StatelessWidget {
                         ],
                       ),
                     Expanded(
-                      child: Text(
-                        lastMessage?.content ?? "content",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            AppTextStyles.poppinsMedium(context, 14).copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
+                      child: SizedBox(
+                        height: 38,
+                        child: Text(
+                          chat.lastMessage?.content ??
+                              "tap here to start the conservation..",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              AppTextStyles.poppinsMedium(context, 14).copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                         ),
                       ),
                     ),
                     if (chat.unreadCount > 0)
-                      ShowUnreadMessagesCounts(
-                        unreadCount: chat.unreadCount,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6, top: 4),
+                        child: ShowUnreadMessagesCounts(
+                          unreadCount: chat.unreadCount,
+                        ),
                       ),
                   ],
                 ),

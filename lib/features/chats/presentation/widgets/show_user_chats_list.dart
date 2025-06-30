@@ -16,7 +16,7 @@ class ShowUserChatsList extends StatelessWidget {
     return ListView.separated(
       padding: EdgeInsets.all(0),
       itemCount: chats.length,
-      separatorBuilder: (context, index) => const VerticalGap(16),
+      separatorBuilder: (context, index) => const VerticalGap(6),
       itemBuilder: (context, index) {
         return CustomChatItem(chat: chats[index]);
       },
