@@ -18,7 +18,7 @@ class CustomChatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final anotherUser = chat.anotherUser;
-    final LastMessageEntity lastMessage = chat.lastMessage;
+    final LastMessageEntity? lastMessage = chat.lastMessage;
 
     return ListTile(
       contentPadding: EdgeInsets.zero,
@@ -38,7 +38,7 @@ class CustomChatItem extends StatelessWidget {
         style: AppTextStyles.poppinsBold(context, 16),
       ),
       subtitle: Text(
-        lastMessage.content,
+        lastMessage?.content ?? "content",
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: AppTextStyles.poppinsMedium(context, 14).copyWith(
@@ -49,12 +49,13 @@ class CustomChatItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(
-            TimeAgoService.getSmartChatTimestamp(lastMessage.createdAt),
-            style: AppTextStyles.poppinsMedium(context, 12).copyWith(
-              color: Theme.of(context).colorScheme.secondary,
+          if (lastMessage != null)
+            Text(
+              TimeAgoService.getSmartChatTimestamp(lastMessage.createdAt),
+              style: AppTextStyles.poppinsMedium(context, 12).copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
-          ),
           if (chat.unreadCount > 0)
             Container(
               margin: const EdgeInsets.only(top: 6),

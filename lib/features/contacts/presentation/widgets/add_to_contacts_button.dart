@@ -46,7 +46,10 @@ class AddToContactsButton extends StatelessWidget {
                     child: CustomLoadingIndicator(),
                   )
                 else
-                  Icon(Icons.person_add, size: 22),
+                  Icon(
+                    Icons.person_add,
+                    size: 22,
+                  ),
                 const SizedBox(width: 8),
                 Text(
                   context.tr("Add"),

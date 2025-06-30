@@ -58,7 +58,7 @@ class CustomUserInfoCard extends StatelessWidget {
             Visibility(
               visible: user.id != currentUserId,
               child: ContactInteractionButton(
-                userId: user.id,
+                anotherUser: user,
                 isActiveButton: isActiveButton,
               ),
             ),

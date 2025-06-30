@@ -10,6 +10,7 @@ import 'package:whatsapp/features/chats/data/models/message_model.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class ChatsRepoImpl extends ChatsRepo {
   final ApiConsumer apiConsumer;
@@ -35,6 +36,7 @@ class ChatsRepoImpl extends ChatsRepo {
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     } catch (e) {
+      log(e.toString());
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     }
@@ -54,6 +56,47 @@ class ChatsRepoImpl extends ChatsRepo {
           .toList();
 
       return Right(messages);
+    } on UnAuthorizedException {
+      log("UnAuthorized in getUserChats");
+      return Left(UnAuthorizedException());
+    } on ConnectionException catch (e) {
+      return Left(CustomException(message: e.message));
+    } on ServerException {
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    } catch (e) {
+      log("error in get chat messages: $e");
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ChatEntity>> createNewChat({
+    String type = "chat",
+    required UserEntity anotherUser,
+  }) async {
+    try {
+      final result = await apiConsumer.post(
+        EndPoints.createChat,
+        data: {
+          "type": type,
+          "userId": anotherUser.id.toString(),
+        },
+      );
+
+      ChatEntity chat;
+      if (result["message"] == "chat created successfully") {
+        final chatId = result["chatId"];
+        chat = ChatEntity.empty(
+          chatId: chatId,
+          anotherUser: anotherUser,
+        );
+      } else {
+        chat = ChatModel.fromJson(result['data']).toEntity();
+      }
+
+      return Right(chat);
     } on UnAuthorizedException {
       log("UnAuthorized in getUserChats");
       return Left(UnAuthorizedException());

@@ -11,7 +11,9 @@ class CustomLoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return LoadingIndicator(
       indicatorType: Indicator.ballPulse,
-      colors: [isLightTheme(context) ? Colors.black : Colors.white],
+      colors: [
+        isLightTheme(context) ? Colors.black : Colors.white,
+      ],
       strokeWidth: 2,
     );
   }

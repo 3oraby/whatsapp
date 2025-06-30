@@ -6,8 +6,8 @@ class ChatEntity {
   final UserEntity anotherUser;
   final bool isPinned;
   final bool isFavorite;
-  final LastMessageEntity lastMessage;
   final int unreadCount;
+  final LastMessageEntity? lastMessage;
   final DateTime? pinnedAt;
 
   const ChatEntity({
@@ -16,7 +16,22 @@ class ChatEntity {
     required this.isPinned,
     required this.isFavorite,
     required this.lastMessage,
-    required this.unreadCount,
+    this.unreadCount = 0,
     this.pinnedAt,
   });
+
+  factory ChatEntity.empty({
+    required int chatId,
+    required UserEntity anotherUser,
+  }) {
+    return ChatEntity(
+      id: chatId,
+      anotherUser: anotherUser,
+      isPinned: false,
+      isFavorite: false,
+      lastMessage: null,
+      unreadCount: 0,
+      pinnedAt: null,
+    );
+  }
 }

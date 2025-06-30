@@ -8,8 +8,8 @@ class ChatModel extends ChatEntity {
     required super.anotherUser,
     required super.isPinned,
     required super.isFavorite,
-    required super.lastMessage,
     required super.unreadCount,
+    super.lastMessage,
     super.pinnedAt,
   });
 
@@ -24,7 +24,9 @@ class ChatModel extends ChatEntity {
       pinnedAt:
           json['pinnedAt'] != null ? DateTime.tryParse(json['pinnedAt']) : null,
       unreadCount: json['unreadCount'] ?? 0,
-      lastMessage: LastMessageModel.fromJson(json['lastMessage']).toEntity(),
+      lastMessage: json['lastMessage'] != null
+          ? LastMessageModel.fromJson(json['lastMessage']).toEntity()
+          : null,
     );
   }
 
@@ -36,7 +38,9 @@ class ChatModel extends ChatEntity {
       isFavorite: entity.isFavorite,
       pinnedAt: entity.pinnedAt,
       unreadCount: entity.unreadCount,
-      lastMessage: LastMessageModel.fromEntity(entity.lastMessage),
+      lastMessage: entity.lastMessage != null
+          ? LastMessageModel.fromEntity(entity.lastMessage!)
+          : null,
     );
   }
 
@@ -48,7 +52,9 @@ class ChatModel extends ChatEntity {
       isFavorite: isFavorite,
       pinnedAt: pinnedAt,
       unreadCount: unreadCount,
-      lastMessage: LastMessageModel.fromEntity(lastMessage).toEntity(),
+      lastMessage: lastMessage != null
+          ? LastMessageModel.fromEntity(lastMessage!).toEntity()
+          : null,
     );
   }
 }
