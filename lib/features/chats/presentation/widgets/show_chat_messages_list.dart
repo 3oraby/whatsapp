@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/swipe_to_reply_message_item.dart';
-import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class ShowChatMessagesList extends StatelessWidget {
   const ShowChatMessagesList({
     super.key,
     required ScrollController scrollController,
     required this.messages,
-    required this.currentUser,
     this.onReplyRequested,
   }) : _scrollController = scrollController;
 
   final ScrollController _scrollController;
   final List<MessageEntity> messages;
-  final UserEntity currentUser;
 
   final void Function(MessageEntity message)? onReplyRequested;
 
@@ -31,7 +28,7 @@ class ShowChatMessagesList extends StatelessWidget {
       separatorBuilder: (context, index) => const VerticalGap(8),
       itemBuilder: (context, index) {
         final msg = messages[index];
-        final isFromMe = msg.senderId == currentUser.id;
+        final isFromMe = msg.isFromMe;
         final bool isLastFromSameSender = index == messages.length - 1 ||
             messages[index + 1].senderId != msg.senderId;
 
