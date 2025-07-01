@@ -7,7 +7,7 @@ import 'package:whatsapp/core/widgets/undefined_route_page.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signup_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/verify_otp_screen.dart';
-import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
+import 'package:whatsapp/features/chats/presentation/routes/chat_screen_args.dart';
 import 'package:whatsapp/features/chats/presentation/screens/chat_screen.dart';
 import 'package:whatsapp/features/contacts/presentation/screens/add_new_contacts_screen.dart';
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
@@ -22,11 +22,6 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
   log("Navigating to ${settings.name}");
 
   switch (settings.name) {
-    // case CheckoutView.routeName:
-    //   return MaterialPageRoute(
-    //       builder: (context) => CheckoutView(
-    //             cartEntity: settings.arguments as CartEntity,
-    //           ));
     case Routes.signInRoute:
       return MaterialPageRoute(
         builder: (context) => SignInScreen(),
@@ -78,9 +73,15 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       );
 
     case Routes.chatScreenRoute:
-      final chat = settings.arguments as ChatEntity;
+      final ChatScreenArgs chatScreenArgs =
+          settings.arguments as ChatScreenArgs;
       return MaterialPageRoute(
-        builder: (_) => ChatScreen(chat: chat),
+        builder: (_) => BlocProvider.value(
+          value: chatScreenArgs.getUserChatsCubit,
+          child: ChatScreen(
+            chat: chatScreenArgs.chat,
+          ),
+        ),
       );
 
     default:

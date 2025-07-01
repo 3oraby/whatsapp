@@ -23,7 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
       ),
-      body: HomeBody(currentViewIndex: currentViewIndex),
+      body: HomeBody(
+        currentViewIndex: currentViewIndex,
+      ),
     );
   }
 }

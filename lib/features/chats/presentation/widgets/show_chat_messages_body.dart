@@ -7,6 +7,7 @@ import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/get_user_chats_cubit/get_user_chats_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/reply_to_message_banner.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/send_message_section.dart';
@@ -31,6 +32,15 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   final ScrollController _scrollController = ScrollController();
   late UserEntity currentUser = getCurrentUserEntity();
   MessageEntity? _replyMessage;
+  late GetUserChatsCubit getUserChatsCubit;
+  late GetChatMessagesCubit getChatMessagesCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    getChatMessagesCubit = context.read<GetChatMessagesCubit>();
+    getUserChatsCubit = context.read<GetUserChatsCubit>();
+  }
 
   @override
   void dispose() {
@@ -82,26 +92,30 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
       listeners: [
         BlocListener<MessageStreamCubit, MessageStreamState>(
           listener: (context, state) {
-            if (state is NewIncomingMessageState ||
-                state is NewOutgoingMessageState) {
-              final message = state is NewIncomingMessageState
-                  ? state.message
-                  : (state as NewOutgoingMessageState).message;
-              context.read<GetChatMessagesCubit>().addMessageToList(message);
+            if (state is NewIncomingMessageState) {
+              getChatMessagesCubit.addMessageToList(state.message);
+            }
+            if (state is NewOutgoingMessageState) {
+              getChatMessagesCubit.addMessageToList(state.message);
+              getUserChatsCubit.updateChatListOnNewMessage(state.message);
             }
             if (state is UpdateMessageStatusState) {
               final messageId = state.newId;
               final newStatus = state.newStatus;
+              getUserChatsCubit.updateLastMessageStatus(
+                chatId: widget.chat.id,
+                newStatus: newStatus,
+              );
               if (newStatus == MessageStatus.sent) {
-                context.read<GetChatMessagesCubit>().updateTempMessage(
-                      newId: messageId,
-                      newStatus: newStatus,
-                    );
+                getChatMessagesCubit.updateTempMessage(
+                  newId: messageId,
+                  newStatus: newStatus,
+                );
               } else {
-                context.read<GetChatMessagesCubit>().updateMessageStatus(
-                      id: messageId,
-                      newStatus: newStatus,
-                    );
+                getChatMessagesCubit.updateMessageStatus(
+                  id: messageId,
+                  newStatus: newStatus,
+                );
               }
             }
           },
@@ -114,34 +128,35 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
           },
         ),
       ],
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              AppImages.imagesWhatsappWallpaper8,
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.low,
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(AppImages.imagesWhatsappWallpaper8),
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.low,
           ),
-          ShowChatMessagesList(
-            scrollController: _scrollController,
-            messages: widget.messages,
-            currentUser: currentUser,
-            onReplyRequested: _onReplyRequested,
-          ),
-          if (_replyMessage != null) ...[
-            ReplyToMessageBanner(
-              replyMessage: _replyMessage!,
-              onCancel: () => setState(
-                () => _replyMessage = null,
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ShowChatMessagesList(
+                scrollController: _scrollController,
+                messages: widget.messages,
+                currentUser: currentUser,
+                onReplyRequested: _onReplyRequested,
               ),
             ),
+            if (_replyMessage != null)
+              ReplyToMessageBanner(
+                replyMessage: _replyMessage!,
+                onCancel: () => setState(() => _replyMessage = null),
+              ),
             const Divider(height: 1),
+            SendMessageSection(
+              sendMessage: sendMessage,
+            ),
           ],
-          SendMessageSection(
-            sendMessage: sendMessage,
-          ),
-        ],
+        ),
       ),
     );
   }

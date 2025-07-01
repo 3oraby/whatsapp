@@ -13,8 +13,7 @@ class Routes {
   static const String createStoryImagePreviewRoute =
       "/createStoryImagePreviewScreen";
   static const String userStoriesViewerRoute = "/UserStoriesViewerScreen";
-  
-  // chats 
-  static const String chatScreenRoute= "/chatScreenRoute";
 
+  // chats
+  static const String chatScreenRoute = "/chatScreenRoute";
 }

@@ -1,9 +1,10 @@
 import 'package:whatsapp/features/chats/domain/entities/last_message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 
 class LastMessageModel extends LastMessageEntity {
   const LastMessageModel({
-    required super.content,
+    super.content,
     required super.messageStatus,
     required super.createdAt,
     required super.type,
@@ -17,7 +18,7 @@ class LastMessageModel extends LastMessageEntity {
       messageStatus:
           MessageStatusExtension.fromString(json['status'] ?? 'sent'),
       createdAt: DateTime.parse(json['createdAt']),
-      type: json['type'] ?? 'text',
+      type: MessageTypeExtension.fromString(json['type'] ?? 'text'),
       senderId: json['senderId'],
       isMine: json['isMine'] ?? false,
     );

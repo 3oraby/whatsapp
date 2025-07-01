@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
+import 'package:whatsapp/core/services/get_it_service.dart';
+import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
+import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/get_user_chats_cubit/get_user_chats_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/user_chats_view.dart';
 import 'package:whatsapp/features/contacts/presentation/widgets/user_contacts_view.dart';
 import 'package:whatsapp/features/settings/presentation/widgets/settings_view.dart';
@@ -14,17 +19,23 @@ class HomeBody extends StatelessWidget {
   final int currentViewIndex;
   @override
   Widget build(BuildContext context) {
-    return LazyIndexedStack(
-      index: currentViewIndex,
-      children: const [
-        StoriesView(),
-        UserChatsView(),
-        MyWidget(
-          color: Colors.green,
-        ),
-        UserContactsView(),
-        SettingsView(),
-      ],
+    return BlocProvider(
+      create: (context) => GetUserChatsCubit(
+        chatsRepo: getIt<ChatsRepo>(),
+        socketRepo: getIt<SocketRepo>(),
+      ),
+      child: LazyIndexedStack(
+        index: currentViewIndex,
+        children: const [
+          StoriesView(),
+          UserChatsView(),
+          MyWidget(
+            color: Colors.green,
+          ),
+          UserContactsView(),
+          SettingsView(),
+        ],
+      ),
     );
   }
 }

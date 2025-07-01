@@ -34,4 +34,24 @@ class ChatEntity {
       pinnedAt: null,
     );
   }
+
+  ChatEntity copyWith({
+    int? id,
+    UserEntity? anotherUser,
+    bool? isPinned,
+    bool? isFavorite,
+    int? unreadCount,
+    LastMessageEntity? lastMessage,
+    DateTime? pinnedAt,
+  }) {
+    return ChatEntity(
+      id: id ?? this.id,
+      anotherUser: anotherUser ?? this.anotherUser,
+      isPinned: isPinned ?? this.isPinned,
+      isFavorite: isFavorite ?? this.isFavorite,
+      unreadCount: unreadCount ?? this.unreadCount,
+      lastMessage: lastMessage ?? this.lastMessage,
+      pinnedAt: pinnedAt ?? this.pinnedAt,
+    );
+  }
 }
