@@ -30,7 +30,7 @@ class WebSocketService {
     );
 
     if (accessToken == null) {
-      print("No access token found, socket not connected.");
+      debugPrint("No access token found, socket not connected.");
       return;
     }
 
@@ -42,8 +42,13 @@ class WebSocketService {
           .setAuth({'token': accessToken})
           .build(),
     );
-
     _socket!.connect();
+    
+    _socket!.onReconnect((_) => debugPrint("Reconnected to socket server"));
+    _socket!.onDisconnect((_) => debugPrint("onDisconnect from socket server ❗"));
+    _socket!.onConnectError((data) => debugPrint("Socket connection error: $data ❌"));
+    _socket!.onError((err) => debugPrint("General socket error: $err ❌"));
+    
     _socket!.onConnect((_) async {
       print("Connected to socket server ✅");
       print("1");
@@ -65,19 +70,11 @@ class WebSocketService {
       _socketIdTimer = null;
     });
 
-    _socket!.onConnectError((data) => print("Connect error: $data"));
-    _socket!.onError((err) => print("Socket error: $err"));
-  }
-
   void disconnect() {
-    if (!isConnected) {
-      print("⚠️ Socket already disconnected, skipping disconnect()");
-      return;
+    if (_socket?.connected == true) {
+      _socket!.disconnect();
+      debugPrint("Disconnected from socket server 🔌");
     }
-    _socket!.disconnect();
-    _socketIdTimer?.cancel();
-    _socketIdTimer = null;
-    print("Disconnected from socket server 🔌");
   }
 
   void dispose() {
