@@ -19,12 +19,4 @@ class CustomBlocObserver extends BlocObserver {
       log('${bloc.runtimeType} $change');
     }
   }
-
-  @override
-  void onClose(BlocBase bloc) {
-    super.onClose(bloc);
-    if (kDebugMode) {
-      debugPrint('${bloc.runtimeType} has been closed');
-    }
-  }
 }

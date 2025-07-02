@@ -9,7 +9,6 @@ import 'package:whatsapp/core/widgets/custom_modal_progress_hud.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/signup_cubits/sign_up_cubit.dart';
 import 'package:whatsapp/features/auth/presentation/widgets/sign_up_body.dart';
-import 'package:whatsapp/features/chats/presentation/cubits/socket_connection_cubit/socket_connection_cubit.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -38,7 +37,6 @@ class SignUpBlocConsumerBody extends StatelessWidget {
           showCustomSnackBar(context, state.message);
         } else if (state is SignUpLoadedState) {
           log("account successfully created");
-          BlocProvider.of<SocketConnectionCubit>(context).connect();
           showCustomSnackBar(
               context, "A verification code has been sent to your email.");
           Navigator.pushNamedAndRemoveUntil(

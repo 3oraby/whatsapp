@@ -12,7 +12,6 @@ import 'package:whatsapp/core/widgets/custom_modal_progress_hud.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/signin_cubits/sign_in_cubit.dart';
 import 'package:whatsapp/features/auth/presentation/widgets/signin_body.dart';
-import 'package:whatsapp/features/chats/presentation/cubits/socket_connection_cubit/socket_connection_cubit.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -43,7 +42,6 @@ class SignInBLocConsumerBody extends StatelessWidget {
           showCustomSnackBar(context, state.message);
         } else if (state is SignInLoadedState) {
           log("account successfully logged in");
-          BlocProvider.of<SocketConnectionCubit>(context).connect();
           showSuccessAuthModalBottomSheet(
             context: context,
             sheetTitle: context.tr("Welcome Back! 🎉"),

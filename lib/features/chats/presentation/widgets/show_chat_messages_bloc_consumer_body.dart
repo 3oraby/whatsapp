@@ -27,9 +27,7 @@ class _ShowChatMessagesBlocConsumerBodyState
     super.initState();
     _loadInitialChatMessages();
 
-    context.read<MessageStreamCubit>().markChatAsRead(
-          chatId: widget.chat.id,
-        );
+    context.read<MessageStreamCubit>().markChatAsRead();
   }
 
   _loadInitialChatMessages() {
@@ -55,6 +53,7 @@ class _ShowChatMessagesBlocConsumerBodyState
             chat: widget.chat,
           );
         }
+    
         return const SizedBox();
       },
     );

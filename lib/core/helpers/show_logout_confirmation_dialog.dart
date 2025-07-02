@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/cubit/logout_cubit/logout_cubit.dart';
 import 'package:whatsapp/core/helpers/show_custom_alert_dialog.dart';
-import 'package:whatsapp/features/chats/presentation/cubits/socket_connection_cubit/socket_connection_cubit.dart';
 
 void showLogoutConfirmationDialog({
   required BuildContext context,
@@ -17,7 +16,6 @@ void showLogoutConfirmationDialog({
       Navigator.pop(context);
     },
     onOkButtonPressed: () {
-      BlocProvider.of<SocketConnectionCubit>(context).disconnect();
       BlocProvider.of<LogoutCubit>(context).logOut();
     },
   );

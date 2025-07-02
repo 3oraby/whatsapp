@@ -1,17 +1,34 @@
+import 'dart:developer';
+
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
+import 'package:whatsapp/features/chats/data/models/message_model.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/last_message_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
+import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 
 part 'get_user_chats_state.dart';
 
 class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
   GetUserChatsCubit({
     required this.chatsRepo,
-  }) : super(GetUserChatsInitial());
+    required this.socketRepo,
+  }) : super(GetUserChatsInitial()) {
+    _initSocketListeners();
+  }
+
   final ChatsRepo chatsRepo;
+  final SocketRepo socketRepo;
+
+  void _initSocketListeners() {
+    socketRepo.onReceiveMessage((data) {
+      log("receive message in init of GetUserChatsCubit");
+      final message = MessageModel.fromJson(data).toEntity();
+      updateChatListOnNewMessage(message);
+    });
+  }
 
   Future<void> getUserChats() async {
     emit(GetUserChatsLoadingState());
@@ -41,7 +58,6 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     final chatIndex = chats.indexWhere((c) => c.id == message.chatId);
 
     final LastMessageEntity lastMessageEntity = LastMessageEntity(
-      messageId: message.id,
       content: message.content,
       messageStatus: message.status,
       createdAt: message.createdAt,
@@ -78,15 +94,14 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
   }
 
   void updateLastMessageStatus({
-    required int messageId,
+    required int chatId,
     required MessageStatus newStatus,
   }) {
     final currentState = state;
     if (currentState is! GetUserChatsLoadedState) return;
 
     final chats = [...currentState.chats];
-    final chatIndex =
-        chats.indexWhere((chat) => chat.lastMessage?.messageId == messageId);
+    final chatIndex = chats.indexWhere((chat) => chat.id == chatId);
     if (chatIndex == -1) return;
 
     final chat = chats[chatIndex];

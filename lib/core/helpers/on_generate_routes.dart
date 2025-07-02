@@ -77,7 +77,7 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
           settings.arguments as ChatScreenArgs;
       return MaterialPageRoute(
         builder: (_) => BlocProvider.value(
-          value: chatScreenArgs.messageStreamCubit,
+          value: chatScreenArgs.getUserChatsCubit,
           child: ChatScreen(
             chat: chatScreenArgs.chat,
           ),
