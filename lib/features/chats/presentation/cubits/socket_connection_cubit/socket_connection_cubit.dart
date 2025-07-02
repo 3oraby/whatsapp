@@ -11,13 +11,7 @@ class SocketConnectionCubit extends Cubit<SocketConnectionState> {
   }) : super(SocketConnectionInitial());
 
   void connect() {
-    if (state is SocketConnected || state is SocketConnecting) {
-      print("SocketConnectionCubit: Already connected or connecting");
-      return;
-    }
-
     emit(SocketConnecting());
-
     try {
       socketRepo.connect();
       emit(SocketConnected());
@@ -27,17 +21,7 @@ class SocketConnectionCubit extends Cubit<SocketConnectionState> {
   }
 
   void disconnect() {
-    if (state is SocketDisconnected || state is SocketConnectionInitial) {
-      print("SocketConnectionCubit: Already disconnected or not connected");
-      return;
-    }
-
     socketRepo.disconnect();
     emit(SocketDisconnected());
-  }
-
-  void dispose() {
-    socketRepo.dispose();
-    emit(SocketConnectionInitial());
   }
 }

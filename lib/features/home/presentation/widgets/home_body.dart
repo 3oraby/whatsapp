@@ -5,7 +5,6 @@ import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_user_chats_cubit/get_user_chats_cubit.dart';
-import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/user_chats_view.dart';
 import 'package:whatsapp/features/contacts/presentation/widgets/user_contacts_view.dart';
 import 'package:whatsapp/features/settings/presentation/widgets/settings_view.dart';
@@ -20,19 +19,11 @@ class HomeBody extends StatelessWidget {
   final int currentViewIndex;
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => GetUserChatsCubit(
-            chatsRepo: getIt<ChatsRepo>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => MessageStreamCubit(
-            socketRepo: getIt<SocketRepo>(),
-          ),
-        )
-      ],
+    return BlocProvider(
+      create: (context) => GetUserChatsCubit(
+        chatsRepo: getIt<ChatsRepo>(),
+        socketRepo: getIt<SocketRepo>(),
+      ),
       child: LazyIndexedStack(
         index: currentViewIndex,
         children: const [
