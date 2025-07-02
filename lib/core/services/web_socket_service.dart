@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:whatsapp/core/constants/storage_keys.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
@@ -12,7 +11,7 @@ class WebSocketService {
         StorageKeys.accessToken.toString());
 
     if (accessToken == null) {
-      log("No access token found, socket not connected.");
+      debugPrint("No access token found, socket not connected.");
       return;
     }
 
@@ -27,17 +26,17 @@ class WebSocketService {
 
     _socket!.connect();
 
-    _socket!.onReconnect((_) => log("Reconnected to socket server"));
-    _socket!.onConnect((_) => log("Connected to socket server ✅"));
-    _socket!.onDisconnect((_) => log("onDisconnect from socket server ❗"));
-    _socket!.onConnectError((data) => log("Socket connection error: $data ❌"));
-    _socket!.onError((err) => log("General socket error: $err ❌"));
+    _socket!.onReconnect((_) => debugPrint("Reconnected to socket server"));
+    _socket!.onConnect((_) => debugPrint("Connected to socket server ✅"));
+    _socket!.onDisconnect((_) => debugPrint("onDisconnect from socket server ❗"));
+    _socket!.onConnectError((data) => debugPrint("Socket connection error: $data ❌"));
+    _socket!.onError((err) => debugPrint("General socket error: $err ❌"));
   }
 
   void disconnect() {
     if (_socket?.connected == true) {
       _socket!.disconnect();
-      log("Disconnected from socket server 🔌");
+      debugPrint("Disconnected from socket server 🔌");
     }
   }
 
