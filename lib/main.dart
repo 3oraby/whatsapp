@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
-import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/helpers/get_initial_route.dart';
 import 'package:whatsapp/core/helpers/on_generate_routes.dart';
 import 'package:whatsapp/core/services/custom_bloc_observer.dart';
@@ -65,9 +64,10 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    super.dispose();
     WidgetsBinding.instance.removeObserver(this);
     socketCubit.disconnect();
-    super.dispose();
+    socketCubit.dispose();
   }
 
   @override

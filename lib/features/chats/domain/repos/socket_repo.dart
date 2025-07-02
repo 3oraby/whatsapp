@@ -1,6 +1,7 @@
 abstract class SocketRepo {
   void connect();
   void disconnect();
+  void dispose();
 
   void sendMessage(Map<String, dynamic> payload);
   void onReceiveMessage(Function(dynamic data) callback);

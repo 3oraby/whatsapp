@@ -17,6 +17,11 @@ class SocketRepoImpl implements SocketRepo {
   }
 
   @override
+  void dispose() {
+    webSocketService.dispose();
+  }
+
+  @override
   void onFriendStatusUpdate(Function(dynamic data) callback) {
     webSocketService.on('friend_status_update', callback);
   }
