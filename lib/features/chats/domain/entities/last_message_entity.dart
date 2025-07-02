@@ -2,6 +2,7 @@ import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 
 class LastMessageEntity {
+  final int messageId;
   final String? content;
   final MessageStatus messageStatus;
   final DateTime createdAt;
@@ -10,6 +11,7 @@ class LastMessageEntity {
   final bool isMine;
 
   const LastMessageEntity({
+    required this.messageId,
     this.content,
     required this.messageStatus,
     required this.createdAt,
@@ -19,6 +21,7 @@ class LastMessageEntity {
   });
 
   LastMessageEntity copyWith({
+    int? messageId,
     String? content,
     MessageStatus? messageStatus,
     DateTime? createdAt,
@@ -27,6 +30,7 @@ class LastMessageEntity {
     bool? isMine,
   }) {
     return LastMessageEntity(
+      messageId: messageId ?? this.messageId,
       content: content ?? this.content,
       messageStatus: messageStatus ?? this.messageStatus,
       createdAt: createdAt ?? this.createdAt,

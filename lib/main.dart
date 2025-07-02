@@ -64,9 +64,10 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    super.dispose();
     WidgetsBinding.instance.removeObserver(this);
     socketCubit.disconnect();
-    super.dispose();
+    socketCubit.dispose();
   }
 
   @override

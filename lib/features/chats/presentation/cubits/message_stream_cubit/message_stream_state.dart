@@ -17,16 +17,12 @@ class NewOutgoingMessageState extends MessageStreamState {
 }
 
 class UpdateMessageStatusState extends MessageStreamState {
+  final int? chatId;
   final int newId;
   final MessageStatus newStatus;
   UpdateMessageStatusState({
+    this.chatId,
     required this.newId,
     required this.newStatus,
   });
-}
-
-class AllMessagesReadInChatState extends MessageStreamState {
-  final int chatId;
-
-  AllMessagesReadInChatState({required this.chatId});
 }

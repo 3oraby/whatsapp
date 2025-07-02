@@ -1,14 +1,33 @@
-import 'package:flutter/widgets.dart';
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:whatsapp/core/constants/storage_keys.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
 
 class WebSocketService {
   Socket? _socket;
+  Timer? _socketIdTimer;
 
-  void connect() async {
+  bool get isConnected => _socket?.connected ?? false;
+
+  Future<void> connect() async {
+    if (isConnected) {
+      print("⚠️ Socket is already connected, skipping connect()");
+      return;
+    }
+
+    if (_socket != null) {
+      print("🧹 Cleaning up old socket connection...");
+      _socket!.dispose();
+      _socket = null;
+      _socketIdTimer?.cancel();
+      _socketIdTimer = null;
+    }
+
     final accessToken = await AppStorageHelper.getSecureData(
-        StorageKeys.accessToken.toString());
+      StorageKeys.accessToken.toString(),
+    );
 
     if (accessToken == null) {
       debugPrint("No access token found, socket not connected.");
@@ -19,25 +38,51 @@ class WebSocketService {
       'http://10.0.2.2:3000',
       OptionBuilder()
           .setTransports(['websocket'])
-          .disableAutoConnect()
+          .enableAutoConnect()
           .setAuth({'token': accessToken})
           .build(),
     );
-
     _socket!.connect();
-
+    
     _socket!.onReconnect((_) => debugPrint("Reconnected to socket server"));
-    _socket!.onConnect((_) => debugPrint("Connected to socket server ✅"));
     _socket!.onDisconnect((_) => debugPrint("onDisconnect from socket server ❗"));
     _socket!.onConnectError((data) => debugPrint("Socket connection error: $data ❌"));
     _socket!.onError((err) => debugPrint("General socket error: $err ❌"));
-  }
+    
+    _socket!.onConnect((_) async {
+      print("Connected to socket server ✅");
+      print("1");
+      await Future.delayed(Duration(seconds: 5));
+      print("2");
+      Future.delayed(Duration(seconds: 2), () {
+        print("After 2 seconds");
+      });
+
+      print("Continuing execution...");
+    });
+
+    // _socketIdTimer = Timer.periodic(const Duration(seconds: 10), (_) {
+    //   print("⏱ Socket ID: ${_socket?.id}");
+    // });
+    _socket!.onDisconnect((_) {
+      print("Disconnected from socket server ❗");
+      _socketIdTimer?.cancel();
+      _socketIdTimer = null;
+    });
 
   void disconnect() {
     if (_socket?.connected == true) {
       _socket!.disconnect();
       debugPrint("Disconnected from socket server 🔌");
     }
+  }
+
+  void dispose() {
+    _socket?.dispose();
+    _socket = null;
+    _socketIdTimer?.cancel();
+    _socketIdTimer = null;
+    print("Socket disposed");
   }
 
   void on(String event, Function(dynamic) callback) {
