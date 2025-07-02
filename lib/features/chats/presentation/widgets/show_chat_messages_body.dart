@@ -128,35 +128,37 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
           },
         ),
       ],
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppImages.imagesWhatsappWallpaper8),
-            fit: BoxFit.cover,
-            filterQuality: FilterQuality.low,
-          ),
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              child: ShowChatMessagesList(
-                scrollController: _scrollController,
-                messages: widget.messages,
-                onReplyRequested: _onReplyRequested,
-              ),
+      child: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppImages.imagesWhatsappWallpaper8),
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.low,
             ),
-            if (_replyMessage != null)
-              ReplyToMessageBanner(
-                replyMessage: _replyMessage!,
-                onCancel: () => setState(
-                  () => _replyMessage = null,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: ShowChatMessagesList(
+                  scrollController: _scrollController,
+                  messages: widget.messages,
+                  onReplyRequested: _onReplyRequested,
                 ),
               ),
-            const Divider(height: 1),
-            SendMessageSection(
-              sendMessage: sendMessage,
-            ),
-          ],
+              if (_replyMessage != null)
+                ReplyToMessageBanner(
+                  replyMessage: _replyMessage!,
+                  onCancel: () => setState(
+                    () => _replyMessage = null,
+                  ),
+                ),
+              const Divider(height: 1),
+              SendMessageSection(
+                sendMessage: sendMessage,
+              ),
+            ],
+          ),
         ),
       ),
     );
