@@ -7,24 +7,13 @@ class SocketRepoImpl implements SocketRepo {
   SocketRepoImpl({required this.webSocketService});
 
   @override
-  void connect() {
-    webSocketService.connect();
-  }
+  void connect() => webSocketService.connect();
 
   @override
-  void disconnect() {
-    webSocketService.disconnect();
-  }
+  void disconnect() => webSocketService.disconnect();
 
   @override
-  void dispose() {
-    webSocketService.dispose();
-  }
-
-  @override
-  void onFriendStatusUpdate(Function(dynamic data) callback) {
-    webSocketService.on('friend_status_update', callback);
-  }
+  void dispose() => webSocketService.dispose();
 
   @override
   void sendMessage(Map<String, dynamic> payload) {
@@ -33,12 +22,12 @@ class SocketRepoImpl implements SocketRepo {
 
   @override
   void onReceiveMessage(Function(dynamic data) callback) {
-    webSocketService.on('receive_message', callback);
+    webSocketService.onReceiveMessage(callback);
   }
 
   @override
   void onTyping(Function(dynamic data) callback) {
-    webSocketService.on('typing', callback);
+    webSocketService.onTyping(callback);
   }
 
   @override
@@ -48,14 +37,12 @@ class SocketRepoImpl implements SocketRepo {
 
   @override
   void onMessageStatusUpdate(Function(dynamic data) callback) {
-    webSocketService.on('status_update', callback);
+    webSocketService.onMessageStatusUpdate(callback);
   }
 
   @override
   void emitMarkChatAsRead(int chatId) {
-    webSocketService.emit('mark_chat_as_read', {
-      'chatId': chatId,
-    });
+    webSocketService.emit('mark_chat_as_read', {'chatId': chatId});
   }
 
   @override
@@ -69,11 +56,16 @@ class SocketRepoImpl implements SocketRepo {
 
   @override
   void onAllMessagesRead(Function(dynamic data) callback) {
-    webSocketService.on('all messages readed successfully', callback);
+    webSocketService.onAllMessagesRead(callback);
   }
 
   @override
   void onMessageRead(Function(dynamic data) callback) {
-    webSocketService.on('message_read', callback);
+    webSocketService.onMessageRead(callback);
+  }
+
+  @override
+  void onFriendStatusUpdate(Function(dynamic data) callback) {
+    webSocketService.onFriendStatusUpdate(callback);
   }
 }

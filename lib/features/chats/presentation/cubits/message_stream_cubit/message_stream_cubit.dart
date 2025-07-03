@@ -10,28 +10,23 @@ part 'message_stream_state.dart';
 class MessageStreamCubit extends Cubit<MessageStreamState> {
   final SocketRepo socketRepo;
 
-  MessageStreamCubit({
-    required this.socketRepo,
-  }) : super(MessageStreamInitial()) {
+  MessageStreamCubit({required this.socketRepo})
+      : super(MessageStreamInitial()) {
     _initSocketListeners();
   }
 
   void _initSocketListeners() {
     socketRepo.onReceiveMessage((data) {
-      print("recieve new message1");
+      print("✅ New message: $data");
       final message = MessageModel.fromJson(data).toEntity();
-      print("recieve new message2");
       if (!isClosed) {
         emit(NewIncomingMessageState(message));
       }
     });
 
     socketRepo.onMessageStatusUpdate((data) {
-      print('new status data: $data');
       final messageId = data["messageId"];
-
       final newStatus = (data["status"] as String).toMessageStatus();
-
       if (!isClosed) {
         emit(UpdateMessageStatusState(
           newId: messageId,
@@ -40,16 +35,8 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       }
     });
 
-    // socketRepo.onAllMessagesRead((data) {
-    //   final int chatId = data["chatId"];
-    //   if (!isClosed) {
-    //     emit(AllMessagesReadInChatState(chatId: chatId));
-    //   }
-    // });
-
     socketRepo.onMessageRead((data) {
       final int messageId = data['messageId'];
-
       if (!isClosed) {
         emit(UpdateMessageStatusState(
           newId: messageId,
@@ -57,6 +44,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
         ));
       }
     });
+
   }
 
   void sendMessage({
@@ -90,10 +78,6 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     required int messageId,
     required int senderId,
   }) {
-    socketRepo.emitMessageRead(
-      messageId,
-      chatId,
-      senderId,
-    );
+    socketRepo.emitMessageRead(messageId, chatId, senderId);
   }
 }
