@@ -1,5 +1,6 @@
 import 'package:whatsapp/core/services/web_socket_service.dart';
-import '../../domain/repos/socket_repo.dart';
+import 'package:whatsapp/core/socket/socket_events.dart';
+import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 
 class SocketRepoImpl implements SocketRepo {
   final WebSocketService webSocketService;
@@ -17,37 +18,37 @@ class SocketRepoImpl implements SocketRepo {
 
   @override
   void sendMessage(Map<String, dynamic> payload) {
-    webSocketService.emit('send_message', payload);
+    webSocketService.emit(SocketEvents.sendMessage, payload);
   }
 
   @override
   void onReceiveMessage(Function(dynamic data) callback) {
-    webSocketService.onReceiveMessage(callback);
+    webSocketService.addListener(SocketEvents.receiveMessage, callback);
   }
 
   @override
   void onTyping(Function(dynamic data) callback) {
-    webSocketService.onTyping(callback);
+    webSocketService.addListener(SocketEvents.typing, callback);
   }
 
   @override
   void emitTyping(Map<String, dynamic> payload) {
-    webSocketService.emit('typing', payload);
+    webSocketService.emit(SocketEvents.typing, payload);
   }
 
   @override
   void onMessageStatusUpdate(Function(dynamic data) callback) {
-    webSocketService.onMessageStatusUpdate(callback);
+    webSocketService.addListener(SocketEvents.statusUpdate, callback);
   }
 
   @override
   void emitMarkChatAsRead(int chatId) {
-    webSocketService.emit('mark_chat_as_read', {'chatId': chatId});
+    webSocketService.emit(SocketEvents.markChatAsRead, {'chatId': chatId});
   }
 
   @override
   void emitMessageRead(int messageId, int chatId, int senderId) {
-    webSocketService.emit('message_read', {
+    webSocketService.emit(SocketEvents.messageRead, {
       'messageId': messageId,
       'chatId': chatId,
       'senderId': senderId,
@@ -56,16 +57,16 @@ class SocketRepoImpl implements SocketRepo {
 
   @override
   void onAllMessagesRead(Function(dynamic data) callback) {
-    webSocketService.onAllMessagesRead(callback);
+    webSocketService.addListener(SocketEvents.allMessagesRead, callback);
   }
 
   @override
   void onMessageRead(Function(dynamic data) callback) {
-    webSocketService.onMessageRead(callback);
+    webSocketService.addListener(SocketEvents.messageRead, callback);
   }
 
   @override
   void onFriendStatusUpdate(Function(dynamic data) callback) {
-    webSocketService.onFriendStatusUpdate(callback);
+    webSocketService.addListener(SocketEvents.friendStatusUpdate, callback);
   }
 }
