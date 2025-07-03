@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 
@@ -11,8 +12,9 @@ class SocketConnectionCubit extends Cubit<SocketConnectionState> {
   }) : super(SocketConnectionInitial());
 
   void connect() {
+    debugPrint("call connect on socket from the cubit");
     if (state is SocketConnected || state is SocketConnecting) {
-      print("SocketConnectionCubit: Already connected or connecting");
+      debugPrint("SocketConnectionCubit: Already connected or connecting");
       return;
     }
 
@@ -27,8 +29,10 @@ class SocketConnectionCubit extends Cubit<SocketConnectionState> {
   }
 
   void disconnect() {
+    debugPrint("call disConnect from socket from the cubit");
     if (state is SocketDisconnected || state is SocketConnectionInitial) {
-      print("SocketConnectionCubit: Already disconnected or not connected");
+      debugPrint(
+          "SocketConnectionCubit: Already disconnected or not connected");
       return;
     }
 
@@ -37,6 +41,7 @@ class SocketConnectionCubit extends Cubit<SocketConnectionState> {
   }
 
   void dispose() {
+    debugPrint("call dispose socket from the cubit");
     socketRepo.dispose();
     emit(SocketConnectionInitial());
   }

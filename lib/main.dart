@@ -66,7 +66,6 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    socketCubit.disconnect();
     socketCubit.dispose();
   }
 
@@ -78,7 +77,7 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
     } else if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       debugPrint("⏸️ App not active – user is offline");
-      socketCubit.disconnect();
+      socketCubit.dispose();
     }
   }
 
@@ -87,7 +86,7 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => socketCubit,
+          create: (context) => socketCubit, 
         ),
         BlocProvider(
           create: (context) => InternetConnectionCubit(

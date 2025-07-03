@@ -9,10 +9,20 @@ class WebSocketService {
   final List<MapEntry<String, Function(dynamic)>> _queuedListeners = [];
 
   void connect() async {
+    if (_socket != null && _socket!.connected) {
+      debugPrint("⚠️ Socket already connected. Skipping re-connection.");
+      return;
+    }
+
     final accessToken = await AppStorageHelper.getSecureData(
         StorageKeys.accessToken.toString());
 
-    if (accessToken == null) return;
+    if (accessToken == null) {
+      debugPrint("⛔ No access token found, socket not connected.");
+      return;
+    }
+
+    debugPrint("🚀 Creating new socket instance...");
 
     _socket = io(
       'http://10.0.2.2:3000',
@@ -26,7 +36,10 @@ class WebSocketService {
     _socket!.onConnect((_) {
       debugPrint("✅ Socket connected");
       for (var listener in _queuedListeners) {
-        _socket!.on(listener.key, listener.value);
+        _socket!.on(
+          listener.key,
+          listener.value,
+        );
       }
     });
 
@@ -52,11 +65,19 @@ class WebSocketService {
   }
 
   void disconnect() {
-    _socket?.disconnect();
+    if (_socket != null) {
+      _socket!.offAny();
+      _socket!.disconnect();
+      debugPrint("🔌 Socket disconnected");
+    }
   }
 
   void dispose() {
-    _socket?.dispose();
-    _socket = null;
+    if (_socket != null) {
+      _socket!.offAny();
+      _socket!.dispose();
+      _socket = null;
+      debugPrint("🗑️ Socket disposed");
+    }
   }
 }
