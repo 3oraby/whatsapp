@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/last_message_entity.dart';
@@ -81,12 +82,17 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     required int messageId,
     required MessageStatus newStatus,
   }) {
+    debugPrint("update: message id = $messageId with status: $newStatus");
     final currentState = state;
     if (currentState is! GetUserChatsLoadedState) return;
 
     final chats = [...currentState.chats];
-    final chatIndex =
-        chats.indexWhere((chat) => chat.lastMessage?.messageId == messageId);
+    final chatIndex = chats.indexWhere((chat) {
+      debugPrint(
+          "lastMessage id: ${chat.lastMessage?.messageId} in chatId: ${chat.id}");
+      return chat.lastMessage?.messageId == messageId ||
+          chat.lastMessage?.messageId == -1;
+    });
     if (chatIndex == -1) return;
 
     final chat = chats[chatIndex];
@@ -98,6 +104,23 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
 
     final updatedChat = chat.copyWith(
       lastMessage: updatedLastMsg,
+    );
+
+    chats[chatIndex] = updatedChat;
+    emit(GetUserChatsLoadedState(chats: chats));
+  }
+
+  void updateLastMessageAsSeen({required int chatId}) {
+    final currentState = state;
+    if (currentState is! GetUserChatsLoadedState) return;
+
+    final chats = [...currentState.chats];
+    final chatIndex = chats.indexWhere((chat) => chat.id == chatId);
+    if (chatIndex == -1) return;
+
+    final chat = chats[chatIndex];
+    final updatedChat = chat.copyWith(
+      unreadCount: 0,
     );
 
     chats[chatIndex] = updatedChat;

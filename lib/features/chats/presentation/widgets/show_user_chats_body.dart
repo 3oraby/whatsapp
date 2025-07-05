@@ -44,6 +44,8 @@ class _ShowUserChatsBodyState extends State<ShowUserChatsBody> {
             messageId: state.newId,
             newStatus: state.newStatus,
           );
+        } else if (state is AllMessagesReadState){
+          getUserChatsCubit.updateLastMessageAsSeen(chatId: state.chatId);
         }
       },
       child: CustomAppPadding(

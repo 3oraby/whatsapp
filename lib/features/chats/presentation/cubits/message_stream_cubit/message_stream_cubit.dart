@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/features/chats/data/models/message_model.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
@@ -25,6 +26,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     });
 
     socketRepo.onMessageStatusUpdate((data) {
+      debugPrint(data.toString());
       final messageId = data["messageId"];
       final newStatus = (data["status"] as String).toMessageStatus();
       if (!isClosed) {
@@ -36,6 +38,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     });
 
     socketRepo.onMessageRead((data) {
+      debugPrint(data.toString());
       final int messageId = data['messageId'];
       if (!isClosed) {
         emit(UpdateMessageStatusState(
@@ -45,6 +48,11 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       }
     });
 
+    socketRepo.onAllMessagesRead((data) {
+      debugPrint(data.toString());
+      final chatId = data["chatId"];
+      emit(AllMessagesReadState(chatId: chatId));
+    });
   }
 
   void sendMessage({
