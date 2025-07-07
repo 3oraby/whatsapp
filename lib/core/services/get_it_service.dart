@@ -51,8 +51,7 @@ Future<void> setupGetIt() async {
     apiConsumer: getIt<ApiConsumer>(),
   ));
 
-  getIt.registerSingleton<WebSocketService>(
-      WebSocketService());
+  getIt.registerSingleton<WebSocketService>(WebSocketService());
 
   getIt.registerSingleton<SocketRepo>(SocketRepoImpl(
     webSocketService: getIt<WebSocketService>(),

@@ -1,5 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/helpers/get_local_access_token.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 
 part 'socket_connection_state.dart';
@@ -11,7 +12,7 @@ class SocketConnectionCubit extends Cubit<SocketConnectionState> {
     required this.socketRepo,
   }) : super(SocketConnectionInitial());
 
-  void connect() {
+  Future<void> connect() async {
     debugPrint("call connect on socket from the cubit");
     if (state is SocketConnected || state is SocketConnecting) {
       debugPrint("SocketConnectionCubit: Already connected or connecting");
@@ -21,8 +22,13 @@ class SocketConnectionCubit extends Cubit<SocketConnectionState> {
     emit(SocketConnecting());
 
     try {
-      socketRepo.connect();
-      emit(SocketConnected());
+      final String? accessToken = await getLocalAccessToken();
+      if (accessToken != null) {
+        socketRepo.connect(accessToken: accessToken);
+        emit(SocketConnected());
+      } else {
+        emit(SocketConnectionError("There is no access token in storage"));
+      }
     } catch (e) {
       emit(SocketConnectionError(e.toString()));
     }

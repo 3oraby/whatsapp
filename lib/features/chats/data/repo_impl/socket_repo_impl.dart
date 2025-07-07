@@ -8,7 +8,8 @@ class SocketRepoImpl implements SocketRepo {
   SocketRepoImpl({required this.webSocketService});
 
   @override
-  void connect() => webSocketService.connect();
+  void connect({required String accessToken}) =>
+      webSocketService.connect(accessToken: accessToken);
 
   @override
   void disconnect() => webSocketService.disconnect();

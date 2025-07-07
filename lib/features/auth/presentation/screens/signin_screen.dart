@@ -43,6 +43,7 @@ class SignInBLocConsumerBody extends StatelessWidget {
           showCustomSnackBar(context, state.message);
         } else if (state is SignInLoadedState) {
           log("account successfully logged in");
+          debugPrint("socket connect in login");
           BlocProvider.of<SocketConnectionCubit>(context).connect();
           showSuccessAuthModalBottomSheet(
             context: context,

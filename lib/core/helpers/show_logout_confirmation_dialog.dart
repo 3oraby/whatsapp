@@ -17,7 +17,8 @@ void showLogoutConfirmationDialog({
       Navigator.pop(context);
     },
     onOkButtonPressed: () {
-      BlocProvider.of<SocketConnectionCubit>(context).disconnect();
+      debugPrint("socket dispose in logout");
+      BlocProvider.of<SocketConnectionCubit>(context).dispose();
       BlocProvider.of<LogoutCubit>(context).logOut();
     },
   );

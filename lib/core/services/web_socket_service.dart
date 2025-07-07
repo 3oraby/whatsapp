@@ -1,24 +1,16 @@
 import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:whatsapp/core/constants/storage_keys.dart';
-import 'package:whatsapp/core/storage/app_storage_helper.dart';
 
 class WebSocketService {
   Socket? _socket;
 
   final List<MapEntry<String, Function(dynamic)>> _queuedListeners = [];
 
-  void connect() async {
+  void connect({
+    required String accessToken,
+  }) {
     if (_socket != null && _socket!.connected) {
       debugPrint("⚠️ Socket already connected. Skipping re-connection.");
-      return;
-    }
-
-    final accessToken = await AppStorageHelper.getSecureData(
-        StorageKeys.accessToken.toString());
-
-    if (accessToken == null) {
-      debugPrint("⛔ No access token found, socket not connected.");
       return;
     }
 
@@ -28,10 +20,14 @@ class WebSocketService {
       'http://10.0.2.2:3000',
       OptionBuilder()
           .setTransports(['websocket'])
-          .enableAutoConnect()
-          .setAuth({'token': accessToken})
+          .disableAutoConnect()
+          .setAuth({
+            'token': accessToken,
+          })
           .build(),
     );
+
+    _socket!.connect();
 
     _socket!.onConnect((_) {
       debugPrint("✅ Socket connected");

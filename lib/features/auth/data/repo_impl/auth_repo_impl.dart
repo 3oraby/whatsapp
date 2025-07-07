@@ -46,8 +46,9 @@ class AuthRepoImpl extends AuthRepo {
         },
       );
 
+      final accessToken = result[ApiKeys.accessToken];
       await AppStorageHelper.setSecureData(
-          StorageKeys.accessToken.toString(), result[ApiKeys.accessToken]);
+          StorageKeys.accessToken.toString(), accessToken);
 
       log("access token is saved in secure data");
       await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), true);

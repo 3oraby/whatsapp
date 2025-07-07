@@ -1,5 +1,7 @@
 abstract class SocketRepo {
-  void connect();
+  void connect({
+    required String accessToken,
+  });
   void disconnect();
   void dispose();
 
