@@ -18,7 +18,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
 
   void _initSocketListeners() {
     socketRepo.onReceiveMessage((data) {
-      print("✅ New message: $data");
+      debugPrint("✅ New message: $data");
       final message = MessageModel.fromJson(data).toEntity();
       if (!isClosed) {
         emit(NewIncomingMessageState(message));
@@ -29,8 +29,11 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       debugPrint(data.toString());
       final messageId = data["messageId"];
       final newStatus = (data["status"] as String).toMessageStatus();
+      final int chatId = data['chatId'];
+
       if (!isClosed) {
         emit(UpdateMessageStatusState(
+          chatId: chatId,
           newId: messageId,
           newStatus: newStatus,
         ));
@@ -40,8 +43,10 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     socketRepo.onMessageRead((data) {
       debugPrint(data.toString());
       final int messageId = data['messageId'];
+      final int chatId = data['chatId'];
       if (!isClosed) {
         emit(UpdateMessageStatusState(
+          chatId: chatId,
           newId: messageId,
           newStatus: MessageStatus.read,
         ));

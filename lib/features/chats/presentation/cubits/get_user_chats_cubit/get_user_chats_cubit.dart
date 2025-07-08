@@ -79,6 +79,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
   }
 
   void updateLastMessageStatus({
+    required int chatId,
     required int messageId,
     required MessageStatus newStatus,
   }) {
@@ -88,10 +89,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
 
     final chats = [...currentState.chats];
     final chatIndex = chats.indexWhere((chat) {
-      debugPrint(
-          "lastMessage id: ${chat.lastMessage?.messageId} in chatId: ${chat.id}");
-      return chat.lastMessage?.messageId == messageId ||
-          chat.lastMessage?.messageId == -1;
+      return chat.id == chatId;
     });
     if (chatIndex == -1) return;
 

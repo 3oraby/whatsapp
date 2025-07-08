@@ -41,10 +41,11 @@ class _ShowUserChatsBodyState extends State<ShowUserChatsBody> {
           getUserChatsCubit.updateChatListOnNewMessage(state.message);
         } else if (state is UpdateMessageStatusState) {
           getUserChatsCubit.updateLastMessageStatus(
+            chatId: state.chatId,
             messageId: state.newId,
             newStatus: state.newStatus,
           );
-        } else if (state is AllMessagesReadState){
+        } else if (state is AllMessagesReadState) {
           getUserChatsCubit.updateLastMessageAsSeen(chatId: state.chatId);
         }
       },
