@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -15,13 +17,14 @@ class WebSocketService {
     }
 
     debugPrint("🚀 Creating new socket instance...");
-
+    log("token before socket connection : $accessToken");
+    log("xxxxxxxxxx");
     _socket = io(
       'http://10.0.2.2:3000',
       OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
-          .setAuth({
+          .setQuery({
             'token': accessToken,
           })
           .build(),
@@ -72,6 +75,7 @@ class WebSocketService {
     if (_socket != null) {
       _socket!.offAny();
       _socket!.dispose();
+      _socket!.destroy();
       _socket = null;
       debugPrint("🗑️ Socket disposed");
     }

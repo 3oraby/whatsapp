@@ -60,7 +60,9 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
     socketCubit = SocketConnectionCubit(
       socketRepo: getIt<SocketRepo>(),
     );
-    socketCubit.connect();
+    if (checkLoginState()) {
+      socketCubit.connect();
+    }
   }
 
   // Future<void> _initSocketConnection() async {
