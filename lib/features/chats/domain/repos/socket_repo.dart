@@ -11,6 +11,9 @@ abstract class SocketRepo {
   void onTyping(Function(dynamic data) callback);
   void emitTyping(Map<String, dynamic> payload);
 
+  void onStopTyping(Function(dynamic data) callback);
+  void emitStopTyping(Map<String, dynamic> payload);
+
   void onMessageStatusUpdate(Function(dynamic data) callback);
 
   void emitMarkChatAsRead(int chatId);

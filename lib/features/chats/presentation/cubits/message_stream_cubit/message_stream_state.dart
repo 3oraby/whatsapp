@@ -32,3 +32,23 @@ class AllMessagesReadState extends MessageStreamState {
 
   AllMessagesReadState({required this.chatId});
 }
+
+class UserTypingState extends MessageStreamState {
+  final int chatId;
+  final int senderId;
+
+  UserTypingState({
+    required this.chatId,
+    required this.senderId,
+  });
+}
+
+class UserStopTypingState extends MessageStreamState {
+  final int chatId;
+  final int senderId;
+
+  UserStopTypingState({
+    required this.chatId,
+    required this.senderId,
+  });
+}

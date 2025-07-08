@@ -38,6 +38,16 @@ class SocketRepoImpl implements SocketRepo {
   }
 
   @override
+  void onStopTyping(Function(dynamic data) callback) {
+    webSocketService.addListener(SocketEvents.stopTyping, callback);
+  }
+
+  @override
+  void emitStopTyping(Map<String, dynamic> payload) {
+    webSocketService.emit(SocketEvents.stopTyping, payload);
+  }
+
+  @override
   void onMessageStatusUpdate(Function(dynamic data) callback) {
     webSocketService.addListener(SocketEvents.statusUpdate, callback);
   }

@@ -60,6 +60,26 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
         emit(AllMessagesReadState(chatId: chatId));
       }
     });
+
+    socketRepo.onTyping((data) {
+      debugPrint("onTyping: ${data.toString()}");
+      final int senderId = data["from"];
+      final int chatId = data["chatId"];
+
+      if (!isClosed) {
+        emit(UserTypingState(chatId: chatId, senderId: senderId));
+      }
+    });
+
+    socketRepo.onStopTyping((data) {
+      debugPrint("onStopTyping: ${data.toString()}");
+      final int senderId = data["from"];
+      final int chatId = data["chatId"];
+
+      if (!isClosed) {
+        emit(UserStopTypingState(chatId: chatId, senderId: senderId));
+      }
+    });
   }
 
   void sendMessage({
@@ -94,5 +114,19 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     required int senderId,
   }) {
     socketRepo.emitMessageRead(messageId, chatId, senderId);
+  }
+
+  void emitTyping({required int chatId}) {
+    debugPrint("emit typing");
+    socketRepo.emitTyping({
+      "chatId": chatId,
+    });
+  }
+
+  void emitStopTyping({required int chatId}) {
+    debugPrint("emit stop typing");
+    socketRepo.emitStopTyping({
+      "chatId": chatId,
+    });
   }
 }

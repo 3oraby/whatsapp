@@ -69,9 +69,9 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     );
 
     messageStreamCubit.sendMessage(
-          dto: dto,
-          currentUserId: currentUser.id,
-        );
+      dto: dto,
+      currentUserId: currentUser.id,
+    );
 
     setState(() {
       _replyMessage = null;
@@ -146,6 +146,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
                   onReplyRequested: _onReplyRequested,
                 ),
               ),
+              IsTypingWidget(),
               if (_replyMessage != null)
                 ReplyToMessageBanner(
                   replyMessage: _replyMessage!,
@@ -156,11 +157,40 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
               const Divider(height: 1),
               SendMessageSection(
                 sendMessage: sendMessage,
+                chatId: widget.chat.id,
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class IsTypingWidget extends StatelessWidget {
+  const IsTypingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<MessageStreamCubit, MessageStreamState>(
+      builder: (context, state) {
+        if (state is UserTypingState) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 16.0, bottom: 4),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "is typing...",
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          );
+        }
+        return SizedBox();
+      },
     );
   }
 }
