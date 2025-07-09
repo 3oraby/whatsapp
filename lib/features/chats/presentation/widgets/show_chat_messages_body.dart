@@ -118,6 +118,9 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
                 );
               }
             }
+            if (state is UserTypingState) {
+              _scrollToBottom();
+            }
           },
         ),
         BlocListener<GetChatMessagesCubit, GetChatMessagesState>(
@@ -137,60 +140,37 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
               filterQuality: FilterQuality.low,
             ),
           ),
-          child: Column(
-            children: [
-              Expanded(
-                child: ShowChatMessagesList(
-                  scrollController: _scrollController,
-                  messages: widget.messages,
-                  onReplyRequested: _onReplyRequested,
-                ),
-              ),
-              IsTypingWidget(),
-              if (_replyMessage != null)
-                ReplyToMessageBanner(
-                  replyMessage: _replyMessage!,
-                  onCancel: () => setState(
-                    () => _replyMessage = null,
+          child: BlocBuilder<MessageStreamCubit, MessageStreamState>(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: ShowChatMessagesList(
+                      scrollController: _scrollController,
+                      messages: widget.messages,
+                      onReplyRequested: _onReplyRequested,
+                      isTyping: state is UserTypingState &&
+                          state.chatId == widget.chat.id,
+                    ),
                   ),
-                ),
-              const Divider(height: 1),
-              SendMessageSection(
-                sendMessage: sendMessage,
-                chatId: widget.chat.id,
-              ),
-            ],
+                  if (_replyMessage != null)
+                    ReplyToMessageBanner(
+                      replyMessage: _replyMessage!,
+                      onCancel: () => setState(
+                        () => _replyMessage = null,
+                      ),
+                    ),
+                  const Divider(height: 1),
+                  SendMessageSection(
+                    sendMessage: sendMessage,
+                    chatId: widget.chat.id,
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
-    );
-  }
-}
-
-class IsTypingWidget extends StatelessWidget {
-  const IsTypingWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<MessageStreamCubit, MessageStreamState>(
-      builder: (context, state) {
-        if (state is UserTypingState) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 16.0, bottom: 4),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "is typing...",
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          );
-        }
-        return SizedBox();
-      },
     );
   }
 }

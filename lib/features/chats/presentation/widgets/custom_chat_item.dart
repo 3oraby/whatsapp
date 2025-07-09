@@ -16,10 +16,12 @@ import 'package:whatsapp/features/chats/presentation/widgets/show_unread_message
 
 class CustomChatItem extends StatelessWidget {
   final ChatEntity chat;
+  final bool isTyping;
 
   const CustomChatItem({
     super.key,
     required this.chat,
+    this.isTyping = false,
   });
 
   @override
@@ -72,48 +74,65 @@ class CustomChatItem extends StatelessWidget {
                         TimeAgoService.getSmartChatTimestamp(
                             lastMessage.createdAt),
                         style:
-                            AppTextStyles.poppinsMedium(context, 12).copyWith(
+                            AppTextStyles.poppinsMedium(context, 14).copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                   ],
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (chat.lastMessage != null && chat.lastMessage!.isMine)
-                      Row(
-                        children: [
-                          BuildMessageStatusIcon(
-                            messageStatus: chat.lastMessage!.messageStatus,
-                          ),
-                          const HorizontalGap(6),
-                        ],
-                      ),
-                    Expanded(
-                      child: SizedBox(
+                if (isTyping)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
                         height: 38,
                         child: Text(
-                          chat.lastMessage?.content ??
-                              "tap here to start the conservation..",
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                          "typing..",
                           style:
                               AppTextStyles.poppinsMedium(context, 14).copyWith(
                             color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                       ),
-                    ),
-                    if (chat.unreadCount > 0)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 6, top: 4),
-                        child: ShowUnreadMessagesCounts(
-                          unreadCount: chat.unreadCount,
+                    ],
+                  )
+                else
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (chat.lastMessage != null && chat.lastMessage!.isMine)
+                        Row(
+                          children: [
+                            BuildMessageStatusIcon(
+                              messageStatus: chat.lastMessage!.messageStatus,
+                            ),
+                            const HorizontalGap(6),
+                          ],
+                        ),
+                      Expanded(
+                        child: SizedBox(
+                          height: 38,
+                          child: Text(
+                            chat.lastMessage?.content ??
+                                "tap here to start the conservation..",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.poppinsMedium(context, 14)
+                                .copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
                         ),
                       ),
-                  ],
-                ),
+                      if (chat.unreadCount > 0)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 6, top: 4),
+                          child: ShowUnreadMessagesCounts(
+                            unreadCount: chat.unreadCount,
+                          ),
+                        ),
+                    ],
+                  ),
               ],
             ),
           ),

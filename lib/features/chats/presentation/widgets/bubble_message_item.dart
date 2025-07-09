@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_constants.dart';
+import 'package:whatsapp/core/widgets/custom_loading_indicator.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/custom_message_content.dart';
 
@@ -8,18 +10,20 @@ class BubbleMessageItem extends StatelessWidget {
   const BubbleMessageItem({
     super.key,
     required this.isFromMe,
-    required this.bgColor,
-    required this.msg,
+    this.msg,
     this.repliedMsg,
+    this.isTyping = false,
   });
 
   final bool isFromMe;
-  final Color bgColor;
-  final MessageEntity msg;
+  final MessageEntity? msg;
   final MessageEntity? repliedMsg;
+  final bool isTyping;
 
   @override
   Widget build(BuildContext context) {
+    final bgColor = isFromMe ? AppColors.myMessageLight : Colors.grey.shade200;
+
     final bool isRepliedMessage = repliedMsg != null;
     return ChatBubble(
       clipper: isFromMe
@@ -36,27 +40,33 @@ class BubbleMessageItem extends StatelessWidget {
         top: isRepliedMessage ? 4 : 6,
         bottom: 4,
         left: isRepliedMessage
-            ? msg.isFromMe
+            ? isFromMe
                 ? 4
                 : 12
-            : msg.isFromMe
+            : isFromMe
                 ? 26
                 : 33,
         right: isRepliedMessage
-            ? msg.isFromMe
+            ? isFromMe
                 ? 12
                 : 4
-            : msg.isFromMe
+            : isFromMe
                 ? 16
                 : 10,
       ),
       margin: EdgeInsets.all(0),
       backGroundColor: bgColor,
-      child: CustomMessageContent(
-        isFromMe: isFromMe,
-        msg: msg,
-        repliedMsg: repliedMsg,
-      ),
+      child: isTyping
+          ? SizedBox(
+              height: 30, 
+              width: 30,
+              child: CustomLoadingIndicator(),
+            )
+          : CustomMessageContent(
+              isFromMe: isFromMe,
+              msg: msg!,
+              repliedMsg: repliedMsg,
+            ),
     );
   }
 }
