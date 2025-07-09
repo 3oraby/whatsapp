@@ -47,6 +47,16 @@ class _ShowUserChatsBodyState extends State<ShowUserChatsBody> {
           );
         } else if (state is AllMessagesReadState) {
           getUserChatsCubit.updateLastMessageAsSeen(chatId: state.chatId);
+        } else if (state is EditMessageState) {
+          getUserChatsCubit.updateLastMessageOnEditMessage(
+            messageId: state.messageId,
+            newContent: state.newContent,
+          );
+        } else if (state is MessageEditedSuccessfullyState) {
+          getUserChatsCubit.updateLastMessageOnEditMessage(
+            messageId: state.messageId,
+            newContent: state.newContent,
+          );
         }
       },
       child: CustomAppPadding(

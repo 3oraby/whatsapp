@@ -52,3 +52,41 @@ class UserStopTypingState extends MessageStreamState {
     required this.senderId,
   });
 }
+
+class MessageDeletedState extends MessageStreamState {
+  final int messageId;
+  final int chatId;
+
+  MessageDeletedState({required this.messageId, required this.chatId});
+}
+
+class MessageEditedSuccessfullyState extends MessageStreamState {
+  final int messageId;
+  final String newContent;
+  MessageEditedSuccessfullyState({
+    required this.messageId,
+    required this.newContent,
+  });
+}
+
+class MessageReactedState extends MessageStreamState {
+  final int messageId;
+  final int reactsCount;
+  final int chatId;
+
+  MessageReactedState({
+    required this.messageId,
+    required this.reactsCount,
+    required this.chatId,
+  });
+}
+
+class EditMessageState extends MessageStreamState {
+  final int messageId;
+  final String newContent;
+
+  EditMessageState({
+    required this.messageId,
+    required this.newContent,
+  });
+}

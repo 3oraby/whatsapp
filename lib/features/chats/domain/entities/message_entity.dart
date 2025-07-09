@@ -13,7 +13,8 @@ class MessageEntity {
   final int? parentId;
   final MessageType type;
   final int? statusId;
-  final bool? isDeleted;
+  final bool isDeleted;
+  final bool isEdited;
   final DateTime createdAt;
   final DateTime? updatedAt;
   final bool isFromMe;
@@ -31,7 +32,8 @@ class MessageEntity {
     this.parentId,
     this.type = MessageType.text,
     this.statusId,
-    this.isDeleted,
+    this.isDeleted = false,
+    this.isEdited = false,
     required this.createdAt,
     this.updatedAt,
     required this.isFromMe,
@@ -51,6 +53,7 @@ class MessageEntity {
     MessageType? type,
     int? statusId,
     bool? isDeleted,
+    bool? isEdited,
     DateTime? createdAt,
     DateTime? updatedAt,
     bool? isFromMe,
@@ -69,6 +72,7 @@ class MessageEntity {
       type: type ?? this.type,
       statusId: statusId ?? this.statusId,
       isDeleted: isDeleted ?? this.isDeleted,
+      isEdited: isEdited ?? this.isEdited,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isFromMe: isFromMe ?? this.isFromMe,

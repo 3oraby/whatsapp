@@ -70,4 +70,26 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
     msgs[idx] = msgs[idx].copyWith(status: newStatus);
     emit(GetChatMessagesLoadedState(messages: msgs));
   }
+
+  void editMessage({
+    required int messageId,
+    required String newContent,
+    required MessageStatus newStatus,
+  }) {
+    if (state is! GetChatMessagesLoadedState) return;
+    final current = state as GetChatMessagesLoadedState;
+    final msgs = List<MessageEntity>.from(current.messages);
+
+    final idx = msgs.indexWhere((m) => m.id == messageId);
+    if (idx == -1) return;
+
+    msgs[idx] = msgs[idx].copyWith(
+      content: newContent,
+      updatedAt: DateTime.now(),
+      isEdited: true,
+      status: msgs[idx].isFromMe ? null : newStatus,
+    );
+
+    emit(GetChatMessagesLoadedState(messages: msgs));
+  }
 }

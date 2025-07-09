@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/bubble_message_item.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/show_message_options_menu.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/swipe_to_reply_message_item.dart';
 
 class ShowChatMessagesList extends StatelessWidget {
@@ -53,12 +54,18 @@ class ShowChatMessagesList extends StatelessWidget {
           );
         }
 
-        return SwipeToReplyMessageItem(
-          msg: msg,
-          isFromMe: isFromMe,
-          showClipper: isLastFromSameSender,
-          onReply: (msg) => onReplyRequested?.call(msg),
-          repliedMsg: repliedMsg,
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onLongPress: () {
+            showMessageOptionsMenu(context, msg);
+          },
+          child: SwipeToReplyMessageItem(
+            msg: msg,
+            isFromMe: isFromMe,
+            showClipper: isLastFromSameSender,
+            onReply: (msg) => onReplyRequested?.call(msg),
+            repliedMsg: repliedMsg,
+          ),
         );
       },
     );

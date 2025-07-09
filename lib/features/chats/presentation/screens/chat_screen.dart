@@ -51,7 +51,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         BlocProvider(
           create: (context) => chatFriendStatusCubit,
-        )
+        ),
       ],
       child: BlocBuilder<ChatFriendStatusCubit, ChatFriendStatusState>(
         builder: (context, state) => Scaffold(

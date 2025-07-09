@@ -24,4 +24,16 @@ abstract class SocketRepo {
   void onMessageRead(Function(dynamic data) callback);
 
   void onFriendStatusUpdate(Function(dynamic data) callback);
+
+  void emitDeleteMessage(int messageId);
+
+  void onMessageDeletedSuccessfully(Function(dynamic data) callback);
+  void emitEditMessage(Map<String, dynamic> payload);
+
+  void onMessageEditedSuccessfully(Function(dynamic data) callback);
+  void onEditMessage(Function(dynamic data) callback);
+
+  void emitReactMessage(Map<String, dynamic> payload);
+
+  void onMessageReactedSuccessfully(Function(dynamic data) callback);
 }

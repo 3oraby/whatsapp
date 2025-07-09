@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/features/chats/data/models/message_model.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 
@@ -80,6 +81,61 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
         emit(UserStopTypingState(chatId: chatId, senderId: senderId));
       }
     });
+
+    socketRepo.onEditMessage(
+      (data) {
+        debugPrint("✏️ message edited: $data");
+        final messageId = data['messageId'];
+        final newContent = data['content'];
+        if (!isClosed) {
+          emit(MessageEditedSuccessfullyState(
+            messageId: messageId,
+            newContent: newContent,
+          ));
+        }
+      },
+    );
+
+    socketRepo.onMessageEditedSuccessfully((data) {
+      debugPrint("✏️ message edited: $data");
+      final messageId = data["messageId"];
+      final newContent = data['content'];
+
+      if (!isClosed) {
+        emit(MessageEditedSuccessfullyState(
+          messageId: messageId,
+          newContent: newContent,
+        ));
+      }
+    });
+
+    socketRepo.onMessageDeletedSuccessfully((data) {
+      debugPrint("🗑 Deleted: $data");
+      final int messageId = data["messageId"];
+      final int chatId = data["chatId"];
+
+      if (!isClosed) {
+        emit(MessageDeletedState(
+          messageId: messageId,
+          chatId: chatId,
+        ));
+      }
+    });
+
+    socketRepo.onMessageReactedSuccessfully((data) {
+      debugPrint("❤️ Reacted: $data");
+      final int messageId = data["messageId"];
+      final int chatId = data["chatId"];
+      final int reactsCount = data["reactsCount"];
+
+      if (!isClosed) {
+        emit(MessageReactedState(
+          messageId: messageId,
+          reactsCount: reactsCount,
+          chatId: chatId,
+        ));
+      }
+    });
   }
 
   void sendMessage({
@@ -127,6 +183,35 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     debugPrint("emit stop typing");
     socketRepo.emitStopTyping({
       "chatId": chatId,
+    });
+  }
+
+  void emitDeleteMessage({required int messageId}) {
+    socketRepo.emitDeleteMessage(messageId);
+  }
+
+  void emitEditMessage({
+    required int messageId,
+    required String newContent,
+  }) {
+    socketRepo.emitEditMessage({
+      "messageId": messageId,
+      "content": newContent,
+    });
+
+    emit(EditMessageState(
+      messageId: messageId,
+      newContent: newContent,
+    ));
+  }
+
+  void emitMessageReaction({
+    required int messageId,
+    required MessageReact reactType,
+  }) {
+    socketRepo.emitReactMessage({
+      "messageId": messageId,
+      "react": reactType.value,
     });
   }
 }

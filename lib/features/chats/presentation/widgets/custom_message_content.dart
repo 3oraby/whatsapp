@@ -42,6 +42,15 @@ class CustomMessageContent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                if (msg.isEdited) ...[
+                  Text(
+                    "Edited",
+                    style: AppTextStyles.poppinsMedium(context, 14).copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  const HorizontalGap(6),
+                ],
                 Text(
                   TimeAgoService.formatTimeOnly(msg.createdAt),
                   style: AppTextStyles.poppinsMedium(context, 14).copyWith(

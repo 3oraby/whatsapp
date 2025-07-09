@@ -121,12 +121,28 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
             if (state is UserTypingState) {
               _scrollToBottom();
             }
+
+            if (state is EditMessageState) {
+              getChatMessagesCubit.editMessage(
+                messageId: state.messageId,
+                newContent: state.newContent,
+                newStatus: MessageStatus.pending,
+              );
+            }
+
+            // if (state is MessageEditedSuccessfullyState) {
+            //   getChatMessagesCubit.editMessage(
+            //     messageId: state.messageId,
+            //     newContent: state.newContent,
+            //     newStatus: MessageStatus.read,
+            //   );
+            // }
           },
         ),
         BlocListener<GetChatMessagesCubit, GetChatMessagesState>(
           listener: (context, state) {
             if (state is GetChatMessagesLoadedState) {
-              _scrollToBottom();
+              // _scrollToBottom();
             }
           },
         ),

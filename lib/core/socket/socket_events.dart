@@ -8,4 +8,11 @@ abstract class SocketEvents {
   static const messageRead = 'message_read';
   static const allMessagesRead = 'all messages readed successfully';
   static const friendStatusUpdate = 'friend_status_update';
+  static const emitEditMessage = 'editMessage';
+  static const onEditMessage = 'edit_message';
+  static const deleteMessage = 'deleteMessage';
+  static const messageReact = 'message_react';
+  static const messageEditedSuccessfully = 'message_edited_successfully';
+  static const messageDeletedSuccessfully = 'message_deleted_successfully';
+  static const messageReactedSuccessfully = 'message_reacted_successfully';
 }

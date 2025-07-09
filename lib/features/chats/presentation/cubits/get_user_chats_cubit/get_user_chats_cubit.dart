@@ -54,7 +54,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     ChatEntity updatedChat;
 
     if (chatIndex != -1) {
-      print("chat is founded");
+      debugPrint("chat is founded");
       final oldChat = chats[chatIndex];
 
       updatedChat = oldChat.copyWith(
@@ -122,6 +122,33 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     );
 
     chats[chatIndex] = updatedChat;
+    emit(GetUserChatsLoadedState(chats: chats));
+  }
+
+  void updateLastMessageOnEditMessage({
+    required int messageId,
+    required String newContent,
+  }) {
+    final currentState = state;
+    if (currentState is! GetUserChatsLoadedState) return;
+
+    final chats = [...currentState.chats];
+    final chatIndex =
+        chats.indexWhere((c) => c.lastMessage?.messageId == messageId);
+    if (chatIndex == -1) return;
+
+    final chat = chats[chatIndex];
+    final lastMsg = chat.lastMessage;
+
+    LastMessageEntity updatedLastMsg = lastMsg!.copyWith(
+      content: newContent,
+    );
+
+    final updatedChat = chat.copyWith(
+      lastMessage: updatedLastMsg,
+    );
+    chats.removeAt(chatIndex);
+    chats.insert(0, updatedChat);
     emit(GetUserChatsLoadedState(chats: chats));
   }
 }

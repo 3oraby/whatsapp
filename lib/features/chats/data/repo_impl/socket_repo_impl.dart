@@ -54,7 +54,9 @@ class SocketRepoImpl implements SocketRepo {
 
   @override
   void emitMarkChatAsRead(int chatId) {
-    webSocketService.emit(SocketEvents.markChatAsRead, {'chatId': chatId});
+    webSocketService.emit(SocketEvents.markChatAsRead, {
+      'chatId': chatId,
+    });
   }
 
   @override
@@ -79,5 +81,54 @@ class SocketRepoImpl implements SocketRepo {
   @override
   void onFriendStatusUpdate(Function(dynamic data) callback) {
     webSocketService.addListener(SocketEvents.friendStatusUpdate, callback);
+  }
+
+  @override
+  void emitDeleteMessage(int messageId) {
+    webSocketService.emit(
+      SocketEvents.deleteMessage,
+      {
+        'messageId': messageId,
+      },
+    );
+  }
+
+  @override
+  void emitEditMessage(Map<String, dynamic> payload) {
+    webSocketService.emit(
+      SocketEvents.emitEditMessage,
+      payload,
+    );
+  }
+
+  @override
+  void onMessageDeletedSuccessfully(Function(dynamic data) callback) {
+    webSocketService.addListener(
+        SocketEvents.messageDeletedSuccessfully, callback);
+  }
+
+  @override
+  void onMessageEditedSuccessfully(Function(dynamic data) callback) {
+    webSocketService.addListener(
+        SocketEvents.messageEditedSuccessfully, callback);
+  }
+
+  @override
+  void emitReactMessage(Map<String, dynamic> payload) {
+    webSocketService.emit(
+      SocketEvents.messageReact,
+      payload,
+    );
+  }
+
+  @override
+  void onMessageReactedSuccessfully(Function(dynamic data) callback) {
+    webSocketService.addListener(
+        SocketEvents.messageReactedSuccessfully, callback);
+  }
+
+  @override
+  void onEditMessage(Function(dynamic data) callback) {
+    webSocketService.addListener(SocketEvents.onEditMessage, callback);
   }
 }
