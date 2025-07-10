@@ -11,6 +11,7 @@ class LastMessageModel extends LastMessageEntity {
     required super.type,
     required super.senderId,
     required super.isMine,
+    super.isDeleted,
   });
 
   factory LastMessageModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +24,7 @@ class LastMessageModel extends LastMessageEntity {
       type: MessageTypeExtension.fromString(json['type'] ?? 'text'),
       senderId: json['senderId'],
       isMine: json['isMine'] ?? false,
+      isDeleted: json['isDeleted'] ?? false,
     );
   }
 
@@ -35,6 +37,7 @@ class LastMessageModel extends LastMessageEntity {
       type: entity.type,
       senderId: entity.senderId,
       isMine: entity.isMine,
+      isDeleted: entity.isDeleted,
     );
   }
 
@@ -47,6 +50,7 @@ class LastMessageModel extends LastMessageEntity {
       type: type,
       senderId: senderId,
       isMine: isMine,
+      isDeleted: isDeleted,
     );
   }
 }

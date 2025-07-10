@@ -131,4 +131,10 @@ class SocketRepoImpl implements SocketRepo {
   void onEditMessage(Function(dynamic data) callback) {
     webSocketService.addListener(SocketEvents.onEditMessage, callback);
   }
+
+
+  @override
+  void onDeleteMessage (Function(dynamic data) callback) {
+    webSocketService.addListener(SocketEvents.onDeleteMessage, callback);
+  }
 }

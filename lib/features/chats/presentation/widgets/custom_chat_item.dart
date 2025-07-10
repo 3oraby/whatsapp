@@ -96,6 +96,30 @@ class CustomChatItem extends StatelessWidget {
                       ),
                     ],
                   )
+                else if (chat.lastMessage?.isDeleted ?? false)
+                  SizedBox(
+                    height: 38,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.block,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        const HorizontalGap(6),
+                        Text(
+                          "${chat.lastMessage?.isMine ?? true ? "You" : chat.anotherUser.name} deleted this message.",
+                          style:
+                              AppTextStyles.poppinsMedium(context, 14).copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  )
                 else
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,

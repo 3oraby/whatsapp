@@ -11,6 +11,7 @@ abstract class SocketEvents {
   static const emitEditMessage = 'editMessage';
   static const onEditMessage = 'edit_message';
   static const deleteMessage = 'deleteMessage';
+  static const onDeleteMessage = 'deleteMessage';
   static const messageReact = 'message_react';
   static const messageEditedSuccessfully = 'message_edited_successfully';
   static const messageDeletedSuccessfully = 'message_deleted_successfully';

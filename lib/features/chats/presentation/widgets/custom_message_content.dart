@@ -24,7 +24,7 @@ class CustomMessageContent extends StatelessWidget {
     return IntrinsicWidth(
       child: Container(
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width * 0.6,
+          maxWidth: MediaQuery.sizeOf(context).width * 0.7,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -33,16 +33,35 @@ class CustomMessageContent extends StatelessWidget {
               RepliedMessageBox(
                 msg: repliedMsg!,
               ),
-            Text(
-              msg.content ?? "content",
-              style: AppTextStyles.poppinsMedium(context, 20),
-            ),
+            if (msg.isDeleted)
+              Row(
+                children: [
+                  Icon(
+                    Icons.block,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  const HorizontalGap(6),
+                  Text(
+                    "You deleted this message.",
+                    style: AppTextStyles.poppinsMedium(context, 16).copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  const HorizontalGap(6),
+                ],
+              )
+            else
+              Text(
+                msg.content ?? "content",
+                style: AppTextStyles.poppinsMedium(context, 20),
+              ),
             const VerticalGap(3),
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (msg.isEdited) ...[
+                if (msg.isEdited && !msg.isDeleted) ...[
                   Text(
                     "Edited",
                     style: AppTextStyles.poppinsMedium(context, 14).copyWith(
@@ -58,7 +77,7 @@ class CustomMessageContent extends StatelessWidget {
                   ),
                 ),
                 const HorizontalGap(4),
-                if (isFromMe)
+                if (isFromMe && !msg.isDeleted)
                   BuildMessageStatusIcon(
                     messageStatus: msg.status,
                   ),

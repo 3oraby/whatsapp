@@ -109,15 +109,24 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       }
     });
 
+    socketRepo.onDeleteMessage((data) {
+      debugPrint("🗑 Deleted: $data");
+      final int messageId = data["messageId"];
+
+      if (!isClosed) {
+        emit(MessageDeletedSuccessfullyState(
+          messageId: messageId,
+        ));
+      }
+    });
+
     socketRepo.onMessageDeletedSuccessfully((data) {
       debugPrint("🗑 Deleted: $data");
       final int messageId = data["messageId"];
-      final int chatId = data["chatId"];
 
       if (!isClosed) {
-        emit(MessageDeletedState(
+        emit(MessageDeletedSuccessfullyState(
           messageId: messageId,
-          chatId: chatId,
         ));
       }
     });
@@ -188,6 +197,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
 
   void emitDeleteMessage({required int messageId}) {
     socketRepo.emitDeleteMessage(messageId);
+    emit(DeleteMessageState(messageId: messageId));
   }
 
   void emitEditMessage({

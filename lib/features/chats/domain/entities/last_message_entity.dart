@@ -9,6 +9,7 @@ class LastMessageEntity {
   final MessageType type;
   final int senderId;
   final bool isMine;
+  final bool isDeleted;
 
   const LastMessageEntity({
     required this.messageId,
@@ -18,6 +19,7 @@ class LastMessageEntity {
     required this.type,
     required this.senderId,
     required this.isMine,
+    this.isDeleted = false,
   });
 
   LastMessageEntity copyWith({
@@ -28,6 +30,7 @@ class LastMessageEntity {
     MessageType? type,
     int? senderId,
     bool? isMine,
+    bool? isDeleted,
   }) {
     return LastMessageEntity(
       messageId: messageId ?? this.messageId,
@@ -37,6 +40,7 @@ class LastMessageEntity {
       type: type ?? this.type,
       senderId: senderId ?? this.senderId,
       isMine: isMine ?? this.isMine,
+      isDeleted: isDeleted ?? this.isDeleted,
     );
   }
 }

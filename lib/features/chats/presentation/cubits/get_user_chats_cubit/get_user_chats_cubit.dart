@@ -32,6 +32,12 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     );
   }
 
+  int _findChatIndex(List<ChatEntity> chats, int chatId) =>
+      chats.indexWhere((c) => c.id == chatId);
+
+  int _findChatByLastMessageId(List<ChatEntity> chats, int messageId) =>
+      chats.indexWhere((c) => c.lastMessage?.messageId == messageId);
+
   void updateChatListOnNewMessage(MessageEntity message) {
     final currentState = state;
     if (currentState is! GetUserChatsLoadedState) return;
@@ -88,9 +94,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     if (currentState is! GetUserChatsLoadedState) return;
 
     final chats = [...currentState.chats];
-    final chatIndex = chats.indexWhere((chat) {
-      return chat.id == chatId;
-    });
+    final chatIndex = _findChatIndex(chats, chatId);
     if (chatIndex == -1) return;
 
     final chat = chats[chatIndex];
@@ -113,7 +117,8 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     if (currentState is! GetUserChatsLoadedState) return;
 
     final chats = [...currentState.chats];
-    final chatIndex = chats.indexWhere((chat) => chat.id == chatId);
+    final chatIndex = _findChatIndex(chats, chatId);
+
     if (chatIndex == -1) return;
 
     final chat = chats[chatIndex];
@@ -133,8 +138,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     if (currentState is! GetUserChatsLoadedState) return;
 
     final chats = [...currentState.chats];
-    final chatIndex =
-        chats.indexWhere((c) => c.lastMessage?.messageId == messageId);
+    final chatIndex = _findChatByLastMessageId(chats, messageId);
     if (chatIndex == -1) return;
 
     final chat = chats[chatIndex];
@@ -142,6 +146,32 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
 
     LastMessageEntity updatedLastMsg = lastMsg!.copyWith(
       content: newContent,
+    );
+
+    final updatedChat = chat.copyWith(
+      lastMessage: updatedLastMsg,
+    );
+    chats.removeAt(chatIndex);
+    chats.insert(0, updatedChat);
+    emit(GetUserChatsLoadedState(chats: chats));
+  }
+
+  void updateLastMessageOnDeleteMessage({
+    required int messageId,
+  }) {
+    final currentState = state;
+    if (currentState is! GetUserChatsLoadedState) return;
+
+    final chats = [...currentState.chats];
+    final chatIndex = _findChatByLastMessageId(chats, messageId);
+    if (chatIndex == -1) return;
+
+    final chat = chats[chatIndex];
+    final lastMsg = chat.lastMessage;
+    LastMessageEntity updatedLastMsg = lastMsg!.copyWith(
+      content: null,
+      messageStatus: null,
+      isDeleted: true,
     );
 
     final updatedChat = chat.copyWith(

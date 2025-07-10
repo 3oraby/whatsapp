@@ -57,6 +57,13 @@ class _ShowUserChatsBodyState extends State<ShowUserChatsBody> {
             messageId: state.messageId,
             newContent: state.newContent,
           );
+        } else if (state is DeleteMessageState ||
+            state is MessageDeletedSuccessfullyState) {
+          getUserChatsCubit.updateLastMessageOnDeleteMessage(
+            messageId: state is DeleteMessageState
+                ? state.messageId
+                : (state as MessageDeletedSuccessfullyState).messageId,
+          );
         }
       },
       child: CustomAppPadding(

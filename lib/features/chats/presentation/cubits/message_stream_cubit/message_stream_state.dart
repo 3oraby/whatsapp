@@ -53,11 +53,12 @@ class UserStopTypingState extends MessageStreamState {
   });
 }
 
-class MessageDeletedState extends MessageStreamState {
+class MessageDeletedSuccessfullyState extends MessageStreamState {
   final int messageId;
-  final int chatId;
 
-  MessageDeletedState({required this.messageId, required this.chatId});
+  MessageDeletedSuccessfullyState({
+    required this.messageId,
+  });
 }
 
 class MessageEditedSuccessfullyState extends MessageStreamState {
@@ -88,5 +89,13 @@ class EditMessageState extends MessageStreamState {
   EditMessageState({
     required this.messageId,
     required this.newContent,
+  });
+}
+
+class DeleteMessageState extends MessageStreamState {
+  final int messageId;
+
+  DeleteMessageState({
+    required this.messageId,
   });
 }
