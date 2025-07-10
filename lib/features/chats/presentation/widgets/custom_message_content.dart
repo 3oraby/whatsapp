@@ -33,7 +33,7 @@ class CustomMessageContent extends StatelessWidget {
               RepliedMessageBox(
                 msg: repliedMsg!,
               ),
-            if (msg.isDeleted)
+            if (msg.isDeleted || (msg.content == null && msg.mediaUrl == null))
               Row(
                 children: [
                   Icon(
