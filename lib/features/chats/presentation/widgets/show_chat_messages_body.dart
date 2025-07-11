@@ -135,6 +135,24 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
           getChatMessagesCubit.deleteMessage(
             messageId: state.messageId,
           );
+        } else if (state is CreateNewReactMessageState) {
+          getChatMessagesCubit.toggleMessageReact(
+            messageId: state.messageId,
+            reactType: state.reactType,
+            isCreate: true,
+          );
+        } else if (state is CreateMessageReactSuccessfullyState) {
+          getChatMessagesCubit.toggleMessageReact(
+            messageId: state.messageReaction.messageId,
+            reactType: state.messageReaction.react,
+            isCreate: true,
+          );
+        } else if (state is DeleteMessageReactSuccessfullyState) {
+          getChatMessagesCubit.toggleMessageReact(
+            messageId: state.messageReaction.messageId,
+            reactType: state.messageReaction.react,
+            isCreate: false,
+          );
         }
       },
       child: SafeArea(

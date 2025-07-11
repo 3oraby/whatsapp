@@ -1,5 +1,6 @@
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 
@@ -109,6 +110,27 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
       isEdited: false,
       isDeleted: true,
       status: null,
+    );
+
+    emit(GetChatMessagesLoadedState(messages: msgs));
+  }
+
+  void toggleMessageReact({
+    required int messageId,
+    required MessageReact reactType,
+    required bool isCreate,
+  }) {
+    if (state is! GetChatMessagesLoadedState) return;
+    final current = state as GetChatMessagesLoadedState;
+    final msgs = List<MessageEntity>.from(current.messages);
+
+    final idx = msgs.indexWhere((m) => m.id == messageId);
+    if (idx == -1) return;
+
+    msgs[idx] = msgs[idx].copyWith(
+      reactsCount:
+          isCreate ? msgs[idx].reactsCount + 1 : msgs[idx].reactsCount - 1,
+      // add type here for react after back end edit
     );
 
     emit(GetChatMessagesLoadedState(messages: msgs));

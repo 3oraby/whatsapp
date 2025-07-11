@@ -70,15 +70,19 @@ class MessageEditedSuccessfullyState extends MessageStreamState {
   });
 }
 
-class MessageReactedState extends MessageStreamState {
-  final int messageId;
-  final int reactsCount;
-  final int chatId;
+class CreateMessageReactSuccessfullyState extends MessageStreamState {
+  final MessageReactionEntity messageReaction;
+  
+  CreateMessageReactSuccessfullyState({
+    required this.messageReaction,
+  });
+}
 
-  MessageReactedState({
-    required this.messageId,
-    required this.reactsCount,
-    required this.chatId,
+class DeleteMessageReactSuccessfullyState extends MessageStreamState {
+  final MessageReactionEntity messageReaction;
+
+  DeleteMessageReactSuccessfullyState({
+    required this.messageReaction,
   });
 }
 
@@ -97,5 +101,15 @@ class DeleteMessageState extends MessageStreamState {
 
   DeleteMessageState({
     required this.messageId,
+  });
+}
+
+class CreateNewReactMessageState extends MessageStreamState {
+  final int messageId;
+  final MessageReact reactType;
+
+  CreateNewReactMessageState({
+    required this.messageId,
+    required this.reactType,
   });
 }

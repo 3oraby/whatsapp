@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/features/chats/data/models/message_model.dart';
+import 'package:whatsapp/features/chats/data/models/message_react_model.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/entities/message_react_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
@@ -131,20 +133,37 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       }
     });
 
-    socketRepo.onMessageReactedSuccessfully((data) {
+    socketRepo.onReactMessage((data) {
       debugPrint("❤️ Reacted: $data");
-      final int messageId = data["messageId"];
-      final int chatId = data["chatId"];
-      final int reactsCount = data["reactsCount"];
+      final reaction = MessageReactionModel.fromJson(data);
 
       if (!isClosed) {
-        emit(MessageReactedState(
-          messageId: messageId,
-          reactsCount: reactsCount,
-          chatId: chatId,
-        ));
+        if (reaction.action == "created_or_updated") {
+          emit(CreateMessageReactSuccessfullyState(
+              messageReaction: reaction.toEntity()));
+        } else {
+          emit(DeleteMessageReactSuccessfullyState(
+            messageReaction: reaction.toEntity(),
+          ));
+        }
       }
     });
+
+    // socketRepo.onMessageReactedSuccessfully((data) {
+    //   debugPrint("❤️ Reacted: $data");
+    //   final reaction = MessageReactionModel.fromJson(data);
+
+    //   if (!isClosed) {
+    //     if (reaction.action == "created_or_updated") {
+    //       emit(CreateMessageReactSuccessfullyState(
+    //           messageReaction: reaction.toEntity()));
+    //     } else {
+    //       emit(DeleteMessageReactSuccessfullyState(
+    //         messageReaction: reaction.toEntity(),
+    //       ));
+    //     }
+    //   }
+    // });
   }
 
   void sendMessage({
@@ -219,9 +238,14 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     required int messageId,
     required MessageReact reactType,
   }) {
+    debugPrint("send new react");
     socketRepo.emitReactMessage({
       "messageId": messageId,
       "react": reactType.value,
     });
+    emit(CreateNewReactMessageState(
+      messageId: messageId,
+      reactType: reactType,
+    ));
   }
 }

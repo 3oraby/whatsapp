@@ -22,6 +22,7 @@ class MessageModel extends MessageEntity {
     super.isEdited,
     super.updatedAt,
     super.sender,
+    super.reacts = const [],
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -47,6 +48,10 @@ class MessageModel extends MessageEntity {
       sender: json['user'] != null
           ? UserModel.fromJson(json['user']).toEntity()
           : null,
+      reacts: (json['reacts'] as List<dynamic>?)
+              ?.map((e) => MessageReactionModel.fromJson(e).toEntity())
+              .toList() ??
+          [],
     );
   }
 
@@ -69,6 +74,7 @@ class MessageModel extends MessageEntity {
       isFromMe: entity.isFromMe,
       reactsCount: entity.reactsCount,
       sender: entity.sender,
+      reacts: entity.reacts,
     );
   }
 
@@ -91,6 +97,7 @@ class MessageModel extends MessageEntity {
       isFromMe: isFromMe,
       reactsCount: reactsCount,
       sender: sender,
+      reacts: reacts,
     );
   }
 }

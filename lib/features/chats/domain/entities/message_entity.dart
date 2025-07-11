@@ -20,6 +20,7 @@ class MessageEntity {
   final bool isFromMe;
   final int reactsCount;
   final UserEntity? sender;
+  final List<MessageReactEntity> reacts;
 
   MessageEntity({
     required this.id,
@@ -39,6 +40,7 @@ class MessageEntity {
     required this.isFromMe,
     this.reactsCount = 0,
     this.sender,
+    this.reacts = const [],
   });
 
   MessageEntity copyWith({
@@ -59,6 +61,7 @@ class MessageEntity {
     bool? isFromMe,
     int? reactsCount,
     UserEntity? sender,
+    List<MessageReactEntity>? reacts,
   }) {
     return MessageEntity(
       id: id ?? this.id,
@@ -78,6 +81,7 @@ class MessageEntity {
       isFromMe: isFromMe ?? this.isFromMe,
       reactsCount: reactsCount ?? this.reactsCount,
       sender: sender ?? this.sender,
+      reacts: reacts ?? this.reacts,
     );
   }
 }

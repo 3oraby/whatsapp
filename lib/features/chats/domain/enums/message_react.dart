@@ -28,6 +28,28 @@ extension MessageReactExtension on MessageReact {
         return MessageReact.like;
     }
   }
+
+  static String getEmojiFromReactWithCount({
+    required String react,
+    required int count,
+  }) {
+    String emoji;
+    switch (react.toLowerCase()) {
+      case 'love':
+        emoji = '❤️';
+        break;
+      case 'like':
+        emoji = '👍';
+        break;
+      case 'haha':
+        emoji = '😂';
+        break;
+      default:
+        emoji = '';
+    }
+
+    return '$emoji $count';
+  }
 }
 
 extension MessageReactParser on String {

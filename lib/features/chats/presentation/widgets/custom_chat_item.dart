@@ -96,7 +96,10 @@ class CustomChatItem extends StatelessWidget {
                       ),
                     ],
                   )
-                else if (chat.lastMessage?.isDeleted ?? false)
+                else if (chat.lastMessage?.isDeleted ??
+                    false ||
+                        chat.lastMessage?.content ==
+                            null) // remove condition 2 after back end
                   SizedBox(
                     height: 38,
                     child: Row(
@@ -109,7 +112,7 @@ class CustomChatItem extends StatelessWidget {
                         ),
                         const HorizontalGap(6),
                         Text(
-                          "${chat.lastMessage?.isMine ?? true ? "You" : chat.anotherUser.name} deleted this message.",
+                          "${(chat.lastMessage != null && chat.lastMessage!.isMine) ? "You" : chat.anotherUser.name} deleted this message.",
                           style:
                               AppTextStyles.poppinsMedium(context, 14).copyWith(
                             color: Theme.of(context).colorScheme.secondary,
