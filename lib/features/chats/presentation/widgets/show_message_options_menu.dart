@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
@@ -36,7 +37,7 @@ void showMessageOptionsMenu(BuildContext context, MessageEntity message) {
               title: const Text('React'),
               onTap: () {
                 Navigator.pop(context);
-                _showReactions(context, message.id);
+                _showReactions(context, message);
               },
             ),
           ],
@@ -73,30 +74,51 @@ void _showEditDialog(BuildContext context, MessageEntity message) {
   );
 }
 
-void _showReactions(BuildContext context, int messageId) {
+void _showReactions(BuildContext context, MessageEntity message) {
   showModalBottomSheet(
     context: context,
     builder: (_) => Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _reactIcon(context, "❤️", MessageReact.love, messageId),
-        _reactIcon(context, "👍", MessageReact.like, messageId),
-        _reactIcon(context, "😂", MessageReact.haha, messageId),
+        _reactIcon(context, "❤️", MessageReact.love, message),
+        // _reactIcon(context, "👍", MessageReact.like, message),
+        // _reactIcon(context, "😂", MessageReact.haha, message),
       ],
     ),
   );
 }
 
 Widget _reactIcon(
-    BuildContext context, String emoji, MessageReact type, int messageId) {
+  BuildContext context,
+  String emoji,
+  MessageReact type,
+  MessageEntity message,
+) {
+  final currentUserId = getCurrentUserEntity().id;
+  final hasReact = message.hasReactFromUser(currentUserId);
+
   return IconButton(
     onPressed: () {
       Navigator.pop(context);
       BlocProvider.of<MessageStreamCubit>(context).emitMessageReaction(
-        messageId: messageId,
+        messageId: message.id,
         reactType: type,
+        isCreate: !hasReact,
       );
     },
-    icon: Text(emoji, style: const TextStyle(fontSize: 28)),
+    icon: Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: hasReact ? Colors.grey.shade300 : Colors.transparent,
+      ),
+      padding: const EdgeInsets.all(8),
+      child: Text(
+        emoji,
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: hasReact ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+    ),
   );
 }

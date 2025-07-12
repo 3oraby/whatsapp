@@ -139,18 +139,28 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
           getChatMessagesCubit.toggleMessageReact(
             messageId: state.messageId,
             reactType: state.reactType,
+            user: currentUser,
             isCreate: true,
+          );
+        } else if (state is DeleteReactMessageState) {
+          getChatMessagesCubit.toggleMessageReact(
+            messageId: state.messageId,
+            reactType: state.reactType,
+            user: currentUser,
+            isCreate: false,
           );
         } else if (state is CreateMessageReactSuccessfullyState) {
           getChatMessagesCubit.toggleMessageReact(
             messageId: state.messageReaction.messageId,
             reactType: state.messageReaction.react,
+            user: widget.chat.anotherUser,
             isCreate: true,
           );
         } else if (state is DeleteMessageReactSuccessfullyState) {
           getChatMessagesCubit.toggleMessageReact(
             messageId: state.messageReaction.messageId,
             reactType: state.messageReaction.react,
+            user: widget.chat.anotherUser,
             isCreate: false,
           );
         }

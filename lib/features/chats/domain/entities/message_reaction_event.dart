@@ -1,11 +1,11 @@
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 
-class MessageReactionEntity {
+class MessageReactionEvent {
   final int messageId;
   final MessageReact react;
   final int userId;
 
-  const MessageReactionEntity({
+  const MessageReactionEvent({
     required this.messageId,
     required this.react,
     required this.userId,

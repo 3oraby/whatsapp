@@ -71,7 +71,7 @@ class MessageEditedSuccessfullyState extends MessageStreamState {
 }
 
 class CreateMessageReactSuccessfullyState extends MessageStreamState {
-  final MessageReactionEntity messageReaction;
+  final MessageReactionEvent messageReaction;
   
   CreateMessageReactSuccessfullyState({
     required this.messageReaction,
@@ -79,7 +79,7 @@ class CreateMessageReactSuccessfullyState extends MessageStreamState {
 }
 
 class DeleteMessageReactSuccessfullyState extends MessageStreamState {
-  final MessageReactionEntity messageReaction;
+  final MessageReactionEvent messageReaction;
 
   DeleteMessageReactSuccessfullyState({
     required this.messageReaction,
@@ -109,6 +109,16 @@ class CreateNewReactMessageState extends MessageStreamState {
   final MessageReact reactType;
 
   CreateNewReactMessageState({
+    required this.messageId,
+    required this.reactType,
+  });
+}
+
+class DeleteReactMessageState extends MessageStreamState {
+  final int messageId;
+  final MessageReact reactType;
+
+  DeleteReactMessageState({
     required this.messageId,
     required this.reactType,
   });

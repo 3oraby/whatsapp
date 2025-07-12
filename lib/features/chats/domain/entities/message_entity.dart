@@ -1,3 +1,4 @@
+import 'package:whatsapp/features/chats/domain/entities/message_reaction_info.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
@@ -20,7 +21,7 @@ class MessageEntity {
   final bool isFromMe;
   final int reactsCount;
   final UserEntity? sender;
-  final List<MessageReactEntity> reacts;
+  final List<MessageReactionInfo> reacts;
 
   MessageEntity({
     required this.id,
@@ -61,7 +62,7 @@ class MessageEntity {
     bool? isFromMe,
     int? reactsCount,
     UserEntity? sender,
-    List<MessageReactEntity>? reacts,
+    List<MessageReactionInfo>? reacts,
   }) {
     return MessageEntity(
       id: id ?? this.id,
@@ -83,5 +84,9 @@ class MessageEntity {
       sender: sender ?? this.sender,
       reacts: reacts ?? this.reacts,
     );
+  }
+
+  bool hasReactFromUser(int userId) {
+    return reacts.any((reaction) => reaction.user.id == userId);
   }
 }

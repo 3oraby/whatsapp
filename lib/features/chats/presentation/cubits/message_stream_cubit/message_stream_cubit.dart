@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/features/chats/data/models/message_model.dart';
-import 'package:whatsapp/features/chats/data/models/message_react_model.dart';
+import 'package:whatsapp/features/chats/data/models/message_reaction_event_model.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
-import 'package:whatsapp/features/chats/domain/entities/message_react_entity.dart';
+import 'package:whatsapp/features/chats/domain/entities/message_reaction_event.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
@@ -98,18 +98,18 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       },
     );
 
-    socketRepo.onMessageEditedSuccessfully((data) {
-      debugPrint("✏️ message edited: $data");
-      final messageId = data["messageId"];
-      final newContent = data['content'];
+    // socketRepo.onMessageEditedSuccessfully((data) {
+    //   debugPrint("✏️ message edited: $data");
+    //   final messageId = data["messageId"];
+    //   final newContent = data['content'];
 
-      if (!isClosed) {
-        emit(MessageEditedSuccessfullyState(
-          messageId: messageId,
-          newContent: newContent,
-        ));
-      }
-    });
+    //   if (!isClosed) {
+    //     emit(MessageEditedSuccessfullyState(
+    //       messageId: messageId,
+    //       newContent: newContent,
+    //     ));
+    //   }
+    // });
 
     socketRepo.onDeleteMessage((data) {
       debugPrint("🗑 Deleted: $data");
@@ -122,20 +122,20 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       }
     });
 
-    socketRepo.onMessageDeletedSuccessfully((data) {
-      debugPrint("🗑 Deleted: $data");
-      final int messageId = data["messageId"];
+    // socketRepo.onMessageDeletedSuccessfully((data) {
+    //   debugPrint("🗑 Deleted: $data");
+    //   final int messageId = data["messageId"];
 
-      if (!isClosed) {
-        emit(MessageDeletedSuccessfullyState(
-          messageId: messageId,
-        ));
-      }
-    });
+    //   if (!isClosed) {
+    //     emit(MessageDeletedSuccessfullyState(
+    //       messageId: messageId,
+    //     ));
+    //   }
+    // });
 
     socketRepo.onReactMessage((data) {
       debugPrint("❤️ Reacted: $data");
-      final reaction = MessageReactionModel.fromJson(data);
+      final reaction = MessageReactionEventModel.fromJson(data);
 
       if (!isClosed) {
         if (reaction.action == "created_or_updated") {
@@ -237,15 +237,23 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
   void emitMessageReaction({
     required int messageId,
     required MessageReact reactType,
+    required bool isCreate,
   }) {
-    debugPrint("send new react");
+    debugPrint("toggle message react");
     socketRepo.emitReactMessage({
       "messageId": messageId,
       "react": reactType.value,
     });
-    emit(CreateNewReactMessageState(
-      messageId: messageId,
-      reactType: reactType,
-    ));
+    if (isCreate) {
+      emit(CreateNewReactMessageState(
+        messageId: messageId,
+        reactType: reactType,
+      ));
+    } else {
+      emit(DeleteReactMessageState(
+        messageId: messageId,
+        reactType: reactType,
+      ));
+    }
   }
 }

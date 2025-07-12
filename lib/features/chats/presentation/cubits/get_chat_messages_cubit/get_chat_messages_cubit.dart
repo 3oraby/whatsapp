@@ -1,8 +1,12 @@
+import 'package:flutter/rendering.dart';
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
+import 'package:whatsapp/features/chats/data/models/message_model.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/entities/message_reaction_info.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 part 'get_chat_messages_state.dart';
 
@@ -119,6 +123,7 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
     required int messageId,
     required MessageReact reactType,
     required bool isCreate,
+    required UserEntity user,
   }) {
     if (state is! GetChatMessagesLoadedState) return;
     final current = state as GetChatMessagesLoadedState;
@@ -127,11 +132,26 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
     final idx = msgs.indexWhere((m) => m.id == messageId);
     if (idx == -1) return;
 
-    msgs[idx] = msgs[idx].copyWith(
-      reactsCount:
-          isCreate ? msgs[idx].reactsCount + 1 : msgs[idx].reactsCount - 1,
+    final msg = msgs[idx];
+    final reacts = List.of(msg.reacts);
+
+    if (isCreate) {
+      reacts.add(
+        MessageReactionInfo(
+          id: DateTime.now().millisecondsSinceEpoch,
+          createdAt: DateTime.now(),
+          user: user,
+        ),
+      );
+    } else {
+      reacts.removeWhere((r) => r.user.id == user.id);
+    }
+    msgs[idx] = msg.copyWith(
+      reactsCount: isCreate ? msg.reactsCount + 1 : msg.reactsCount - 1,
+      reacts: reacts,
       // add type here for react after back end edit
     );
+    debugPrint(MessageModel.fromEntity(msgs[idx]).toJson().toString());
 
     emit(GetChatMessagesLoadedState(messages: msgs));
   }

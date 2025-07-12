@@ -1,18 +1,18 @@
-import 'package:whatsapp/features/chats/domain/entities/message_react_entity.dart';
+import 'package:whatsapp/features/chats/domain/entities/message_reaction_event.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 
-class MessageReactionModel extends MessageReactionEntity {
+class MessageReactionEventModel extends MessageReactionEvent {
   final String action;
 
-  const MessageReactionModel({
+  const MessageReactionEventModel({
     required super.messageId,
     required super.react,
     required super.userId,
     required this.action,
   });
 
-  factory MessageReactionModel.fromJson(Map<String, dynamic> json) {
-    return MessageReactionModel(
+  factory MessageReactionEventModel.fromJson(Map<String, dynamic> json) {
+    return MessageReactionEventModel(
       messageId: json['messageId'],
       react: MessageReactExtension.fromString(json['react']),
       userId: json['userId'],
@@ -29,19 +29,19 @@ class MessageReactionModel extends MessageReactionEntity {
     };
   }
 
-  MessageReactionEntity toEntity() {
-    return MessageReactionEntity(
+  MessageReactionEvent toEntity() {
+    return MessageReactionEvent(
       messageId: messageId,
       react: react,
       userId: userId,
     );
   }
 
-  factory MessageReactionModel.fromEntity(
-    MessageReactionEntity entity, {
+  factory MessageReactionEventModel.fromEntity(
+    MessageReactionEvent entity, {
     String action = '',
   }) {
-    return MessageReactionModel(
+    return MessageReactionEventModel(
       messageId: entity.messageId,
       react: entity.react,
       userId: entity.userId,

@@ -1,3 +1,4 @@
+import 'package:whatsapp/features/chats/data/models/message_reaction_info_model.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
@@ -49,10 +50,34 @@ class MessageModel extends MessageEntity {
           ? UserModel.fromJson(json['user']).toEntity()
           : null,
       reacts: (json['reacts'] as List<dynamic>?)
-              ?.map((e) => MessageReactionModel.fromJson(e).toEntity())
+              ?.map((e) => MessageReactionInfoModel.fromJson(e).toEntity())
               .toList() ??
           [],
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'content': content,
+      'media_url': mediaUrl,
+      'chat_id': chatId,
+      'user_id': senderId,
+      'reciever_id': receiverId,
+      'status': status.name,
+      'parent_id': parentId,
+      'type': type.name,
+      'statusId': statusId,
+      'isDeleted': isDeleted,
+      'isUpdated': isEdited,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+      'isFromMe': isFromMe,
+      'reacts_count': reactsCount,
+      'user': sender != null ? UserModel.fromEntity(sender!).toJson() : null,
+      'reacts': reacts
+          .map((r) => MessageReactionInfoModel.fromEntity(r).toJson())
+          .toList(),
+    };
   }
 
   factory MessageModel.fromEntity(MessageEntity entity) {
