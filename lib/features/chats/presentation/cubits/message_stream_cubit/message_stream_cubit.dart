@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
@@ -148,7 +150,12 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
   Future<void> resendPendingMessagesForChat(int chatId) async {
     try {
       debugPrint("resendPendingMessagesForChat");
+      if (!socketRepo.isConnected) {
+        debugPrint("❌ Socket not connected. Waiting for connection...");
+        await _waitForSocketConnectionWithTimeout();
+      }
       final pending = await pendingMessagesHelper.getPendingMessages();
+
       for (final json in pending) {
         final messageDto = SendMessageDto.fromJson(json);
         if (messageDto.chatId == chatId) {
@@ -160,6 +167,33 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       }
     } catch (e) {
       debugPrint("Error while resending messages: $e");
+    }
+  }
+
+  Future<void> _waitForSocketConnectionWithTimeout() async {
+    final completer = Completer<void>();
+
+    if (socketRepo.isConnected) {
+      debugPrint("✅ Socket already connected.");
+      return;
+    }
+
+    late void Function(dynamic) onConnect;
+    onConnect = (_) {
+      debugPrint("✅ Socket connected during wait.");
+      if (!completer.isCompleted) {
+        completer.complete();
+      }
+    };
+
+    socketRepo.onConnect(onConnect);
+
+    try {
+      await completer.future.timeout(const Duration(seconds: 10));
+    } catch (_) {
+      debugPrint("⏰ Timeout while waiting for socket to connect.");
+    } finally {
+      socketRepo.offConnect(onConnect);
     }
   }
 

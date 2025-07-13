@@ -4,15 +4,15 @@ import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class WebSocketService {
-  Socket? _socket;
+  Socket? socket;
 
   final List<MapEntry<String, Function(dynamic)>> _queuedListeners = [];
-  bool get isConnected => _socket?.connected == true;
+  bool get isConnected => socket?.connected == true;
 
   void connect({
     required String accessToken,
   }) {
-    if (_socket != null && _socket!.connected) {
+    if (socket != null && socket!.connected) {
       debugPrint("⚠️ Socket already connected. Skipping re-connection.");
       return;
     }
@@ -20,7 +20,7 @@ class WebSocketService {
     debugPrint("🚀 Creating new socket instance...");
     log("token before socket connection : $accessToken");
     log("xxxxxxxxxx");
-    _socket = io(
+    socket = io(
       'http://10.0.2.2:3000',
       OptionBuilder()
           .setTransports(['websocket'])
@@ -31,53 +31,53 @@ class WebSocketService {
           .build(),
     );
 
-    _socket!.connect();
+    socket!.connect();
 
-    _socket!.onConnect((_) {
+    socket!.onConnect((_) {
       debugPrint("✅ Socket connected");
       for (var listener in _queuedListeners) {
-        _socket!.on(
+        socket!.on(
           listener.key,
           listener.value,
         );
       }
     });
 
-    _socket!.onDisconnect((_) => debugPrint("❌ Disconnected from socket"));
-    _socket!.onConnectError((err) => debugPrint("⛔ Connect error: $err"));
-    _socket!.onError((err) => debugPrint("❗ Socket error: $err"));
+    socket!.onDisconnect((_) => debugPrint("❌ Disconnected from socket"));
+    socket!.onConnectError((err) => debugPrint("⛔ Connect error: $err"));
+    socket!.onError((err) => debugPrint("❗ Socket error: $err"));
   }
 
   void addListener(String event, Function(dynamic) callback) {
-    if (_socket?.connected == true) {
-      _socket!.on(event, callback);
+    if (socket?.connected == true) {
+      socket!.on(event, callback);
     } else {
       _queuedListeners.add(MapEntry(event, callback));
     }
   }
 
   void emit(String event, dynamic data) {
-    if (_socket?.connected == true) {
-      _socket!.emit(event, data);
+    if (socket?.connected == true) {
+      socket!.emit(event, data);
     } else {
       debugPrint("⚠️ Cannot emit, socket not connected");
     }
   }
 
   void disconnect() {
-    if (_socket != null) {
-      _socket!.offAny();
-      _socket!.disconnect();
+    if (socket != null) {
+      socket!.offAny();
+      socket!.disconnect();
       debugPrint("🔌 Socket disconnected");
     }
   }
 
   void dispose() {
-    if (_socket != null) {
-      _socket!.offAny();
-      _socket!.dispose();
-      _socket!.destroy();
-      _socket = null;
+    if (socket != null) {
+      socket!.offAny();
+      socket!.dispose();
+      socket!.destroy();
+      socket = null;
       debugPrint("🗑️ Socket disposed");
     }
   }

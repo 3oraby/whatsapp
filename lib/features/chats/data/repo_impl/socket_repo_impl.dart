@@ -21,6 +21,16 @@ class SocketRepoImpl implements SocketRepo {
   void dispose() => webSocketService.dispose();
 
   @override
+  void onConnect(Function(dynamic) callback) {
+    webSocketService.addListener("connect", callback);
+  }
+
+  @override
+  void offConnect(Function(dynamic) callback) {
+    webSocketService.socket?.off("connect", callback);
+  }
+
+  @override
   void sendMessage(Map<String, dynamic> payload) {
     webSocketService.emit(SocketEvents.sendMessage, payload);
   }

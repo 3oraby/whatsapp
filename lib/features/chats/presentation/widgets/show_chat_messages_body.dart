@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/utils/app_images.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
@@ -8,7 +9,6 @@ import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
-import 'package:whatsapp/features/chats/presentation/cubits/socket_connection_cubit/socket_connection_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/reply_to_message_banner.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/send_message_section.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_list.dart';
@@ -87,10 +87,10 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     _scrollToBottom();
   }
 
-  void _onSocketStateChanged(
-      BuildContext context, SocketConnectionState state) {
-    if (state is SocketConnected) {
-      debugPrint("onSocketStateChanged");
+  void _onInternetStateChanged(
+      BuildContext context, InternetConnectionState state) {
+    if (state is InternetConnectionConnected) {
+      debugPrint("_onInternetStateChanged");
       messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
     }
   }
@@ -170,8 +170,8 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<SocketConnectionCubit, SocketConnectionState>(
-          listener: _onSocketStateChanged,
+        BlocListener<InternetConnectionCubit, InternetConnectionState>(
+          listener: _onInternetStateChanged,
         ),
         BlocListener<MessageStreamCubit, MessageStreamState>(
           listener: _onMessageStreamChanged,

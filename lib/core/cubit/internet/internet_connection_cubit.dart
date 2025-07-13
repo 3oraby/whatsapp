@@ -29,11 +29,11 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
     final hasConnection = !results.contains(ConnectivityResult.none);
     log("listen on internet");
     if (hasConnection) {
-      emit(InternetConnectionConnected());
       socketConnectionCubit.connect();
+      emit(InternetConnectionConnected());
     } else {
-      emit(InternetConnectionDisconnected());
       socketConnectionCubit.dispose();
+      emit(InternetConnectionDisconnected());
     }
   }
 
