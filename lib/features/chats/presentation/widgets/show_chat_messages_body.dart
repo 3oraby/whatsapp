@@ -8,6 +8,7 @@ import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/socket_connection_cubit/socket_connection_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/reply_to_message_banner.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/send_message_section.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_list.dart';
@@ -39,6 +40,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     super.initState();
     getChatMessagesCubit = context.read<GetChatMessagesCubit>();
     messageStreamCubit = context.read<MessageStreamCubit>();
+    messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
   }
 
   @override
@@ -85,86 +87,96 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     _scrollToBottom();
   }
 
+  void _onSocketStateChanged(
+      BuildContext context, SocketConnectionState state) {
+    if (state is SocketConnected) {
+      debugPrint("onSocketStateChanged");
+      messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
+    }
+  }
+
+  void _onMessageStreamChanged(BuildContext context, MessageStreamState state) {
+    if (state is NewIncomingMessageState) {
+      getChatMessagesCubit.addMessageToList(state.message);
+      messageStreamCubit.markMessageAsRead(
+        chatId: widget.chat.id,
+        messageId: state.message.id,
+      );
+    } else if (state is NewOutgoingMessageState) {
+      getChatMessagesCubit.addMessageToList(state.message);
+    } else if (state is UpdateMessageStatusState) {
+      if (state.newStatus == MessageStatus.sent) {
+        getChatMessagesCubit.updateTempMessage(
+          newId: state.newId,
+          newStatus: state.newStatus,
+        );
+      } else {
+        getChatMessagesCubit.updateMessageStatus(
+          id: state.newId,
+          newStatus: state.newStatus,
+        );
+      }
+    } else if (state is EditMessageState) {
+      getChatMessagesCubit.editMessage(
+        messageId: state.messageId,
+        newContent: state.newContent,
+        newStatus: MessageStatus.pending,
+      );
+    } else if (state is MessageEditedSuccessfullyState) {
+      getChatMessagesCubit.editMessage(
+        messageId: state.messageId,
+        newContent: state.newContent,
+        newStatus: MessageStatus.read,
+      );
+    } else if (state is DeleteMessageState ||
+        state is MessageDeletedSuccessfullyState) {
+      getChatMessagesCubit.deleteMessage(
+        messageId: (state as dynamic).messageId,
+      );
+    } else if (state is CreateNewReactMessageState) {
+      getChatMessagesCubit.toggleMessageReact(
+        messageId: state.messageId,
+        reactType: state.reactType,
+        user: currentUser,
+        isCreate: true,
+      );
+    } else if (state is DeleteReactMessageState) {
+      getChatMessagesCubit.toggleMessageReact(
+        messageId: state.messageId,
+        reactType: state.reactType,
+        user: currentUser,
+        isCreate: false,
+      );
+    } else if (state is CreateMessageReactSuccessfullyState) {
+      getChatMessagesCubit.toggleMessageReact(
+        messageId: state.messageReaction.messageId,
+        reactType: state.messageReaction.react,
+        user: widget.chat.anotherUser,
+        isCreate: true,
+      );
+    } else if (state is DeleteMessageReactSuccessfullyState) {
+      getChatMessagesCubit.toggleMessageReact(
+        messageId: state.messageReaction.messageId,
+        reactType: state.messageReaction.react,
+        user: widget.chat.anotherUser,
+        isCreate: false,
+      );
+    } else if (state is UserTypingState && state.chatId == widget.chat.id) {
+      _scrollToBottom();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<MessageStreamCubit, MessageStreamState>(
-      listener: (context, state) {
-        if (state is NewIncomingMessageState) {
-          final message = state.message;
-          getChatMessagesCubit.addMessageToList(message);
-          messageStreamCubit.markMessageAsRead(
-            chatId: widget.chat.id,
-            messageId: message.id,
-            senderId: message.senderId,
-          );
-        } else if (state is NewOutgoingMessageState) {
-          getChatMessagesCubit.addMessageToList(state.message);
-        } else if (state is UpdateMessageStatusState) {
-          final messageId = state.newId;
-          final newStatus = state.newStatus;
-          if (newStatus == MessageStatus.sent) {
-            getChatMessagesCubit.updateTempMessage(
-              newId: messageId,
-              newStatus: newStatus,
-            );
-          } else {
-            getChatMessagesCubit.updateMessageStatus(
-              id: messageId,
-              newStatus: newStatus,
-            );
-          }
-        } else if (state is UserTypingState) {
-          _scrollToBottom();
-        } else if (state is EditMessageState) {
-          getChatMessagesCubit.editMessage(
-            messageId: state.messageId,
-            newContent: state.newContent,
-            newStatus: MessageStatus.pending,
-          );
-        } else if (state is MessageEditedSuccessfullyState) {
-          getChatMessagesCubit.editMessage(
-            messageId: state.messageId,
-            newContent: state.newContent,
-            newStatus: MessageStatus.read,
-          );
-        } else if (state is DeleteMessageState) {
-          getChatMessagesCubit.deleteMessage(
-            messageId: state.messageId,
-          );
-        } else if (state is MessageDeletedSuccessfullyState) {
-          getChatMessagesCubit.deleteMessage(
-            messageId: state.messageId,
-          );
-        } else if (state is CreateNewReactMessageState) {
-          getChatMessagesCubit.toggleMessageReact(
-            messageId: state.messageId,
-            reactType: state.reactType,
-            user: currentUser,
-            isCreate: true,
-          );
-        } else if (state is DeleteReactMessageState) {
-          getChatMessagesCubit.toggleMessageReact(
-            messageId: state.messageId,
-            reactType: state.reactType,
-            user: currentUser,
-            isCreate: false,
-          );
-        } else if (state is CreateMessageReactSuccessfullyState) {
-          getChatMessagesCubit.toggleMessageReact(
-            messageId: state.messageReaction.messageId,
-            reactType: state.messageReaction.react,
-            user: widget.chat.anotherUser,
-            isCreate: true,
-          );
-        } else if (state is DeleteMessageReactSuccessfullyState) {
-          getChatMessagesCubit.toggleMessageReact(
-            messageId: state.messageReaction.messageId,
-            reactType: state.messageReaction.react,
-            user: widget.chat.anotherUser,
-            isCreate: false,
-          );
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<SocketConnectionCubit, SocketConnectionState>(
+          listener: _onSocketStateChanged,
+        ),
+        BlocListener<MessageStreamCubit, MessageStreamState>(
+          listener: _onMessageStreamChanged,
+        ),
+      ],
       child: SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -174,34 +186,36 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
               filterQuality: FilterQuality.low,
             ),
           ),
-          child: BlocBuilder<MessageStreamCubit, MessageStreamState>(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  Expanded(
+          child: Column(
+            children: [
+              BlocBuilder<MessageStreamCubit, MessageStreamState>(
+                buildWhen: (prev, curr) =>
+                    curr is UserTypingState || curr is UserStopTypingState,
+                builder: (context, state) {
+                  final isTyping = state is UserTypingState &&
+                      state.chatId == widget.chat.id;
+
+                  return Expanded(
                     child: ShowChatMessagesList(
                       scrollController: _scrollController,
                       messages: widget.messages,
                       onReplyRequested: _onReplyRequested,
-                      isTyping: state is UserTypingState &&
-                          state.chatId == widget.chat.id,
+                      isTyping: isTyping,
                     ),
-                  ),
-                  if (_replyMessage != null)
-                    ReplyToMessageBanner(
-                      replyMessage: _replyMessage!,
-                      onCancel: () => setState(
-                        () => _replyMessage = null,
-                      ),
-                    ),
-                  const Divider(height: 1),
-                  SendMessageSection(
-                    sendMessage: sendMessage,
-                    chatId: widget.chat.id,
-                  ),
-                ],
-              );
-            },
+                  );
+                },
+              ),
+              if (_replyMessage != null)
+                ReplyToMessageBanner(
+                  replyMessage: _replyMessage!,
+                  onCancel: () => setState(() => _replyMessage = null),
+                ),
+              const Divider(height: 1),
+              SendMessageSection(
+                sendMessage: sendMessage,
+                chatId: widget.chat.id,
+              ),
+            ],
           ),
         ),
       ),

@@ -27,4 +27,16 @@ class SendMessageDto {
           "media_url": mediaUrl,
         }
       };
+
+  factory SendMessageDto.fromJson(Map<String, dynamic> json) {
+    final message = json['message'] as Map<String, dynamic>;
+    return SendMessageDto(
+      receiverId: json['receiverId'] as int,
+      chatId: message['chatId'] as int,
+      content: message['content'] as String,
+      parentId: message['parent_id'] as int?,
+      type: MessageTypeExtension.fromString(message['type'] as String),
+      mediaUrl: message['media_url'] as String?,
+    );
+  }
 }

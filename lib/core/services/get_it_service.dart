@@ -7,6 +7,8 @@ import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:whatsapp/core/api/api_consumer.dart';
 import 'package:whatsapp/core/api/dio_consumer.dart';
+import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
+import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper_impl.dart';
 import 'package:whatsapp/core/services/web_socket_service.dart';
 import 'package:whatsapp/features/auth/data/repo_impl/auth_repo_impl.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
@@ -56,6 +58,8 @@ Future<void> setupGetIt() async {
   getIt.registerSingleton<SocketRepo>(SocketRepoImpl(
     webSocketService: getIt<WebSocketService>(),
   ));
+
+  getIt.registerSingleton<PendingMessagesHelper>(PendingMessagesHelperImpl());
 
   getIt.registerSingleton<ContactsRepo>(ContactsRepoImpl(
     apiConsumer: getIt<ApiConsumer>(),

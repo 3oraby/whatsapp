@@ -7,7 +7,7 @@ class LastMessageEntity {
   final MessageStatus messageStatus;
   final DateTime createdAt;
   final MessageType type;
-  final int senderId;
+  final int? senderId;
   final bool isMine;
   final bool isDeleted;
 

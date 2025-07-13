@@ -1,4 +1,6 @@
 abstract class SocketRepo {
+  bool get isConnected;
+
   void connect({
     required String accessToken,
   });
@@ -17,7 +19,7 @@ abstract class SocketRepo {
   void onMessageStatusUpdate(Function(dynamic data) callback);
 
   void emitMarkChatAsRead(int chatId);
-  void emitMessageRead(int messageId, int chatId, int senderId);
+  void emitMessageRead(int messageId, int chatId);
 
   void onAllMessagesRead(Function(dynamic data) callback);
 

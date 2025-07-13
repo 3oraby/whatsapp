@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
 import 'package:whatsapp/features/chats/data/models/message_model.dart';
 import 'package:whatsapp/features/chats/data/models/message_reaction_event_model.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
@@ -13,9 +14,12 @@ part 'message_stream_state.dart';
 
 class MessageStreamCubit extends Cubit<MessageStreamState> {
   final SocketRepo socketRepo;
+  final PendingMessagesHelper pendingMessagesHelper;
 
-  MessageStreamCubit({required this.socketRepo})
-      : super(MessageStreamInitial()) {
+  MessageStreamCubit({
+    required this.socketRepo,
+    required this.pendingMessagesHelper,
+  }) : super(MessageStreamInitial()) {
     _initSocketListeners();
   }
 
@@ -169,7 +173,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
   void sendMessage({
     required SendMessageDto dto,
     required int currentUserId,
-  }) {
+  }) async {
     final tempMessage = MessageEntity(
       id: -1,
       content: dto.content,
@@ -185,7 +189,30 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     );
 
     emit(NewOutgoingMessageState(tempMessage));
+    if (!socketRepo.isConnected) {
+      await pendingMessagesHelper.addPendingMessage(dto.toSocketPayload());
+      return;
+    }
+
     socketRepo.sendMessage(dto.toSocketPayload());
+  }
+
+  Future<void> resendPendingMessagesForChat(int chatId) async {
+    try {
+      debugPrint("resendPendingMessagesForChat");
+      final pending = await pendingMessagesHelper.getPendingMessages();
+      for (final json in pending) {
+        final messageDto = SendMessageDto.fromJson(json);
+        if (messageDto.chatId == chatId) {
+          debugPrint("Send pending message: $json");
+
+          socketRepo.sendMessage(json);
+          await pendingMessagesHelper.removePendingMessage(json);
+        }
+      }
+    } catch (e) {
+      debugPrint("Error while resending messages: $e");
+    }
   }
 
   void markChatAsRead({required int chatId}) {
@@ -195,9 +222,8 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
   void markMessageAsRead({
     required int chatId,
     required int messageId,
-    required int senderId,
   }) {
-    socketRepo.emitMessageRead(messageId, chatId, senderId);
+    socketRepo.emitMessageRead(messageId, chatId);
   }
 
   void emitTyping({required int chatId}) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
+import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
@@ -30,6 +31,7 @@ class HomeBody extends StatelessWidget {
         BlocProvider(
           create: (context) => MessageStreamCubit(
             socketRepo: getIt<SocketRepo>(),
+            pendingMessagesHelper: getIt<PendingMessagesHelper>(),
           ),
         )
       ],

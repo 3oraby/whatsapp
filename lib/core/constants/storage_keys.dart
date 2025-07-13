@@ -6,6 +6,7 @@ enum StorageKeys {
   userEmail,
   isLoggedIn,
   currentUser,
+  pendingMessages,
 }
 
 extension StorageKeysExt on StorageKeys {

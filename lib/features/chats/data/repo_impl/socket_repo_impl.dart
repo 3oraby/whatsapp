@@ -8,6 +8,9 @@ class SocketRepoImpl implements SocketRepo {
   SocketRepoImpl({required this.webSocketService});
 
   @override
+  bool get isConnected => webSocketService.isConnected;
+
+  @override
   void connect({required String accessToken}) =>
       webSocketService.connect(accessToken: accessToken);
 
@@ -60,11 +63,10 @@ class SocketRepoImpl implements SocketRepo {
   }
 
   @override
-  void emitMessageRead(int messageId, int chatId, int senderId) {
+  void emitMessageRead(int messageId, int chatId) {
     webSocketService.emit(SocketEvents.messageRead, {
       'messageId': messageId,
       'chatId': chatId,
-      'senderId': senderId,
     });
   }
 

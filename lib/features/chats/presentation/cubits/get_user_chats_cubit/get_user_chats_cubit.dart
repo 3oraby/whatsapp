@@ -89,7 +89,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     required int messageId,
     required MessageStatus newStatus,
   }) {
-    debugPrint("update: message id = $messageId with status: $newStatus");
+    debugPrint("update: message id = $messageId  with status: $newStatus");
     final currentState = state;
     if (currentState is! GetUserChatsLoadedState) return;
 
@@ -100,7 +100,12 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     final chat = chats[chatIndex];
     final lastMsg = chat.lastMessage;
 
-    LastMessageEntity updatedLastMsg = lastMsg!.copyWith(
+    if (lastMsg == null) {
+      debugPrint(
+          "there is no last message to update: in GetUserChatsCubit.updateLastMessageStatus()");
+      return;
+    }
+    LastMessageEntity updatedLastMsg = lastMsg.copyWith(
       messageStatus: newStatus,
     );
 

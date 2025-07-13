@@ -33,7 +33,7 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
       socketConnectionCubit.connect();
     } else {
       emit(InternetConnectionDisconnected());
-      socketConnectionCubit.disconnect();
+      socketConnectionCubit.dispose();
     }
   }
 

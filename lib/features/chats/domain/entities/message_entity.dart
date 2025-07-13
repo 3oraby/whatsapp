@@ -8,7 +8,7 @@ class MessageEntity {
   final String? content;
   final String? mediaUrl;
   final int? chatId;
-  final int senderId;
+  final int? senderId;
   final int? receiverId;
   final MessageStatus status;
   final int? parentId;

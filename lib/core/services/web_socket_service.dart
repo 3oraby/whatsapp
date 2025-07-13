@@ -7,6 +7,7 @@ class WebSocketService {
   Socket? _socket;
 
   final List<MapEntry<String, Function(dynamic)>> _queuedListeners = [];
+  bool get isConnected => _socket?.connected == true;
 
   void connect({
     required String accessToken,
