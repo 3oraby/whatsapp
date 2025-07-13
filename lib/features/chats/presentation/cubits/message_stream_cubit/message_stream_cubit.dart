@@ -102,19 +102,6 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       },
     );
 
-    // socketRepo.onMessageEditedSuccessfully((data) {
-    //   debugPrint("✏️ message edited: $data");
-    //   final messageId = data["messageId"];
-    //   final newContent = data['content'];
-
-    //   if (!isClosed) {
-    //     emit(MessageEditedSuccessfullyState(
-    //       messageId: messageId,
-    //       newContent: newContent,
-    //     ));
-    //   }
-    // });
-
     socketRepo.onDeleteMessage((data) {
       debugPrint("🗑 Deleted: $data");
       final int messageId = data["messageId"];
@@ -125,17 +112,6 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
         ));
       }
     });
-
-    // socketRepo.onMessageDeletedSuccessfully((data) {
-    //   debugPrint("🗑 Deleted: $data");
-    //   final int messageId = data["messageId"];
-
-    //   if (!isClosed) {
-    //     emit(MessageDeletedSuccessfullyState(
-    //       messageId: messageId,
-    //     ));
-    //   }
-    // });
 
     socketRepo.onReactMessage((data) {
       debugPrint("❤️ Reacted: $data");
@@ -152,22 +128,6 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
         }
       }
     });
-
-    // socketRepo.onMessageReactedSuccessfully((data) {
-    //   debugPrint("❤️ Reacted: $data");
-    //   final reaction = MessageReactionModel.fromJson(data);
-
-    //   if (!isClosed) {
-    //     if (reaction.action == "created_or_updated") {
-    //       emit(CreateMessageReactSuccessfullyState(
-    //           messageReaction: reaction.toEntity()));
-    //     } else {
-    //       emit(DeleteMessageReactSuccessfullyState(
-    //         messageReaction: reaction.toEntity(),
-    //       ));
-    //     }
-    //   }
-    // });
   }
 
   void sendMessage({
