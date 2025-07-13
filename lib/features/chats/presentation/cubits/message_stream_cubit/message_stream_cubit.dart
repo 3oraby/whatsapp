@@ -174,19 +174,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     required SendMessageDto dto,
     required int currentUserId,
   }) async {
-    final tempMessage = MessageEntity(
-      id: -1,
-      content: dto.content,
-      senderId: currentUserId,
-      receiverId: dto.receiverId,
-      chatId: dto.chatId,
-      parentId: dto.parentId,
-      createdAt: DateTime.now(),
-      type: dto.type,
-      mediaUrl: dto.mediaUrl,
-      isFromMe: true,
-      reactsCount: 0,
-    );
+    final tempMessage = MessageEntity.fromDto(dto, currentUserId);
 
     emit(NewOutgoingMessageState(tempMessage));
     if (!socketRepo.isConnected) {

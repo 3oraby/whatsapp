@@ -15,7 +15,8 @@ class PendingMessagesHelperImpl implements PendingMessagesHelper {
         list != null ? List<Map<String, dynamic>>.from(jsonDecode(list)) : [];
     messages.add(message);
     await AppStorageHelper.setString(key, jsonEncode(messages));
-    debugPrint('✅ Message added. Total pending: ${messages.length}');
+    debugPrint(
+        '✅ Message pending added. Total pending: ${messages.length} . : $messages');
   }
 
   @override
@@ -35,7 +36,7 @@ class PendingMessagesHelperImpl implements PendingMessagesHelper {
     debugPrint('🗑 Attempting to remove pending message: $message');
     final messages = await getPendingMessages();
     final initialLength = messages.length;
-    messages.removeWhere((m) => mapEquals(m, message));
+    messages.removeWhere((m) => pendingMessageEquals(m, message));
     await AppStorageHelper.setString(key, jsonEncode(messages));
     debugPrint(
         '✅ Message removed. Before: $initialLength, After: ${messages.length}');
@@ -46,5 +47,16 @@ class PendingMessagesHelperImpl implements PendingMessagesHelper {
     debugPrint('🧹 Clearing all pending messages.');
     await AppStorageHelper.remove(key);
     debugPrint('✅ Pending messages cleared.');
+  }
+
+  bool pendingMessageEquals(Map<String, dynamic> a, Map<String, dynamic> b) {
+    final aMsg = a['message'];
+    final bMsg = b['message'];
+    return a['receiverId'] == b['receiverId'] &&
+        aMsg['content'] == bMsg['content'] &&
+        aMsg['chatId'] == bMsg['chatId'] &&
+        aMsg['parent_id'] == bMsg['parent_id'] &&
+        aMsg['type'] == bMsg['type'] &&
+        aMsg['media_url'] == bMsg['media_url'];
   }
 }

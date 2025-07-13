@@ -1,3 +1,4 @@
+import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_reaction_info.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
@@ -88,5 +89,21 @@ class MessageEntity {
 
   bool hasReactFromUser(int userId) {
     return reacts.any((reaction) => reaction.user.id == userId);
+  }
+
+  factory MessageEntity.fromDto(SendMessageDto dto, int currentUserId) {
+    return MessageEntity(
+      id: -1,
+      content: dto.content,
+      senderId: currentUserId,
+      receiverId: dto.receiverId,
+      chatId: dto.chatId,
+      parentId: dto.parentId,
+      createdAt: DateTime.now(),
+      type: dto.type,
+      mediaUrl: dto.mediaUrl,
+      isFromMe: true,
+      reactsCount: 0,
+    );
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/rendering.dart';
 import 'package:whatsapp/core/cubit/base/base_cubit.dart';
+import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
 import 'package:whatsapp/features/chats/data/models/message_model.dart';
+import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
+import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_reaction_info.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
@@ -12,8 +15,10 @@ part 'get_chat_messages_state.dart';
 
 class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
   final ChatsRepo chatsRepo;
+  final PendingMessagesHelper pendingMessagesHelper;
   GetChatMessagesCubit({
     required this.chatsRepo,
+    required this.pendingMessagesHelper,
   }) : super(GetChatMessagesInitial());
 
   Future<void> getChatMessages({
@@ -31,6 +36,25 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
         emit(GetChatMessagesLoadedState(messages: messages));
       },
     );
+  }
+
+  void loadPendingMessages({
+    required ChatEntity chat,
+    required int currentUserId,
+  }) async {
+    final pending = await pendingMessagesHelper.getPendingMessages();
+    final List chatPending =
+        pending.where((m) => m['chatId'] == chat.id).toList();
+    if (chatPending.isEmpty) {
+      debugPrint("there is no pending messages in this chat: ${chat.id}");
+      return;
+    }
+    for (final msg in chatPending) {
+      final messageDto = SendMessageDto.fromJson(msg);
+      final tempMessage = MessageEntity.fromDto(messageDto, currentUserId);
+
+      addMessageToList(tempMessage);
+    }
   }
 
   void addMessageToList(MessageEntity message) {

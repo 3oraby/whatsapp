@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
+import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
@@ -47,7 +49,11 @@ class _ChatScreenState extends State<ChatScreen> {
         BlocProvider(
           create: (context) => GetChatMessagesCubit(
             chatsRepo: getIt<ChatsRepo>(),
-          ),
+            pendingMessagesHelper: getIt<PendingMessagesHelper>(),
+          )..loadPendingMessages(
+              chat: widget.chat,
+              currentUserId: getCurrentUserEntity().id,
+            ),
         ),
         BlocProvider(
           create: (context) => chatFriendStatusCubit,
