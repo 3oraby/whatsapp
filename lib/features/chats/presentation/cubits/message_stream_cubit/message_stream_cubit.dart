@@ -162,6 +162,7 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
           debugPrint("Send pending message: $json");
 
           socketRepo.sendMessage(json);
+          await Future.delayed(Duration(milliseconds: 1000));
           await pendingMessagesHelper.removePendingMessage(json);
         }
       }

@@ -92,7 +92,7 @@ class MessageEntity {
   }
 
   factory MessageEntity.fromDto(SendMessageDto dto, int currentUserId) {
-    final int tempId = DateTime.now().millisecondsSinceEpoch;
+    final int tempId = -1;
     return MessageEntity(
       id: tempId,
       content: dto.content,

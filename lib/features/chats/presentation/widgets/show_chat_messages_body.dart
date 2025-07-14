@@ -68,6 +68,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
       chatId: widget.chat.id,
       content: text,
       parentId: _replyMessage?.id,
+      // createdAt: DateTime.now(),
     );
 
     messageStreamCubit.sendMessage(

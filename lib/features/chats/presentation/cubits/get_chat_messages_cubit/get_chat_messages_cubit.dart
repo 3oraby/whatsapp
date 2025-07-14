@@ -72,10 +72,18 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
   }) {
     if (state is! GetChatMessagesLoadedState) return;
     final currentState = state as GetChatMessagesLoadedState;
-
     final messages = List<MessageEntity>.from(currentState.messages);
 
-    final idx = messages.indexWhere((msg) => msg.id == -1 && msg.isFromMe);
+    final pendingMessages =
+        messages.where((msg) => msg.id == -1 && msg.isFromMe).toList();
+
+    if (pendingMessages.isEmpty) return;
+
+    pendingMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+    final oldestPendingMessage = pendingMessages.first;
+
+    final idx = messages.indexOf(oldestPendingMessage);
     if (idx == -1) return;
     messages[idx] = messages[idx].copyWith(
       id: newId,
@@ -89,9 +97,12 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
     required int id,
     required MessageStatus newStatus,
   }) {
+    debugPrint(
+        "in GetChatMessagesCubit: update message: $id with new status : ${newStatus.value}");
     if (state is! GetChatMessagesLoadedState) return;
     final current = state as GetChatMessagesLoadedState;
     final msgs = List<MessageEntity>.from(current.messages);
+    debugPrint("last message: ${msgs.last.id}");
 
     final idx = msgs.indexWhere((m) => m.id == id);
     if (idx == -1) return;
