@@ -39,8 +39,7 @@ class MessageModel extends MessageEntity {
       type: MessageTypeExtension.fromString(json['type'] ?? 'text'),
       statusId: json['statusId'],
       isDeleted: json['isDeleted'] ?? false,
-      // isEdited: json['isUpdated'] ?? false,
-      isEdited: false,
+      isEdited: json['isUpdated'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt:
           json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,

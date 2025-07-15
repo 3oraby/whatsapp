@@ -29,7 +29,6 @@ class ShowChatMessagesBody extends StatefulWidget {
 }
 
 class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
-  final ScrollController _scrollController = ScrollController();
   late UserEntity currentUser = getCurrentUserEntity();
   MessageEntity? _replyMessage;
   late GetChatMessagesCubit getChatMessagesCubit;
@@ -41,22 +40,6 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     getChatMessagesCubit = context.read<GetChatMessagesCubit>();
     messageStreamCubit = context.read<MessageStreamCubit>();
     messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _scrollToBottom() {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (_scrollController.hasClients) {
-        _scrollController.jumpTo(
-          _scrollController.position.maxScrollExtent,
-        );
-      }
-    });
   }
 
   void sendMessage(String content) {
@@ -85,7 +68,6 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     setState(() {
       _replyMessage = message;
     });
-    _scrollToBottom();
   }
 
   void _onInternetStateChanged(
@@ -163,8 +145,6 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
         user: widget.chat.anotherUser,
         isCreate: false,
       );
-    } else if (state is UserTypingState && state.chatId == widget.chat.id) {
-      _scrollToBottom();
     }
   }
 
@@ -199,7 +179,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
 
                   return Expanded(
                     child: ShowChatMessagesList(
-                      scrollController: _scrollController,
+                      chatId: widget.chat.id,
                       messages: widget.messages,
                       onReplyRequested: _onReplyRequested,
                       isTyping: isTyping,
