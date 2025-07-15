@@ -93,16 +93,17 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
 
     final messageWidgets = <Widget>[];
 
-    groupedMessages.forEach((dateTitle, messages) {
-      messageWidgets.add(
-        GroupMessagesDateHeader(label: dateTitle),
-      );
+    final reversedGroups = groupedMessages.entries.toList().reversed;
+
+    for (var group in reversedGroups) {
+      final dateTitle = group.key;
+      final messages = group.value.reversed.toList();
 
       for (int i = 0; i < messages.length; i++) {
         final msg = messages[i];
         final isFromMe = msg.isFromMe;
-        final isLastFromSameSender = i == messages.length - 1 ||
-            messages[i + 1].senderId != msg.senderId;
+        final isLastFromSameSender =
+            i == 0 || messages[i - 1].senderId != msg.senderId;
 
         final isReplied = msg.parentId != null;
         MessageEntity? repliedMsg;
@@ -128,13 +129,17 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
         );
         messageWidgets.add(const VerticalGap(8));
       }
-    });
+      messageWidgets.add(GroupMessagesDateHeader(label: dateTitle));
+    }
 
     if (widget.isTyping) {
-      messageWidgets.add(const BubbleMessageItem(
-        isFromMe: false,
-        isTyping: true,
-      ));
+      messageWidgets.insert(
+        0,
+        const BubbleMessageItem(
+          isFromMe: false,
+          isTyping: true,
+        ),
+      );
     }
 
     return Stack(
@@ -142,6 +147,7 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
         ListView(
           controller: widget.scrollController,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          reverse: true,
           children: messageWidgets,
         ),
         Positioned(
