@@ -145,29 +145,37 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
           _scrollToBottom();
         }
       },
-      child: Stack(
-        children: [
-          ListView(
-            controller: scrollController,
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            reverse: true,
-            children: messageWidgets,
-          ),
-          Positioned(
-            bottom: 60,
-            right: 16,
-            child: AnimatedOpacity(
-              opacity: _showScrollDownButton ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 200),
-              child: FloatingActionButton(
-                mini: true,
-                backgroundColor: Colors.teal.shade400,
-                onPressed: _scrollToBottom,
-                child: const Icon(Icons.arrow_downward),
+      child: Scrollbar(
+        controller: scrollController,
+        interactive: true,
+        radius: Radius.circular(40),
+        thumbVisibility: true,
+        trackVisibility: true,
+        thickness: 4,
+        child: Stack(
+          children: [
+            ListView(
+              controller: scrollController,
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              reverse: true,
+              children: messageWidgets,
+            ),
+            Positioned(
+              bottom: 60,
+              right: 16,
+              child: AnimatedOpacity(
+                opacity: _showScrollDownButton ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 200),
+                child: FloatingActionButton(
+                  mini: true,
+                  backgroundColor: Colors.teal.shade400,
+                  onPressed: _scrollToBottom,
+                  child: const Icon(Icons.arrow_downward),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
