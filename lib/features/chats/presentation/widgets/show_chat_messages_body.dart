@@ -102,6 +102,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
       messageStreamCubit.markMessageAsRead(
         chatId: widget.chat.id,
         messageId: state.message.id,
+        senderId: state.message.senderId!,
       );
     } else if (state is NewOutgoingMessageState) {
       getChatMessagesCubit.addMessageToList(state.message);

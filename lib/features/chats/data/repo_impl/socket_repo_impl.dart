@@ -73,10 +73,11 @@ class SocketRepoImpl implements SocketRepo {
   }
 
   @override
-  void emitMessageRead(int messageId, int chatId) {
+  void emitMessageRead(int messageId, int chatId, int senderId) {
     webSocketService.emit(SocketEvents.messageRead, {
       'messageId': messageId,
       'chatId': chatId,
+      'senderId': senderId,
     });
   }
 

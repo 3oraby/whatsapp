@@ -63,9 +63,12 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
       debugPrint("chat is founded");
       final oldChat = chats[chatIndex];
 
+      debugPrint(message.status.value);
       updatedChat = oldChat.copyWith(
         lastMessage: lastMessageEntity,
-        unreadCount: isToMe ? oldChat.unreadCount + 1 : oldChat.unreadCount,
+        unreadCount: isToMe && message.status != MessageStatus.read
+            ? oldChat.unreadCount + 1
+            : oldChat.unreadCount,
       );
 
       chats.removeAt(chatIndex);
@@ -89,7 +92,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     required int messageId,
     required MessageStatus newStatus,
   }) {
-    debugPrint("update: message id = $messageId  with status: $newStatus");
+    debugPrint("update last message:: id = $messageId  with status: $newStatus in getUserChatsCubit");
     final currentState = state;
     if (currentState is! GetUserChatsLoadedState) return;
 
