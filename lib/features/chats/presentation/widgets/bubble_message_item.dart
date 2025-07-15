@@ -49,7 +49,7 @@ class BubbleMessageItem extends StatelessWidget {
                     ? 4
                     : 12
                 : isFromMe
-                    ? 26
+                    ? 25
                     : 33,
             right: isRepliedMessage
                 ? isFromMe
@@ -57,7 +57,7 @@ class BubbleMessageItem extends StatelessWidget {
                     : 4
                 : isFromMe
                     ? 16
-                    : 10,
+                    : 9,
           ),
           margin: EdgeInsets.all(0),
           backGroundColor: bgColor,

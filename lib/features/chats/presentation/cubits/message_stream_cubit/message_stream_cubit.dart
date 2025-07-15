@@ -30,9 +30,8 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       debugPrint("✅ New message: $data");
       final message = MessageModel.fromJson(data).toEntity();
 
-      final receivedMessage = message.copyWith(status: MessageStatus.read);
       if (!isClosed) {
-        emit(NewIncomingMessageState(receivedMessage));
+        emit(NewIncomingMessageState(message));
       }
     });
 

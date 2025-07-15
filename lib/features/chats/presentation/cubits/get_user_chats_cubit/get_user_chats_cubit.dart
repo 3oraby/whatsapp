@@ -66,7 +66,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
       debugPrint(message.status.value);
       updatedChat = oldChat.copyWith(
         lastMessage: lastMessageEntity,
-        unreadCount: isToMe && message.status != MessageStatus.read
+        unreadCount: isToMe
             ? oldChat.unreadCount + 1
             : oldChat.unreadCount,
       );
