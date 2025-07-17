@@ -1,11 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
 import 'package:whatsapp/core/helpers/get_initial_route.dart';
 import 'package:whatsapp/core/helpers/on_generate_routes.dart';
+import 'package:whatsapp/core/services/app_notification_service.dart';
 import 'package:whatsapp/core/services/custom_bloc_observer.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
@@ -21,9 +23,13 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
-  await AppStorageHelper.init();
   await setupGetIt();
+  await Firebase.initializeApp();
+  await Future.wait([
+    AppStorageHelper.init(),
+    EasyLocalization.ensureInitialized(),
+    AppNotificationService().init(),
+  ]);
   Bloc.observer = CustomBlocObserver();
 
   runApp(
@@ -64,13 +70,6 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
       socketCubit.connect();
     }
   }
-
-  // Future<void> _initSocketConnection() async {
-  //   final token = await getLocalAccessToken();
-  //   if (token != null) {
-  //     socketCubit.connect(accessToken: token);
-  //   }
-  // }
 
   @override
   void dispose() {
