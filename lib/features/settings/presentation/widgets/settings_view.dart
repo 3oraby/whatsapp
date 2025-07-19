@@ -40,7 +40,7 @@ class _SettingsBodyState extends State<SettingsBody> {
   @override
   void initState() {
     super.initState();
-    currentUser = getCurrentUserEntity();
+    currentUser = getCurrentUserEntity()!;
   }
 
   @override

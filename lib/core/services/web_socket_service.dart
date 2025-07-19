@@ -26,6 +26,7 @@ class WebSocketService {
       OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
+          .setPath('/socket.io')
           .setQuery({
             'token': accessToken,
           })

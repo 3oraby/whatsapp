@@ -52,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
             pendingMessagesHelper: getIt<PendingMessagesHelper>(),
           )..loadPendingMessages(
               chat: widget.chat,
-              currentUserId: getCurrentUserEntity().id,
+              currentUserId: getCurrentUserEntity()!.id,
             ),
         ),
         BlocProvider(

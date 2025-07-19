@@ -29,7 +29,7 @@ class ShowChatMessagesBody extends StatefulWidget {
 }
 
 class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
-  late UserEntity currentUser = getCurrentUserEntity();
+  late UserEntity currentUser = getCurrentUserEntity()!;
   MessageEntity? _replyMessage;
   late GetChatMessagesCubit getChatMessagesCubit;
   late MessageStreamCubit messageStreamCubit;

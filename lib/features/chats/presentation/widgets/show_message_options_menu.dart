@@ -94,7 +94,7 @@ Widget _reactIcon(
   MessageReact type,
   MessageEntity message,
 ) {
-  final currentUserId = getCurrentUserEntity().id;
+  final currentUserId = getCurrentUserEntity()!.id;
   final hasReact = message.hasReactFromUser(currentUserId);
 
   return IconButton(

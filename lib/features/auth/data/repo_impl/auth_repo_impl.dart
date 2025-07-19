@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
+import 'package:flutter/widgets.dart';
 import 'package:whatsapp/core/api/api_consumer.dart';
 import 'package:whatsapp/core/api/api_keys.dart';
 import 'package:whatsapp/core/api/end_points.dart';
@@ -46,11 +45,13 @@ class AuthRepoImpl extends AuthRepo {
         },
       );
 
+      debugPrint(result.toString());
+
       final accessToken = result[ApiKeys.accessToken];
       await AppStorageHelper.setSecureData(
           StorageKeys.accessToken.toString(), accessToken);
 
-      log("access token is saved in secure data");
+      debugPrint("access token is saved in secure data");
       await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), true);
 
       await getCurrentUser();

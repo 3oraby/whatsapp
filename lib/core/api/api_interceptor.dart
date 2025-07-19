@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:whatsapp/core/api/api_keys.dart';
 import 'package:whatsapp/core/api/end_points.dart';
 import 'package:whatsapp/core/constants/storage_keys.dart';
@@ -29,13 +28,13 @@ class ApiInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    log("error: ApiInterceptor.onError()");
-    log("status message: ${err.response?.statusMessage}");
-    log("response data: ${err.response?.data}");
+    debugPrint("error: ApiInterceptor.onError()");
+    debugPrint("status message: ${err.response?.statusMessage}");
+    debugPrint("response data: ${err.response?.data}");
 
     if (err.response?.data["message"] == "Unable to verify token") {
       try {
-        log("error in ApiInterceptors: Unable to verify token");
+        debugPrint("error in ApiInterceptors: Unable to verify token");
         final refreshResponse = await dio.get(EndPoints.refreshToken);
 
         final newAccessToken = refreshResponse.data[ApiKeys.accessToken];
@@ -48,20 +47,20 @@ class ApiInterceptor extends Interceptor {
         final clonedRequest = await dio.fetch(opts);
         return handler.resolve(clonedRequest);
       } catch (e) {
-        log("error in get refresh token part: ${e.toString()}");
-        await forcesUserLogOut(handler, err);
+        debugPrint("error in get refresh token part: ${e.toString()}");
+        await forcesUserdebugPrintOut(handler, err);
       }
     }
 
     if (err.response?.data['message'] == "No refreshToken found in cookie") {
-      log("No refreshToken found in cookie");
-      log("there is an except in the refresh token now, there is a problem");
-      await forcesUserLogOut(handler, err);
+      debugPrint("No refreshToken found in cookie");
+      debugPrint("there is an except in the refresh token now, there is a problem");
+      await forcesUserdebugPrintOut(handler, err);
     }
     return handler.next(err);
   }
 
-  forcesUserLogOut(ErrorInterceptorHandler handler, DioException err) async {
+  forcesUserdebugPrintOut(ErrorInterceptorHandler handler, DioException err) async {
     await AppStorageHelper.deleteSecureData(StorageKeys.accessToken.toString());
 
     await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), false);

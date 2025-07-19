@@ -52,7 +52,7 @@ class StoriesRepoImpl extends StoriesRepo {
         EndPoints.getCurrentUserStory,
       );
 
-      final UserEntity currentUser = getCurrentUserEntity();
+      final UserEntity currentUser = getCurrentUserEntity()!;
 
       final Map<String, dynamic> json = {
         'id': currentUser.id,
