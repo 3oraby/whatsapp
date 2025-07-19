@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:whatsapp/core/api/api_urls.dart';
 
 class WebSocketService {
   Socket? socket;
@@ -21,7 +22,7 @@ class WebSocketService {
     log("token before socket connection : $accessToken");
     log("xxxxxxxxxx");
     socket = io(
-      'http://10.0.2.2:3000',
+      ApiUrls.webSocketUrl,
       OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
