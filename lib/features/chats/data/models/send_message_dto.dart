@@ -4,14 +4,14 @@ class SendMessageDto {
   final int receiverId;
   final int chatId;
   final int? parentId;
-  final String content;
+  final String? content;
   final MessageType type;
   final String? mediaUrl;
 
   SendMessageDto({
     required this.receiverId,
     required this.chatId,
-    required this.content,
+    this.content,
     this.parentId,
     this.mediaUrl,
     this.type = MessageType.text,

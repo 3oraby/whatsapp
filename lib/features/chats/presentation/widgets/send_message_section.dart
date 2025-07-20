@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,13 +11,14 @@ import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 
 class SendMessageSection extends StatefulWidget {
-  final void Function(String) sendMessage;
+  final void Function(File?, String?) sendMessage;
+
   final int chatId;
 
   const SendMessageSection({
     super.key,
-    required this.sendMessage,
     required this.chatId,
+    required this.sendMessage,
   });
 
   @override
@@ -27,6 +29,7 @@ class _SendMessageSectionState extends State<SendMessageSection> {
   final TextEditingController _controller = TextEditingController();
   Timer? _typingTimer;
   bool _isTyping = false;
+  File? imageFile;
 
   void _onTextChanged(String text) {
     if (text.trim().isEmpty) {
@@ -55,8 +58,8 @@ class _SendMessageSectionState extends State<SendMessageSection> {
 
   void _onSendPressed() {
     final text = _controller.text.trim();
-    if (text.isEmpty) return;
-    widget.sendMessage(text);
+
+    widget.sendMessage(imageFile, text);
     _controller.clear();
     _stopTyping();
   }
@@ -94,7 +97,13 @@ class _SendMessageSectionState extends State<SendMessageSection> {
           Expanded(
             child: GalleryImagePicker(
               onImageSelected: (image) {
-                // send image logic here
+                image.originFile.then((file) {
+                  if (file != null) {
+                    setState(() {
+                      imageFile = file;
+                    });
+                  }
+                });
                 Navigator.pop(context);
               },
             ),

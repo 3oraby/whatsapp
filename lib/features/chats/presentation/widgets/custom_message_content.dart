@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
+import 'package:whatsapp/core/widgets/custom_network_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
@@ -33,7 +34,7 @@ class CustomMessageContent extends StatelessWidget {
               RepliedMessageBox(
                 msg: repliedMsg!,
               ),
-            if (msg.isDeleted || (msg.content == null && msg.mediaUrl == null))
+            if (msg.isDeleted)
               Row(
                 children: [
                   Icon(
@@ -52,9 +53,15 @@ class CustomMessageContent extends StatelessWidget {
                 ],
               )
             else
-              Text(
-                msg.content ?? "content",
-                style: AppTextStyles.poppinsMedium(context, 20),
+              Column(
+                children: [
+                  if (msg.mediaUrl != null)
+                    CustomNetworkImage(imageUrl: msg.mediaUrl!),
+                  Text(
+                    msg.content ?? "content",
+                    style: AppTextStyles.poppinsMedium(context, 20),
+                  ),
+                ],
               ),
             const VerticalGap(3),
             Row(

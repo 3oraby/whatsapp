@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
@@ -7,8 +9,10 @@ import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/upload_chat_image_cubit/upload_chat_image_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/reply_to_message_banner.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/send_message_section.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_list.dart';
@@ -29,10 +33,11 @@ class ShowChatMessagesBody extends StatefulWidget {
 }
 
 class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
-  late UserEntity currentUser = getCurrentUserEntity()!;
+  late UserEntity currentUser;
   MessageEntity? _replyMessage;
   late GetChatMessagesCubit getChatMessagesCubit;
   late MessageStreamCubit messageStreamCubit;
+  String? content;
 
   @override
   void initState() {
@@ -40,28 +45,53 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     getChatMessagesCubit = context.read<GetChatMessagesCubit>();
     messageStreamCubit = context.read<MessageStreamCubit>();
     messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
+    currentUser = getCurrentUserEntity()!;
   }
 
-  void sendMessage(String content) {
-    final text = content.trim();
-    if (text.isEmpty) return;
+  void sendMessage(File? imageFile, String? content) {
+    if (imageFile != null) {
+      BlocProvider.of<UploadChatImageCubit>(context).uploadChatImage(
+        mediaFile: imageFile,
+      );
 
+      content = content;
+    } else {
+      final String? text = content?.trim();
+      if (text == null || text.isEmpty) return;
+      final dto = SendMessageDto(
+        receiverId: widget.chat.anotherUser.id,
+        chatId: widget.chat.id,
+        content: text,
+        parentId: _replyMessage?.id,
+      );
+
+      messageStreamCubit.sendMessage(
+        dto: dto,
+        currentUserId: currentUser.id,
+      );
+    }
+
+    setState(() {
+      _replyMessage = null;
+    });
+  }
+
+  void sendMediaMessage(String mediaUrl) {
+    final String? text = content?.trim();
+    if (text == null || text.isEmpty) return;
     final dto = SendMessageDto(
       receiverId: widget.chat.anotherUser.id,
       chatId: widget.chat.id,
       content: text,
+      mediaUrl: mediaUrl,
+      type: MessageType.image,
       parentId: _replyMessage?.id,
-      // createdAt: DateTime.now(),
     );
 
     messageStreamCubit.sendMessage(
       dto: dto,
       currentUserId: currentUser.id,
     );
-
-    setState(() {
-      _replyMessage = null;
-    });
   }
 
   void _onReplyRequested(MessageEntity message) {
@@ -75,6 +105,15 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     if (state is InternetConnectionConnected) {
       debugPrint("_onInternetStateChanged");
       messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
+    }
+  }
+
+  void _onUploadChatImageStateChanged(
+      BuildContext context, UploadChatImageState state) {
+    if (state is UploadChatImageLoadedState) {
+      sendMediaMessage(
+        state.mediaUrl,
+      );
     }
   }
 
@@ -157,6 +196,9 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
         ),
         BlocListener<MessageStreamCubit, MessageStreamState>(
           listener: _onMessageStreamChanged,
+        ),
+        BlocListener<UploadChatImageCubit, UploadChatImageState>(
+          listener: _onUploadChatImageStateChanged,
         ),
       ],
       child: SafeArea(
