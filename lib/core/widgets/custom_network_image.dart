@@ -8,6 +8,7 @@ class CustomNetworkImage extends StatelessWidget {
   final BoxFit? fit;
   final ImageErrorWidgetBuilder? errorBuilder;
   final Widget? placeholder;
+  final double? borderRadius;
 
   const CustomNetworkImage({
     super.key,
@@ -17,16 +18,16 @@ class CustomNetworkImage extends StatelessWidget {
     this.fit,
     this.errorBuilder,
     this.placeholder,
+    this.borderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
+    final image = CachedNetworkImage(
       key: ValueKey(imageUrl),
       imageUrl: imageUrl,
       width: width,
       height: height,
-      alignment: Alignment(0, 0),
       fit: fit,
       placeholder: (context, url) {
         return SizedBox(
@@ -42,9 +43,16 @@ class CustomNetworkImage extends StatelessWidget {
         height: height,
         child: Container(
           color: Colors.grey[300],
-          child: const Icon(Icons.error, color: Colors.red), 
+          child: const Icon(Icons.error, color: Colors.red),
         ),
       ),
     );
+
+    return borderRadius != null
+        ? ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius!),
+            child: image,
+          )
+        : image;
   }
 }

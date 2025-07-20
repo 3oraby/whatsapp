@@ -41,24 +41,43 @@ class BubbleMessageItem extends StatelessWidget {
                   radius: AppConstants.messageBorderRadius,
                 ),
           alignment: isFromMe ? Alignment.topRight : Alignment.topLeft,
-          padding: EdgeInsets.only(
-            top: isRepliedMessage ? 4 : 6,
-            bottom: 4,
-            left: isRepliedMessage
-                ? isFromMe
-                    ? 4
-                    : 12
-                : isFromMe
-                    ? 25
-                    : 33,
-            right: isRepliedMessage
-                ? isFromMe
-                    ? 12
-                    : 4
-                : isFromMe
-                    ? 16
-                    : 9,
-          ),
+          padding: msg?.mediaUrl == null
+              ? EdgeInsets.only(
+                  top: isRepliedMessage ? 4 : 6,
+                  bottom: 4,
+                  left: isRepliedMessage
+                      ? isFromMe
+                          ? 4
+                          : 12
+                      : isFromMe
+                          ? 25
+                          : 33,
+                  right: isRepliedMessage
+                      ? isFromMe
+                          ? 12
+                          : 4
+                      : isFromMe
+                          ? 16
+                          : 9,
+                )
+              : EdgeInsets.only(
+                  top: isRepliedMessage ? 4 : 6,
+                  bottom: 4,
+                  left: isRepliedMessage
+                      ? isFromMe
+                          ? 4
+                          : 12
+                      : isFromMe
+                          ? 6
+                          : 14,
+                  right: isRepliedMessage
+                      ? isFromMe
+                          ? 12
+                          : 4
+                      : isFromMe
+                          ? 14
+                          : 6,
+                ),
           margin: EdgeInsets.all(0),
           backGroundColor: bgColor,
           child: isTyping

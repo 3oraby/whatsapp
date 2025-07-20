@@ -37,7 +37,9 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   MessageEntity? _replyMessage;
   late GetChatMessagesCubit getChatMessagesCubit;
   late MessageStreamCubit messageStreamCubit;
-  String? content;
+
+  /// محتوى الرسالة المؤقتة (لو فيها صورة) 
+  String? _pendingText;
 
   @override
   void initState() {
@@ -49,15 +51,16 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   }
 
   void sendMessage(File? imageFile, String? content) {
+    final text = content?.trim();
+    final hasText = text != null && text.isNotEmpty;
+
     if (imageFile != null) {
+      _pendingText = hasText ? text : null;
+
       BlocProvider.of<UploadChatImageCubit>(context).uploadChatImage(
         mediaFile: imageFile,
       );
-
-      content = content;
-    } else {
-      final String? text = content?.trim();
-      if (text == null || text.isEmpty) return;
+    } else if (hasText) {
       final dto = SendMessageDto(
         receiverId: widget.chat.anotherUser.id,
         chatId: widget.chat.id,
@@ -77,12 +80,10 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   }
 
   void sendMediaMessage(String mediaUrl) {
-    final String? text = content?.trim();
-    if (text == null || text.isEmpty) return;
     final dto = SendMessageDto(
       receiverId: widget.chat.anotherUser.id,
       chatId: widget.chat.id,
-      content: text,
+      content: _pendingText,
       mediaUrl: mediaUrl,
       type: MessageType.image,
       parentId: _replyMessage?.id,
@@ -92,6 +93,8 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
       dto: dto,
       currentUserId: currentUser.id,
     );
+
+    _pendingText = null;
   }
 
   void _onReplyRequested(MessageEntity message) {
@@ -103,7 +106,6 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   void _onInternetStateChanged(
       BuildContext context, InternetConnectionState state) {
     if (state is InternetConnectionConnected) {
-      debugPrint("_onInternetStateChanged");
       messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
     }
   }
@@ -111,9 +113,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   void _onUploadChatImageStateChanged(
       BuildContext context, UploadChatImageState state) {
     if (state is UploadChatImageLoadedState) {
-      sendMediaMessage(
-        state.mediaUrl,
-      );
+      sendMediaMessage(state.mediaUrl);
     }
   }
 

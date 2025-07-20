@@ -35,12 +35,19 @@ class NormalMessageItem extends StatelessWidget {
                 AppConstants.messageBorderRadius,
               ),
             ),
-            padding: EdgeInsets.only(
-              top: isRepliedMessage ? 4 : 6,
-              bottom: 4,
-              left: isRepliedMessage ? 4 : 26,
-              right: isRepliedMessage ? 4 : 8,
-            ),
+            padding: msg.mediaUrl == null
+                ? EdgeInsets.only(
+                    top: isRepliedMessage ? 4 : 6,
+                    bottom: 4,
+                    left: isRepliedMessage ? 4 : 26,
+                    right: isRepliedMessage ? 4 : 8,
+                  )
+                : EdgeInsets.only(
+                    top: isRepliedMessage ? 4 : 6,
+                    bottom: 4,
+                    left: isRepliedMessage ? 2 : 4,
+                    right: isRepliedMessage ? 2 : 4,
+                  ),
             child: CustomMessageContent(
               isFromMe: isFromMe,
               msg: msg,

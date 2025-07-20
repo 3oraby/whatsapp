@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
+import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_network_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
@@ -54,9 +55,14 @@ class CustomMessageContent extends StatelessWidget {
               )
             else
               Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (msg.mediaUrl != null)
-                    CustomNetworkImage(imageUrl: msg.mediaUrl!),
+                    CustomNetworkImage(
+                      borderRadius: AppConstants.messageBorderRadius,
+                      imageUrl: msg.mediaUrl!,
+                    ),
+                  const VerticalGap(2),
                   Text(
                     msg.content ?? "content",
                     style: AppTextStyles.poppinsMedium(context, 20),
