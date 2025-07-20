@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
+import 'package:whatsapp/core/widgets/custom_text_form_field.dart';
+import 'package:whatsapp/core/widgets/gallery_image_picker.dart';
+import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 
 class SendMessageSection extends StatefulWidget {
@@ -37,7 +40,7 @@ class _SendMessageSectionState extends State<SendMessageSection> {
     }
 
     _typingTimer?.cancel();
-  _typingTimer = Timer(const Duration(seconds: 2), () {
+    _typingTimer = Timer(const Duration(seconds: 2), () {
       _stopTyping();
     });
   }
@@ -65,6 +68,42 @@ class _SendMessageSectionState extends State<SendMessageSection> {
     super.dispose();
   }
 
+  Future<dynamic> showGalleryImages(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (_) => Column(
+        children: [
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Cancel",
+                  style: AppTextStyles.poppinsBold(context, 16),
+                ),
+              ),
+              const HorizontalGap(120), // change it later
+              Text(
+                "Photos",
+                style: AppTextStyles.poppinsBold(context, 16),
+              ),
+            ],
+          ),
+          Expanded(
+            child: GalleryImagePicker(
+              onImageSelected: (image) {
+                // send image logic here
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,27 +113,45 @@ class _SendMessageSectionState extends State<SendMessageSection> {
         children: [
           IconButton(
             icon: const Icon(Icons.add, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              showGalleryImages(context);
+            },
           ),
-          IconButton(
-            icon: const Icon(Icons.camera_alt, color: Colors.green),
-            onPressed: () {},
-          ),
+          const HorizontalGap(16),
           Expanded(
-            child: TextField(
-              controller: _controller,
-              onChanged: _onTextChanged,
-              style: AppTextStyles.poppinsMedium(context, 16),
-              decoration: InputDecoration(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 6,
+              ),
+              child: CustomTextFormFieldWidget(
+                controller: _controller,
+                onChanged: _onTextChanged,
                 hintText: "Type your message...",
                 hintStyle: AppTextStyles.poppinsRegular(context, 14),
-                border: InputBorder.none,
+                textStyle: AppTextStyles.poppinsMedium(context, 16),
+                fillColor: Colors.white,
+                borderRadius: 40,
+                borderWidth: 0,
+                enabledBorderColor: Colors.transparent,
+                borderColor: Colors.transparent,
+                focusedBorderColor: Colors.transparent,
               ),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.send, color: AppColors.primary),
-            onPressed: _onSendPressed,
+          const HorizontalGap(16),
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: _controller,
+            builder: (context, value, child) {
+              final hasText = value.text.trim().isNotEmpty;
+              return IconButton(
+                icon: Icon(
+                  hasText ? Icons.send : Icons.camera_alt_outlined,
+                  color: hasText ? AppColors.primary : Colors.black,
+                  size: 32,
+                ),
+                onPressed: hasText ? _onSendPressed : () {},
+              );
+            },
           ),
         ],
       ),

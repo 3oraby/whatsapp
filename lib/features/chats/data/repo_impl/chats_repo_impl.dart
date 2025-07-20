@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:whatsapp/core/api/api_consumer.dart';
@@ -99,6 +100,35 @@ class ChatsRepoImpl extends ChatsRepo {
       return Right(chat);
     } on UnAuthorizedException {
       log("UnAuthorized in getUserChats");
+      return Left(UnAuthorizedException());
+    } on ConnectionException catch (e) {
+      return Left(CustomException(message: e.message));
+    } on ServerException {
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    } catch (e) {
+      log("error in get chat messages: $e");
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadChatImage({
+    required File image,
+  }) async {
+    try {
+      final result = await apiConsumer.post(
+        EndPoints.uploadChatImage,
+        isFromData: true,
+        data: {
+          "image": image,
+        },
+      );
+
+      return Right(result['url']);
+    } on UnAuthorizedException {
+      log("UnAuthorized in uploadChatImage");
       return Left(UnAuthorizedException());
     } on ConnectionException catch (e) {
       return Left(CustomException(message: e.message));
