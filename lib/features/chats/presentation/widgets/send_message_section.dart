@@ -9,6 +9,7 @@ import 'package:whatsapp/core/widgets/custom_text_form_field.dart';
 import 'package:whatsapp/core/widgets/gallery_image_picker.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/selected_image_banner.dart';
 
 class SendMessageSection extends StatefulWidget {
   final VoidCallback sendMessage;
@@ -119,56 +120,69 @@ class _SendMessageSectionState extends State<SendMessageSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      color: AppColors.lightChatAppBarColor,
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.add, color: Colors.black),
-            onPressed: () {
-              showGalleryImages(context);
+    return Column(
+      children: [
+        if (_selectedImageFile != null)
+          SelectedImageBanner(
+            imageFile: _selectedImageFile!,
+            onCancel: () {
+              setState(() {
+                _selectedImageFile = null;
+              });
             },
           ),
-          const HorizontalGap(16),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: CustomTextFormFieldWidget(
-                controller: widget.contentController,
-                onChanged: _onTextChanged,
-                hintText: "Type your message...",
-                hintStyle: AppTextStyles.poppinsRegular(context, 14),
-                textStyle: AppTextStyles.poppinsMedium(context, 16),
-                fillColor: Colors.white,
-                borderRadius: 40,
-                borderWidth: 0,
-                enabledBorderColor: Colors.transparent,
-                borderColor: Colors.transparent,
-                focusedBorderColor: Colors.transparent,
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          color: AppColors.lightChatAppBarColor,
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.black),
+                onPressed: () {
+                  showGalleryImages(context);
+                },
               ),
-            ),
-          ),
-          const HorizontalGap(16),
-          ValueListenableBuilder<TextEditingValue>(
-            valueListenable: widget.contentController,
-            builder: (context, value, child) {
-              final hasText = value.text.trim().isNotEmpty;
-              final hasImage = _selectedImageFile != null;
-              final canSend = hasText || hasImage;
-
-              return IconButton(
-                icon: Icon(
-                  canSend ? Icons.send : Icons.camera_alt_outlined,
-                  color: canSend ? AppColors.primary : Colors.black,
-                  size: 32,
+              const HorizontalGap(16),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: CustomTextFormFieldWidget(
+                    controller: widget.contentController,
+                    onChanged: _onTextChanged,
+                    hintText: "Type your message...",
+                    hintStyle: AppTextStyles.poppinsRegular(context, 14),
+                    textStyle: AppTextStyles.poppinsMedium(context, 16),
+                    fillColor: Colors.white,
+                    borderRadius: 40,
+                    borderWidth: 0,
+                    enabledBorderColor: Colors.transparent,
+                    borderColor: Colors.transparent,
+                    focusedBorderColor: Colors.transparent,
+                  ),
                 ),
-                onPressed: canSend ? _onSendPressed : () {},
-              );
-            },
+              ),
+              const HorizontalGap(16),
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: widget.contentController,
+                builder: (context, value, child) {
+                  final hasText = value.text.trim().isNotEmpty;
+                  final hasImage = _selectedImageFile != null;
+                  final canSend = hasText || hasImage;
+
+                  return IconButton(
+                    icon: Icon(
+                      canSend ? Icons.send : Icons.camera_alt_outlined,
+                      color: canSend ? AppColors.primary : Colors.black,
+                      size: 32,
+                    ),
+                    onPressed: canSend ? _onSendPressed : () {},
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

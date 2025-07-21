@@ -12,7 +12,6 @@ import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/reply_to_message_banner.dart';
-import 'package:whatsapp/features/chats/presentation/widgets/selected_image_banner.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/send_message_section.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_list.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
@@ -197,15 +196,6 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
                 ReplyToMessageBanner(
                   replyMessage: _replyMessage!,
                   onCancel: () => setState(() => _replyMessage = null),
-                ),
-              if (mediaFile != null)
-                SelectedImageBanner(
-                  imageFile: mediaFile!,
-                  onCancel: () {
-                    setState(() {
-                      mediaFile = null;
-                    });
-                  },
                 ),
               const Divider(height: 1),
               SendMessageSection(
