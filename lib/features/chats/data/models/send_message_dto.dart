@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 
 class SendMessageDto {
@@ -6,7 +8,8 @@ class SendMessageDto {
   final int? parentId;
   final String? content;
   final MessageType type;
-  final String? mediaUrl;
+  String? mediaUrl;
+  final File? mediaFile;
 
   SendMessageDto({
     required this.receiverId,
@@ -14,6 +17,7 @@ class SendMessageDto {
     this.content,
     this.parentId,
     this.mediaUrl,
+    this.mediaFile,
     this.type = MessageType.text,
   });
 

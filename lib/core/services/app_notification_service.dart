@@ -39,6 +39,7 @@ class AppNotificationService {
   static Future<void> handleBackgroundMessage(RemoteMessage remoteMessage) async {
     await Firebase.initializeApp();
     debugPrint("onBackgroundMessage new message arrived -- title: ${remoteMessage.notification?.title} -- body: ${remoteMessage.notification?.body}");
+    debugPrint("onBackgroundMessage new message arrived -- data: ${remoteMessage.data}");
   }
 
   static Future<void> handleForegroundMessage() async {

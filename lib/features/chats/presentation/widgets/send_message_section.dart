@@ -11,14 +11,17 @@ import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 
 class SendMessageSection extends StatefulWidget {
-  final void Function(File?, String?) sendMessage;
-
+  final VoidCallback sendMessage;
+  final TextEditingController contentController;
+  final void Function(File mediaFile) onImageSelected;
   final int chatId;
 
   const SendMessageSection({
     super.key,
     required this.chatId,
     required this.sendMessage,
+    required this.contentController,
+    required this.onImageSelected,
   });
 
   @override
@@ -26,10 +29,9 @@ class SendMessageSection extends StatefulWidget {
 }
 
 class _SendMessageSectionState extends State<SendMessageSection> {
-  final TextEditingController _controller = TextEditingController();
   Timer? _typingTimer;
   bool _isTyping = false;
-  File? imageFile;
+  File? _selectedImageFile;
 
   void _onTextChanged(String text) {
     if (text.trim().isEmpty) {
@@ -57,16 +59,17 @@ class _SendMessageSectionState extends State<SendMessageSection> {
   }
 
   void _onSendPressed() {
-    final text = _controller.text.trim();
-
-    widget.sendMessage(imageFile, text);
-    _controller.clear();
+    widget.sendMessage();
+    widget.contentController.clear();
     _stopTyping();
+    setState(() {
+      _selectedImageFile = null;
+    });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    widget.contentController.dispose();
     _typingTimer?.cancel();
     super.dispose();
   }
@@ -100,8 +103,9 @@ class _SendMessageSectionState extends State<SendMessageSection> {
                 image.originFile.then((file) {
                   if (file != null) {
                     setState(() {
-                      imageFile = file;
+                      _selectedImageFile = file;
                     });
+                    widget.onImageSelected(file);
                   }
                 });
                 Navigator.pop(context);
@@ -129,11 +133,9 @@ class _SendMessageSectionState extends State<SendMessageSection> {
           const HorizontalGap(16),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 6,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 6),
               child: CustomTextFormFieldWidget(
-                controller: _controller,
+                controller: widget.contentController,
                 onChanged: _onTextChanged,
                 hintText: "Type your message...",
                 hintStyle: AppTextStyles.poppinsRegular(context, 14),
@@ -149,16 +151,19 @@ class _SendMessageSectionState extends State<SendMessageSection> {
           ),
           const HorizontalGap(16),
           ValueListenableBuilder<TextEditingValue>(
-            valueListenable: _controller,
+            valueListenable: widget.contentController,
             builder: (context, value, child) {
               final hasText = value.text.trim().isNotEmpty;
+              final hasImage = _selectedImageFile != null;
+              final canSend = hasText || hasImage;
+
               return IconButton(
                 icon: Icon(
-                  hasText ? Icons.send : Icons.camera_alt_outlined,
-                  color: hasText ? AppColors.primary : Colors.black,
+                  canSend ? Icons.send : Icons.camera_alt_outlined,
+                  color: canSend ? AppColors.primary : Colors.black,
                   size: 32,
                 ),
-                onPressed: hasText ? _onSendPressed : () {},
+                onPressed: canSend ? _onSendPressed : () {},
               );
             },
           ),

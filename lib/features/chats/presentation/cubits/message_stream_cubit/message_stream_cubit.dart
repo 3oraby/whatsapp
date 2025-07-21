@@ -10,6 +10,7 @@ import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_reaction_event.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
+import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 
 part 'message_stream_state.dart';
@@ -17,10 +18,12 @@ part 'message_stream_state.dart';
 class MessageStreamCubit extends Cubit<MessageStreamState> {
   final SocketRepo socketRepo;
   final PendingMessagesHelper pendingMessagesHelper;
+  final ChatsRepo chatsRepo;
 
   MessageStreamCubit({
     required this.socketRepo,
     required this.pendingMessagesHelper,
+    required this.chatsRepo,
   }) : super(MessageStreamInitial()) {
     _initSocketListeners();
   }
@@ -137,6 +140,20 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     required SendMessageDto dto,
     required int currentUserId,
   }) async {
+    if (dto.mediaFile != null) {
+      final result = await chatsRepo.uploadChatImage(image: dto.mediaFile!);
+      result.fold(
+        (failure) {
+          debugPrint("Can not upload chat image: ${failure.message}");
+          // emit failure state
+          return;
+        },
+        (url) {
+          dto.mediaUrl = url;
+        },
+      );
+    }
+
     final tempMessage = MessageEntity.fromDto(dto, currentUserId);
 
     emit(NewOutgoingMessageState(tempMessage));

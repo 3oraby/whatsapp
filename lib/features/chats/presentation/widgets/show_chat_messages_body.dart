@@ -9,11 +9,10 @@ import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
-import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
-import 'package:whatsapp/features/chats/presentation/cubits/upload_chat_image_cubit/upload_chat_image_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/reply_to_message_banner.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/selected_image_banner.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/send_message_section.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_list.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
@@ -37,9 +36,8 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   MessageEntity? _replyMessage;
   late GetChatMessagesCubit getChatMessagesCubit;
   late MessageStreamCubit messageStreamCubit;
-
-  /// محتوى الرسالة المؤقتة (لو فيها صورة) 
-  String? _pendingText;
+  final TextEditingController contentController = TextEditingController();
+  File? mediaFile;
 
   @override
   void initState() {
@@ -50,42 +48,14 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     currentUser = getCurrentUserEntity()!;
   }
 
-  void sendMessage(File? imageFile, String? content) {
-    final text = content?.trim();
-    final hasText = text != null && text.isNotEmpty;
+  void sendMessage() {
+    final text = contentController.text.trim();
 
-    if (imageFile != null) {
-      _pendingText = hasText ? text : null;
-
-      BlocProvider.of<UploadChatImageCubit>(context).uploadChatImage(
-        mediaFile: imageFile,
-      );
-    } else if (hasText) {
-      final dto = SendMessageDto(
-        receiverId: widget.chat.anotherUser.id,
-        chatId: widget.chat.id,
-        content: text,
-        parentId: _replyMessage?.id,
-      );
-
-      messageStreamCubit.sendMessage(
-        dto: dto,
-        currentUserId: currentUser.id,
-      );
-    }
-
-    setState(() {
-      _replyMessage = null;
-    });
-  }
-
-  void sendMediaMessage(String mediaUrl) {
     final dto = SendMessageDto(
       receiverId: widget.chat.anotherUser.id,
       chatId: widget.chat.id,
-      content: _pendingText,
-      mediaUrl: mediaUrl,
-      type: MessageType.image,
+      content: text,
+      mediaFile: mediaFile,
       parentId: _replyMessage?.id,
     );
 
@@ -94,7 +64,11 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
       currentUserId: currentUser.id,
     );
 
-    _pendingText = null;
+    mediaFile = null;
+
+    setState(() {
+      _replyMessage = null;
+    });
   }
 
   void _onReplyRequested(MessageEntity message) {
@@ -107,13 +81,6 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
       BuildContext context, InternetConnectionState state) {
     if (state is InternetConnectionConnected) {
       messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
-    }
-  }
-
-  void _onUploadChatImageStateChanged(
-      BuildContext context, UploadChatImageState state) {
-    if (state is UploadChatImageLoadedState) {
-      sendMediaMessage(state.mediaUrl);
     }
   }
 
@@ -197,9 +164,6 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
         BlocListener<MessageStreamCubit, MessageStreamState>(
           listener: _onMessageStreamChanged,
         ),
-        BlocListener<UploadChatImageCubit, UploadChatImageState>(
-          listener: _onUploadChatImageStateChanged,
-        ),
       ],
       child: SafeArea(
         child: Container(
@@ -234,10 +198,25 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
                   replyMessage: _replyMessage!,
                   onCancel: () => setState(() => _replyMessage = null),
                 ),
+              if (mediaFile != null)
+                SelectedImageBanner(
+                  imageFile: mediaFile!,
+                  onCancel: () {
+                    setState(() {
+                      mediaFile = null;
+                    });
+                  },
+                ),
               const Divider(height: 1),
               SendMessageSection(
                 sendMessage: sendMessage,
+                contentController: contentController,
                 chatId: widget.chat.id,
+                onImageSelected: (file) {
+                  setState(() {
+                    mediaFile = file;
+                  });
+                },
               ),
             ],
           ),

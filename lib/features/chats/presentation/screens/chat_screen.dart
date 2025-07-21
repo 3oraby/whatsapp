@@ -14,7 +14,6 @@ import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/chat_friend_status_cubit/chat_friend_status_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
-import 'package:whatsapp/features/chats/presentation/cubits/upload_chat_image_cubit/upload_chat_image_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_chat_messages_bloc_consumer_body.dart';
 import 'package:whatsapp/features/user/domain/repos/user_repo.dart';
 
@@ -58,11 +57,6 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         BlocProvider(
           create: (context) => chatFriendStatusCubit,
-        ),
-        BlocProvider(
-          create: (context) => UploadChatImageCubit(
-            chatsRepo: getIt<ChatsRepo>(),
-          ),
         ),
       ],
       child: BlocBuilder<ChatFriendStatusCubit, ChatFriendStatusState>(

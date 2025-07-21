@@ -32,6 +32,7 @@ class HomeBody extends StatelessWidget {
           create: (context) => MessageStreamCubit(
             socketRepo: getIt<SocketRepo>(),
             pendingMessagesHelper: getIt<PendingMessagesHelper>(),
+            chatsRepo: getIt<ChatsRepo>(),
           ),
         )
       ],
