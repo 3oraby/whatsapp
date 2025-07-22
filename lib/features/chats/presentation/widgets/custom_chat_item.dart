@@ -9,6 +9,7 @@ import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/last_message_entity.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/routes/chat_screen_args.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/build_message_status_icon.dart';
@@ -96,10 +97,31 @@ class CustomChatItem extends StatelessWidget {
                       ),
                     ],
                   )
-                else if (chat.lastMessage?.isDeleted ??
-                    false ||
-                        chat.lastMessage?.content ==
-                            null) // remove condition 2 after back end
+                else if (chat.lastMessage?.type == MessageType.image)
+                  SizedBox(
+                    height: 38,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.camera_alt,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        const HorizontalGap(6),
+                        Text(
+                          "photo",
+                          style:
+                              AppTextStyles.poppinsMedium(context, 14).copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  )
+                else if (chat.lastMessage?.isDeleted ?? false)
                   SizedBox(
                     height: 38,
                     child: Row(

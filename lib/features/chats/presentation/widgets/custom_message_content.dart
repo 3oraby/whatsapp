@@ -61,6 +61,9 @@ class CustomMessageContent extends StatelessWidget {
                     CustomNetworkImage(
                       borderRadius: AppConstants.messageBorderRadius,
                       imageUrl: msg.mediaUrl!,
+                      width: 400,
+                      height: 400,
+                      fit: BoxFit.cover,
                     ),
                   const VerticalGap(2),
                   Text(

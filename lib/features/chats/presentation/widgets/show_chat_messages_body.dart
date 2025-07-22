@@ -9,6 +9,7 @@ import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_chat_messages_cubit/get_chat_messages_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/reply_to_message_banner.dart';
@@ -56,6 +57,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
       content: text,
       mediaFile: mediaFile,
       parentId: _replyMessage?.id,
+      type: mediaFile == null ? MessageType.text : MessageType.image,
     );
 
     messageStreamCubit.sendMessage(

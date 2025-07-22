@@ -6,7 +6,7 @@ class CustomNetworkImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit? fit;
-  final ImageErrorWidgetBuilder? errorBuilder;
+  final LoadingErrorWidgetBuilder? errorBuilder;
   final Widget? placeholder;
   final double? borderRadius;
 
@@ -29,23 +29,29 @@ class CustomNetworkImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-      placeholder: (context, url) {
-        return SizedBox(
-          width: width,
-          height: height,
-          child: Container(
-            color: Colors.grey[300],
-          ),
-        );
-      },
-      errorWidget: (context, url, error) => SizedBox(
+      placeholder: (context, url) => SizedBox(
         width: width,
         height: height,
         child: Container(
           color: Colors.grey[300],
-          child: const Icon(Icons.error, color: Colors.red),
+          child: const Center(
+            child: SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          ),
         ),
       ),
+      errorWidget: errorBuilder ??
+          (context, url, error) => SizedBox(
+                width: width,
+                height: height,
+                child: Container(
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.error, color: Colors.red),
+                ),
+              ),
     );
 
     return borderRadius != null
