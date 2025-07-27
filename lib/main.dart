@@ -23,10 +23,8 @@ Future<void> main() async {
   await setupGetIt();
   await Firebase.initializeApp();
   await AppStorageHelper.init();
-  await Future.wait([
-    EasyLocalization.ensureInitialized(),
-    AppNotificationService().init(),
-  ]);
+  await EasyLocalization.ensureInitialized();
+  await AppNotificationService().init();
   Bloc.observer = CustomBlocObserver();
 
   runApp(
