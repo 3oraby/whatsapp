@@ -11,18 +11,21 @@ import 'package:whatsapp/core/services/app_notification_service.dart';
 import 'package:whatsapp/core/services/custom_bloc_observer.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
+import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_strings.dart';
 import 'package:whatsapp/core/utils/app_themes.dart';
+import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/socket_connection_cubit/socket_connection_cubit.dart';
+import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupGetIt();
-  await Firebase.initializeApp();
   await AppStorageHelper.init();
+  await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   await AppNotificationService().init();
   Bloc.observer = CustomBlocObserver();
@@ -52,7 +55,6 @@ class Whatsapp extends StatefulWidget {
 
 class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
   late SocketConnectionCubit socketCubit;
-  late String initialRoute;
 
   @override
   void initState() {
@@ -65,12 +67,6 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
     if (checkLoginState()) {
       socketCubit.connect();
     }
-
-    _loadInitialRoute();
-  }
-
-  _loadInitialRoute() {
-    initialRoute = getInitialRoute();
   }
 
   @override
@@ -120,7 +116,9 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
         darkTheme: AppThemes.getDarkTheme(context),
         themeMode: ThemeMode.system,
         onGenerateRoute: onGenerateRoutes,
-        initialRoute: initialRoute,
+        home: getInitialRoute() == Routes.homeRoute
+            ? HomeScreen()
+            : SignInScreen(),
       ),
     );
   }
