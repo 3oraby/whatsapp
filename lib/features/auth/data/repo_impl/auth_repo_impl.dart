@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/widgets.dart';
 import 'package:whatsapp/core/api/api_consumer.dart';
@@ -64,6 +67,9 @@ class AuthRepoImpl extends AuthRepo {
       if (e.errModel.message == "wrong credential") {
         return Left(CustomException(
             message: "Incorrect email or password. Please try again."));
+      } else if (e.errModel.message == "user is not active") {
+        return Left(CustomException(
+            message: "user is not active. Please go and verify your email"));
       }
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
@@ -193,6 +199,36 @@ class AuthRepoImpl extends AuthRepo {
           message: "We couldn’t find an account with that information.",
         ));
       }
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadUserProfileImg({
+    required File image,
+  }) async {
+    try {
+      final result = await apiConsumer.post(
+        EndPoints.uploadProfileImage,
+        isFromData: true,
+        data: {
+          "image": image,
+        },
+      );
+
+      return Right(result['url']);
+    } on UnAuthorizedException {
+      log("UnAuthorized in uploadChatImage");
+      return Left(UnAuthorizedException());
+    } on ConnectionException catch (e) {
+      return Left(CustomException(message: e.message));
+    } on ServerException {
+      log("message");
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    } catch (e) {
+      log("error in get chat messages: $e");
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     }

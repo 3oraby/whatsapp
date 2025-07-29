@@ -57,7 +57,7 @@ class VerifyOtpBlocConsumerBody extends StatelessWidget {
             onNextButtonPressed: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                Routes.homeRoute,
+                Routes.setUserProfileImgRoute,
                 (Route<dynamic> route) => false,
               );
             },

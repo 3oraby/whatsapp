@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/widgets/undefined_route_page.dart';
+import 'package:whatsapp/features/auth/presentation/screens/set_user_profile_picture_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signup_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/verify_otp_screen.dart';
@@ -17,6 +18,8 @@ import 'package:whatsapp/features/stories/presentation/routes/user_stories_viewe
 import 'package:whatsapp/features/stories/presentation/screens/create_new_story_screen.dart';
 import 'package:whatsapp/features/stories/presentation/screens/create_story_image_preview_screen.dart';
 import 'package:whatsapp/features/stories/presentation/screens/user_stories_viewer_screen.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
+import 'package:whatsapp/features/user/presentation/screens/user_profile_screen.dart';
 
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
   log("Navigating to ${settings.name}");
@@ -82,6 +85,17 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
             chat: chatScreenArgs.chat,
           ),
         ),
+      );
+
+    case Routes.setUserProfileImgRoute:
+      return MaterialPageRoute(
+        builder: (context) => SetUserProfilePictureScreen(),
+      );
+
+    case Routes.userProfileRoute:
+      final user = settings.arguments as UserEntity;
+      return MaterialPageRoute(
+        builder: (_) => UserProfileScreen(user: user),
       );
 
     default:

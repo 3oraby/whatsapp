@@ -40,7 +40,24 @@ class SignInBLocConsumerBody extends StatelessWidget {
     return BlocConsumer<SignInCubit, SignInState>(
       listener: (context, state) {
         if (state is SignInFailureState) {
-          showCustomSnackBar(context, state.message);
+          if (state.message !=
+              "user is not active. Please go and verify your email") {
+            showCustomSnackBar(context, state.message);
+          } else {
+            showSuccessAuthModalBottomSheet(
+              context: context,
+              sheetTitle: context.tr("Welcome User! 🎉"),
+              sheetDescription: context
+                  .tr("user is not active. Please go and verify your email"),
+              buttonDescription: context.tr('Verify email Now'),
+              onNextButtonPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.verifyOtpRoute,
+                );
+              },
+            );
+          }
         } else if (state is SignInLoadedState) {
           log("account successfully logged in");
           debugPrint("socket connect in login");

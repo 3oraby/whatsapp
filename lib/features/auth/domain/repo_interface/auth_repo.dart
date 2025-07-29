@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:whatsapp/core/errors/failures.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
@@ -24,4 +26,8 @@ abstract class AuthRepo {
   Future<Either<Failure, void>> logOut();
 
   Future<Either<Failure, UserEntity>> getCurrentUser();
+
+  Future<Either<Failure, String>> uploadUserProfileImg({
+    required File image,
+  });
 }

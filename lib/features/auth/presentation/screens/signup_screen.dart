@@ -39,10 +39,9 @@ class SignUpBlocConsumerBody extends StatelessWidget {
           log("account successfully created");
           showCustomSnackBar(
               context, "A verification code has been sent to your email.");
-          Navigator.pushNamedAndRemoveUntil(
+          Navigator.pushNamed(
             context,
             Routes.verifyOtpRoute,
-            (Route<dynamic> route) => false,
           );
         }
       },

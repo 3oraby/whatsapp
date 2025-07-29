@@ -7,6 +7,7 @@ class AppColors {
   static const Color onlineStatus = Color(0xFF00FF00);
   static const Color iconBackgroundColor = Color(0xFF345a99);
   static const Color createStoryBackgroundColor = Color(0xFF757575);
+  static const Color unEnabledButtonColor = Color.fromARGB(255, 136, 137, 141);
 
   // Light Mode Colors
   static const Color primary = Color(0xFF28a55d);

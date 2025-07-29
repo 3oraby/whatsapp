@@ -25,7 +25,7 @@ class CustomTriggerButton extends StatelessWidget {
   final bool isEnabled;
   final VoidCallback? onPressed;
   final Text? buttonDescription;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final double buttonHeight;
   final double buttonWidth;
   final Widget? child;
