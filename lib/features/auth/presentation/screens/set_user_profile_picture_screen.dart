@@ -10,7 +10,7 @@ import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/widgets/custom_modal_progress_hud.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/set_user_profile_picture_cubit/set_user_profile_picture_cubit.dart';
-import 'package:whatsapp/features/auth/presentation/widgets/add_user_profile_picture_body.dart';
+import 'package:whatsapp/features/auth/presentation/widgets/set_user_profile_picture_body.dart';
 
 class SetUserProfilePictureScreen extends StatefulWidget {
   const SetUserProfilePictureScreen({super.key});
@@ -64,9 +64,11 @@ class SetUserProfilePictureBlocConsumerBody extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return CustomModalProgressHUD(
-          inAsyncCall: state is SetUserProfilePictureLoadingState,
-          child: const SetUserProfilePictureBody(),
+        return SafeArea(
+          child: CustomModalProgressHUD(
+            inAsyncCall: state is SetUserProfilePictureLoadingState,
+            child: const SetUserProfilePictureBody(),
+          ),
         );
       },
     );

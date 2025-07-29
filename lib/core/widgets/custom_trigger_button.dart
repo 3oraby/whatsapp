@@ -14,7 +14,7 @@ class CustomTriggerButton extends StatelessWidget {
     this.buttonHeight = 60,
     this.buttonWidth = double.infinity,
     this.borderWidth = 0,
-    this.borderColor = AppColors.primary,
+    this.borderColor = Colors.black,
     this.borderRadius = AppConstants.borderRadius,
     this.prefixIcon,
     this.suffixIcon,

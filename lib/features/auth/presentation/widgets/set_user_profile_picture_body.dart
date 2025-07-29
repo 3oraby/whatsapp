@@ -97,11 +97,10 @@ class _SetUserProfilePictureBodyState extends State<SetUserProfilePictureBody> {
         horizontal: AppConstants.horizontalPadding,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             context.tr("Pick a profile picture"),
-            style: AppTextStyles.poppinsBlack(context, 30),
+            style: AppTextStyles.poppinsBold(context, 30),
           ),
           const VerticalGap(16),
           Text(
@@ -110,7 +109,7 @@ class _SetUserProfilePictureBodyState extends State<SetUserProfilePictureBody> {
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),
-          const VerticalGap(48),
+          const VerticalGap(56),
           Skeletonizer(
             enabled: _isPickedImageLoading,
             child: GestureDetector(
@@ -120,7 +119,7 @@ class _SetUserProfilePictureBodyState extends State<SetUserProfilePictureBody> {
                   alignment: Alignment.bottomRight,
                   children: [
                     CircleAvatar(
-                      radius: 100,
+                      radius: 120,
                       backgroundColor: AppColors.highlightBackgroundColor,
                       child: fileImage == null
                           ? const Icon(
@@ -131,8 +130,8 @@ class _SetUserProfilePictureBodyState extends State<SetUserProfilePictureBody> {
                           : ClipOval(
                               child: Image.file(
                                 fileImage!,
-                                width: 200,
-                                height: 200,
+                                width: 240,
+                                height: 240,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -180,8 +179,9 @@ class _SetUserProfilePictureBodyState extends State<SetUserProfilePictureBody> {
                 color: Colors.white,
               ),
             ),
-            backgroundColor:
-                !_isImageUploaded ? AppColors.unEnabledButtonColor : null,
+            backgroundColor: !_isImageUploaded
+                ? AppColors.unEnabledButtonColor
+                : AppColors.primary,
           ),
           const VerticalGap(16),
           Center(

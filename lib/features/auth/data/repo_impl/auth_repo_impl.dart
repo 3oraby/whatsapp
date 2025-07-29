@@ -9,6 +9,7 @@ import 'package:whatsapp/core/api/end_points.dart';
 import 'package:whatsapp/core/constants/storage_keys.dart';
 import 'package:whatsapp/core/errors/failures.dart';
 import 'package:whatsapp/core/errors/exceptions.dart';
+import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/helpers/save_current_user_data_locally.dart';
 import 'package:whatsapp/core/storage/app_storage_helper.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
@@ -113,13 +114,16 @@ class AuthRepoImpl extends AuthRepo {
     required String otp,
   }) async {
     try {
-      await apiConsumer.post(
+      final result = await apiConsumer.post(
         EndPoints.verifyOTP,
         data: {
           ApiKeys.email: email,
           ApiKeys.otp: otp,
         },
       );
+      final accessToken = result[ApiKeys.accessToken];
+      await AppStorageHelper.setSecureData(
+          StorageKeys.accessToken.toString(), accessToken);
 
       await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), true);
 
@@ -217,7 +221,16 @@ class AuthRepoImpl extends AuthRepo {
         },
       );
 
-      return Right(result['url']);
+      final String mediaUrl = result["url"];
+      final UserEntity? currentUser = getCurrentUserEntity();
+
+      if (currentUser != null) {
+        final updatedUser = currentUser.copyWith(profileImage: mediaUrl);
+        await saveCurrentUserDataLocally(
+          user: updatedUser,
+        );
+      }
+      return Right(mediaUrl);
     } on UnAuthorizedException {
       log("UnAuthorized in uploadChatImage");
       return Left(UnAuthorizedException());

@@ -38,8 +38,7 @@ class UserProfileScreen extends StatelessWidget {
         children: [
           const VerticalGap(24),
           BuildUserProfileImage(
-            circleAvatarRadius: 60,
-            userEntity: user,
+            circleAvatarRadius: 100,
             profilePicUrl: user.profileImage,
           ),
           const VerticalGap(16),

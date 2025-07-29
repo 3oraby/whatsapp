@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/helpers/is_light_theme.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
@@ -18,6 +19,7 @@ class BuildUserProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? profilePic = profilePicUrl ?? userEntity?.profileImage;
     return GestureDetector(
       onTap: () {
         if (userEntity != null) {
@@ -34,13 +36,13 @@ class BuildUserProfileImage extends StatelessWidget {
             ? AppColors.highlightBackgroundColor
             : AppColors.highlightBackgroundColorDark,
         child: ClipOval(
-          child: profilePicUrl != null
-              ? Image.network(
-                  profilePicUrl!,
+          child: profilePic != null
+              ? CachedNetworkImage(
+                  imageUrl: profilePic,
                   fit: BoxFit.cover,
                   width: circleAvatarRadius * 2,
                   height: circleAvatarRadius * 2,
-                  errorBuilder: (context, error, stackTrace) {
+                  errorWidget: (context, error, stackTrace) {
                     return CustomPersonIcon(
                         circleAvatarRadius: circleAvatarRadius);
                   },
