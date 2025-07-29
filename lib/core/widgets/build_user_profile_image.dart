@@ -1,37 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/helpers/is_light_theme.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
+import 'package:whatsapp/core/utils/app_routes.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class BuildUserProfileImage extends StatelessWidget {
   const BuildUserProfileImage({
     super.key,
-    required this.profilePicUrl,
+    this.userEntity,
     this.circleAvatarRadius = 30,
+    this.profilePicUrl,
   });
 
-  final String? profilePicUrl;
   final double circleAvatarRadius;
+  final UserEntity? userEntity;
+  final String? profilePicUrl;
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: circleAvatarRadius,
-      backgroundColor: isLightTheme(context)
-          ? AppColors.highlightBackgroundColor
-          : AppColors.highlightBackgroundColorDark,
-      child: ClipOval(
-        child: profilePicUrl != null
-            ? Image.network(
-                profilePicUrl!,
-                fit: BoxFit.cover,
-                width: circleAvatarRadius * 2,
-                height: circleAvatarRadius * 2,
-                errorBuilder: (context, error, stackTrace) {
-                  return CustomPersonIcon(
-                      circleAvatarRadius: circleAvatarRadius);
-                },
-              )
-            : CustomPersonIcon(circleAvatarRadius: circleAvatarRadius),
+    return GestureDetector(
+      onTap: () {
+        if (userEntity != null) {
+          Navigator.pushNamed(
+            context,
+            Routes.userProfileRoute,
+            arguments: userEntity,
+          );
+        }
+      },
+      child: CircleAvatar(
+        radius: circleAvatarRadius,
+        backgroundColor: isLightTheme(context)
+            ? AppColors.highlightBackgroundColor
+            : AppColors.highlightBackgroundColorDark,
+        child: ClipOval(
+          child: profilePicUrl != null
+              ? Image.network(
+                  profilePicUrl!,
+                  fit: BoxFit.cover,
+                  width: circleAvatarRadius * 2,
+                  height: circleAvatarRadius * 2,
+                  errorBuilder: (context, error, stackTrace) {
+                    return CustomPersonIcon(
+                        circleAvatarRadius: circleAvatarRadius);
+                  },
+                )
+              : CustomPersonIcon(circleAvatarRadius: circleAvatarRadius),
+        ),
       ),
     );
   }

@@ -49,7 +49,7 @@ class CustomChatItem extends StatelessWidget {
             padding: const EdgeInsets.only(top: 16),
             child: BuildUserProfileImage(
               circleAvatarRadius: 25,
-              profilePicUrl: anotherUser.profileImage,
+              userEntity: anotherUser,
             ),
           ),
           const HorizontalGap(12),

@@ -71,7 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Row(
                   children: [
                     BuildUserProfileImage(
-                      profilePicUrl: widget.chat.anotherUser.profileImage,
+                      userEntity: widget.chat.anotherUser,
                       circleAvatarRadius: 16,
                     ),
                     const HorizontalGap(10),

@@ -19,22 +19,11 @@ class UserChatsView extends StatelessWidget {
       builder: (context, state) => Column(
         children: [
           AppBar(
-            leading: GestureDetector(
-              onTap: () {
-                if (currentUser != null) {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.userProfileRoute,
-                    arguments: currentUser,
-                  );
-                }
-              },
-              child: Transform.scale(
-                scale: 0.7,
-                child: BuildUserProfileImage(
-                  circleAvatarRadius: 30,
-                  profilePicUrl: currentUser?.profileImage,
-                ),
+            leading: Transform.scale(
+              scale: 0.7,
+              child: BuildUserProfileImage(
+                circleAvatarRadius: 30,
+                userEntity: currentUser,
               ),
             ),
             title: state is InternetConnectionDisconnected

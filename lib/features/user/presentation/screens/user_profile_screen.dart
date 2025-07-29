@@ -16,9 +16,7 @@ class UserProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          user.name,
-        ),
+        title: Text(user.name),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -26,6 +24,7 @@ class UserProfileScreen extends StatelessWidget {
           const VerticalGap(24),
           BuildUserProfileImage(
             circleAvatarRadius: 60,
+            userEntity: user,
             profilePicUrl: user.profileImage,
           ),
           const VerticalGap(16),
@@ -35,11 +34,19 @@ class UserProfileScreen extends StatelessWidget {
           const VerticalGap(8),
           Text(user.phoneNumber ?? "Number",
               style: const TextStyle(fontSize: 16, color: Colors.grey)),
-          const VerticalGap(40),
+          const VerticalGap(16),
+          ListTile(
+            leading: const Icon(Icons.email_outlined),
+            title: const Text("Email"),
+            subtitle: Text(user.email),
+          ),
+          const VerticalGap(16),
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text("About"),
-            subtitle: Text("Hey there! I am using WhatsApp."),
+            subtitle: Text(
+              "Hey there! I am using WhatsApp.",
+            ),
           ),
         ],
       ),

@@ -30,7 +30,7 @@ class CustomUserInfoCard extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         isThreeLine: user.description != null,
         leading: BuildUserProfileImage(
-          profilePicUrl: user.profileImage,
+          userEntity: user,
         ),
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
