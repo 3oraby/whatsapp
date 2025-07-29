@@ -12,6 +12,7 @@ class EndPoints {
   static const String getUser = "${ApiUrls.userApiBaseUrl}/user";
   static const String updateUser = "${ApiUrls.userApiBaseUrl}/user";
   static const String uploadProfileImage = "${ApiUrls.userApiBaseUrl}/user/image";
+  static const String deleteProfileImage = "${ApiUrls.userApiBaseUrl}/user/image";
   static const String saveFcmToken = "${ApiUrls.userApiBaseUrl}/user/api/register-fcm-token";
   static const String searchInUsers = "${ApiUrls.userApiBaseUrl}/user/search";
   static String getUserCurrentStatus({required int userId}) =>

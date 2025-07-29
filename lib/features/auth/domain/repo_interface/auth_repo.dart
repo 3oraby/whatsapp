@@ -30,4 +30,6 @@ abstract class AuthRepo {
   Future<Either<Failure, String>> uploadUserProfileImg({
     required File image,
   });
+
+  Future<Either<Failure, void>> deleteUserProfileImg();
 }

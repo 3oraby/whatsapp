@@ -1,5 +1,6 @@
 class Routes {
   static const String userProfileRoute = "/userProfile";
+  static const String fullUserProfileImgRoute = "/fullUserProfileImg";
   // auth
   static const String signInRoute = "/signIn";
   static const String signUpRoute = "/signUp";

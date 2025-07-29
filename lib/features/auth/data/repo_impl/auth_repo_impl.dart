@@ -246,4 +246,36 @@ class AuthRepoImpl extends AuthRepo {
           message: "Something went wrong. Please try again later."));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteUserProfileImg() async {
+    try {
+      await apiConsumer.delete(
+        EndPoints.deleteProfileImage,
+      );
+
+      final UserEntity? currentUser = getCurrentUserEntity();
+
+      if (currentUser != null) {
+        final updatedUser = currentUser.copyWith(profileImage: null);
+        await saveCurrentUserDataLocally(
+          user: updatedUser,
+        );
+      }
+      return Right(null);
+    } on UnAuthorizedException {
+      log("UnAuthorized in uploadChatImage");
+      return Left(UnAuthorizedException());
+    } on ConnectionException catch (e) {
+      return Left(CustomException(message: e.message));
+    } on ServerException {
+      log("message");
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    } catch (e) {
+      log("error in get chat messages: $e");
+      return Left(CustomException(
+          message: "Something went wrong. Please try again later."));
+    }
+  }
 }

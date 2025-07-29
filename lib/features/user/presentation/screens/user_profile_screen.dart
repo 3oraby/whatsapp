@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
+import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
-class UserProfileScreen extends StatelessWidget {
+class UserProfileScreen extends StatefulWidget {
   final UserEntity user;
 
   const UserProfileScreen({
     super.key,
     required this.user,
   });
+
+  @override
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  final ImagePicker _picker = ImagePicker();
+  String? _localImagePath;
 
   void _copyEmail(BuildContext context, String email) {
     Clipboard.setData(ClipboardData(text: email));
@@ -24,12 +34,71 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
+  void _showEditPhotoOptions() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 8),
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Take Photo'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final pickedFile =
+                      await _picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _localImagePath = pickedFile.path;
+                    });
+                    // TODO: upload the image to backend here
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from Gallery'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final pickedFile =
+                      await _picker.pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _localImagePath = pickedFile.path;
+                    });
+                    // TODO: upload the image to backend here
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete),
+                title: const Text('Delete Photo'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String? imageUrl = _localImagePath ?? widget.user.profileImage;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          user.name,
+          widget.user.name,
           style: AppTextStyles.poppinsBold(context, 18),
         ),
       ),
@@ -37,26 +106,53 @@ class UserProfileScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const VerticalGap(24),
-          BuildUserProfileImage(
-            circleAvatarRadius: 100,
-            profilePicUrl: user.profileImage,
+          Hero(
+            tag: "userProfileImg",
+            child: GestureDetector(
+              onTap: () {
+                if (widget.user.profileImage != null ||
+                    _localImagePath != null) {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.fullUserProfileImgRoute,
+                    arguments: {
+                      "imagePath": _localImagePath ?? widget.user.profileImage!,
+                      "heroTag": "userProfileImg"
+                    },
+                  );
+                }
+              },
+              child: BuildUserProfileImage(
+                circleAvatarRadius: 100,
+                profilePicUrl: imageUrl,
+                // localFilePath: _localImagePath,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => _showEditPhotoOptions(),
+            child: Text(
+              "Edit Photo",
+              style: AppTextStyles.poppinsBold(context, 18).copyWith(
+                color: AppColors.primary,
+              ),
+            ),
           ),
           const VerticalGap(16),
           Text(
-            user.name,
+            widget.user.name,
             style: AppTextStyles.poppinsBold(context, 22),
           ),
           const VerticalGap(8),
           Text(
-            user.phoneNumber ?? "Number",
+            widget.user.phoneNumber ?? "Number",
             style: AppTextStyles.poppinsMedium(context, 16).copyWith(
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),
           const VerticalGap(24),
-
           GestureDetector(
-            onTap: () => _copyEmail(context, user.email),
+            onTap: () => _copyEmail(context, widget.user.email),
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(16),
@@ -74,7 +170,7 @@ class UserProfileScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      user.email,
+                      widget.user.email,
                       style: AppTextStyles.poppinsMedium(context, 16).copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -90,15 +186,12 @@ class UserProfileScreen extends StatelessWidget {
               ),
             ),
           ),
-
           const VerticalGap(24),
-
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text("About"),
             subtitle: Text(
-              "Hey there! I am using WhatsApp.",
-            ),
+                widget.user.description ?? "Hey there! I am using WhatsApp."),
           ),
         ],
       ),

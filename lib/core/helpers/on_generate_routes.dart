@@ -19,6 +19,7 @@ import 'package:whatsapp/features/stories/presentation/screens/create_new_story_
 import 'package:whatsapp/features/stories/presentation/screens/create_story_image_preview_screen.dart';
 import 'package:whatsapp/features/stories/presentation/screens/user_stories_viewer_screen.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
+import 'package:whatsapp/features/user/presentation/screens/full_user_profile_img_screen.dart';
 import 'package:whatsapp/features/user/presentation/screens/user_profile_screen.dart';
 
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
@@ -96,6 +97,15 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       final user = settings.arguments as UserEntity;
       return MaterialPageRoute(
         builder: (_) => UserProfileScreen(user: user),
+      );
+
+    case Routes.fullUserProfileImgRoute:
+      final arguments = settings.arguments as Map;
+      return MaterialPageRoute(
+        builder: (_) => FullUserProfileImgScreen(
+          imagePath: arguments['imagePath'],
+          heroTag: arguments['heroTag'],
+        ),
       );
 
     default:

@@ -21,15 +21,15 @@ class BuildUserProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final String? profilePic = profilePicUrl ?? userEntity?.profileImage;
     return GestureDetector(
-      onTap: () {
-        if (userEntity != null) {
-          Navigator.pushNamed(
-            context,
-            Routes.userProfileRoute,
-            arguments: userEntity,
-          );
-        }
-      },
+      onTap: userEntity == null
+          ? null
+          : () {
+              Navigator.pushNamed(
+                context,
+                Routes.userProfileRoute,
+                arguments: userEntity,
+              );
+            },
       child: CircleAvatar(
         radius: circleAvatarRadius,
         backgroundColor: isLightTheme(context)
