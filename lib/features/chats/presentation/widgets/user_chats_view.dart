@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
-import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_user_chats_body.dart';
-import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class UserChatsView extends StatelessWidget {
   const UserChatsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final UserEntity? currentUser = getCurrentUserEntity();
     return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
       builder: (context, state) => Column(
         children: [
@@ -23,7 +20,7 @@ class UserChatsView extends StatelessWidget {
               scale: 0.7,
               child: BuildUserProfileImage(
                 circleAvatarRadius: 30,
-                userEntity: currentUser,
+                isCurrentUser: true,
               ),
             ),
             title: state is InternetConnectionDisconnected

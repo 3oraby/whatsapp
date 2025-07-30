@@ -49,6 +49,7 @@ class MyStoryWithStatusItem extends StatelessWidget {
                 size: avatarSize,
                 imageUrl: contactStoryEntity.profileImage,
                 viewedSegments: contactStoryEntity.totalStoriesCount,
+                isCurrentUser: true,
               ),
               HorizontalGap(horizontalSpacing),
               Expanded(

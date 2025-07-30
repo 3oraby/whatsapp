@@ -89,8 +89,12 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       );
 
     case Routes.setUserProfileImgRoute:
+      final isInSignUpStep = settings.arguments as bool;
+
       return MaterialPageRoute(
-        builder: (context) => SetUserProfilePictureScreen(),
+        builder: (context) => SetUserProfilePictureScreen(
+          isInSignUpStep: isInSignUpStep,
+        ),
       );
 
     case Routes.userProfileRoute:

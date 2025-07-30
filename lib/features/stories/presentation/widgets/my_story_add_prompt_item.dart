@@ -46,6 +46,8 @@ class MyStoryAddPromptItem extends StatelessWidget {
                   BuildUserProfileImage(
                     circleAvatarRadius: avatarSize / 2,
                     profilePicUrl: currentUserProfileImage,
+                    isEnabled: false,
+                    isCurrentUser: true,
                   ),
                   Positioned(
                     right: -3,

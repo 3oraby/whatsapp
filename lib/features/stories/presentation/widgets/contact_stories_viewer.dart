@@ -173,6 +173,7 @@ class _ContactStoriesViewerState extends State<ContactStoriesViewer>
                               name: widget.contactStory.name,
                               profileImage: widget.contactStory.profileImage,
                               createdAt: story.createdAt,
+                              isCurrentUser: widget.showCurrentUserStories,
                             ),
                             const VerticalGap(16),
                             StoryBodyContent(

@@ -15,38 +15,44 @@ class BuildUserProfileImage extends StatefulWidget {
     this.circleAvatarRadius = 30,
     this.profilePicUrl,
     this.isEnabled = true,
+    this.isCurrentUser = false,
   });
 
   final double circleAvatarRadius;
   final UserEntity? userEntity;
   final String? profilePicUrl;
   final bool isEnabled;
+  final bool isCurrentUser;
 
   @override
   State<BuildUserProfileImage> createState() => _BuildUserProfileImageState();
 }
 
 class _BuildUserProfileImageState extends State<BuildUserProfileImage> {
-  late UserEntity currentUser;
+  late UserEntity? currentUser;
   late String? profilePic;
 
   @override
   void initState() {
     super.initState();
-    currentUser = getCurrentUserEntity()!;
-    profilePic = widget.profilePicUrl ?? widget.userEntity?.profileImage;
+    if (widget.isCurrentUser) {
+      currentUser = getCurrentUserEntity()!;
+    }
+    profilePic = widget.profilePicUrl ??
+        widget.userEntity?.profileImage ??
+        currentUser?.profileImage;
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SetUserProfilePictureCubit, SetUserProfilePictureState>(
       listener: (BuildContext context, SetUserProfilePictureState state) {
-        if (currentUser.id == widget.userEntity?.id) {
+        if (widget.isCurrentUser) {
           if (state is SetUserProfilePictureLoadedState ||
               state is DeletedUserProfilePictureLoadedState) {
             setState(() {
               currentUser = getCurrentUserEntity()!;
-              profilePic = currentUser.profileImage;
+              profilePic = currentUser!.profileImage;
             });
           }
         }
@@ -58,7 +64,8 @@ class _BuildUserProfileImageState extends State<BuildUserProfileImage> {
                 Navigator.pushNamed(
                   context,
                   Routes.userProfileRoute,
-                  arguments: widget.userEntity,
+                  arguments:
+                      widget.isCurrentUser ? currentUser : widget.userEntity,
                 );
               },
         child: CircleAvatar(

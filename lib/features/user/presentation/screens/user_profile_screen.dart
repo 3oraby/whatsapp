@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
 import 'package:whatsapp/core/services/image_picker_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
@@ -25,8 +26,15 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  late UserEntity? currentUser;
   final ImagePickerService _imagePickerService = ImagePickerService();
   String? _localImagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = getCurrentUserEntity();
+  }
 
   void _copyEmail(BuildContext context, String email) {
     Clipboard.setData(ClipboardData(text: email));
@@ -73,6 +81,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Navigator.pushNamed(
                     context,
                     Routes.setUserProfileImgRoute,
+                    arguments: false,
                   );
                   // final pickedFile =
                   //     await _imagePickerService.pickImageFromGallery();
@@ -147,6 +156,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   circleAvatarRadius: 100,
                   userEntity: widget.user,
                   isEnabled: false,
+                  isCurrentUser: currentUser?.id == widget.user.id,
                 ),
               ),
             ),

@@ -5,34 +5,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
 import 'package:whatsapp/core/helpers/show_success_auth_modal_bottom_sheet.dart';
-import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/widgets/custom_modal_progress_hud.dart';
-import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/set_user_profile_picture_cubit/set_user_profile_picture_cubit.dart';
 import 'package:whatsapp/features/auth/presentation/widgets/set_user_profile_picture_body.dart';
 
-class SetUserProfilePictureScreen extends StatefulWidget {
-  const SetUserProfilePictureScreen({super.key});
+class SetUserProfilePictureScreen extends StatelessWidget {
+  const SetUserProfilePictureScreen({
+    super.key,
+    this.isInSignUpStep = true,
+  });
 
-
-  @override
-  State<SetUserProfilePictureScreen> createState() =>
-      _SetUserProfilePictureScreenState();
-}
-
-class _SetUserProfilePictureScreenState
-    extends State<SetUserProfilePictureScreen> {
+  final bool isInSignUpStep;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const SetUserProfilePictureBlocConsumerBody(),
+      body: SetUserProfilePictureBlocConsumerBody(
+        isInSignUpStep: isInSignUpStep,
+      ),
     );
   }
 }
 
 class SetUserProfilePictureBlocConsumerBody extends StatelessWidget {
-  const SetUserProfilePictureBlocConsumerBody({super.key});
+  const SetUserProfilePictureBlocConsumerBody({
+    super.key,
+    required this.isInSignUpStep,
+  });
+
+  final bool isInSignUpStep;
 
   @override
   Widget build(BuildContext context) {
@@ -42,21 +43,29 @@ class SetUserProfilePictureBlocConsumerBody extends StatelessWidget {
           showCustomSnackBar(context, state.message);
         } else if (state is SetUserProfilePictureLoadedState) {
           log("image uploaded successfully");
-          // showSuccessAuthModalBottomSheet(
-          //   context: context,
-          //   sheetTitle: context.tr("Profile Picture Uploaded! 🎉"),
-          //   sheetDescription: context.tr(
-          //       "Your profile picture has been uploaded successfully. You're all set to explore tweets and connect with friends!"),
-          //   buttonDescription: context.tr('Explore Now'),
-          //   onNextButtonPressed: () {
-          //     Navigator.pushNamedAndRemoveUntil(
-          //       context,
-          //       Routes.homeRoute,
-          //       (Route<dynamic> route) => false,
-          //     );
-          //   },
-          // );
-          Navigator.pop(context);
+          if (isInSignUpStep) {
+            showSuccessAuthModalBottomSheet(
+              context: context,
+              sheetTitle: context.tr("Profile Picture Uploaded! 🎉"),
+              sheetDescription: context.tr(
+                  "Your profile picture has been uploaded successfully. You're all set to explore tweets and connect with friends!"),
+              buttonDescription: context.tr('Explore Now'),
+              onNextButtonPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.homeRoute,
+                  (Route<dynamic> route) => false,
+                );
+              },
+            );
+          } else {
+            Navigator.pop(context);
+            showCustomSnackBar(
+              context,
+              context.tr("Profile Picture Uploaded! 🎉"),
+              backgroundColor: Colors.black,
+            );
+          }
         }
       },
       builder: (context, state) {

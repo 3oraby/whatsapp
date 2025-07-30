@@ -9,12 +9,14 @@ class StoryHeader extends StatelessWidget {
   final String name;
   final String? profileImage;
   final DateTime createdAt;
+  final bool isCurrentUser;
 
   const StoryHeader({
     super.key,
     required this.name,
     required this.profileImage,
     required this.createdAt,
+    this.isCurrentUser = false,
   });
 
   @override
@@ -25,7 +27,9 @@ class StoryHeader extends StatelessWidget {
         const HorizontalGap(12),
         BuildUserProfileImage(
           circleAvatarRadius: 20,
-          profilePicUrl: profileImage,
+          profilePicUrl: isCurrentUser ? null : profileImage,
+          isEnabled: false,
+          isCurrentUser: isCurrentUser,
         ),
         const HorizontalGap(16),
         Column(

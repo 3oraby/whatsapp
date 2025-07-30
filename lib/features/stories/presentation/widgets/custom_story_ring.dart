@@ -8,6 +8,7 @@ class CustomStoryRing extends StatelessWidget {
   final int viewedSegments;
   final double size;
   final String? imageUrl;
+  final bool isCurrentUser;
 
   const CustomStoryRing({
     super.key,
@@ -15,6 +16,7 @@ class CustomStoryRing extends StatelessWidget {
     this.viewedSegments = 0,
     required this.size,
     this.imageUrl,
+    this.isCurrentUser = false,
   });
 
   @override
@@ -41,6 +43,8 @@ class CustomStoryRing extends StatelessWidget {
               child: BuildUserProfileImage(
                 circleAvatarRadius: (size - AppConstants.strokeWidth * 2) / 2,
                 profilePicUrl: imageUrl,
+                isCurrentUser: isCurrentUser,
+                isEnabled: false,
               ),
             ),
           ),
