@@ -257,7 +257,10 @@ class AuthRepoImpl extends AuthRepo {
       final UserEntity? currentUser = getCurrentUserEntity();
 
       if (currentUser != null) {
-        final updatedUser = currentUser.copyWith(profileImage: null);
+        final updatedUser = currentUser.copyWith(
+          removeProfileImage: true,
+        );
+
         await saveCurrentUserDataLocally(
           user: updatedUser,
         );

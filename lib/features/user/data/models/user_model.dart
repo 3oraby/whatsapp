@@ -54,21 +54,5 @@ class UserModel extends UserEntity {
     );
   }
 
-  UserModel copyWith({
-    int? id,
-    String? name,
-    String? phoneNumber,
-    String? description,
-    String? email,
-    String? profileImage,
-  }) {
-    return UserModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      description: description ?? this.description,
-      email: email ?? this.email,
-      profileImage: profileImage ?? this.profileImage,
-    );
-  }
+
 }

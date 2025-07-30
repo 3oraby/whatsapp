@@ -22,6 +22,7 @@ class UserEntity {
     String? phoneNumber,
     String? description,
     String? profileImage,
+    bool removeProfileImage = false,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -29,7 +30,8 @@ class UserEntity {
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       description: description ?? this.description,
-      profileImage: profileImage ?? this.profileImage,
+      profileImage:
+          removeProfileImage ? null : profileImage ?? this.profileImage,
     );
   }
 }

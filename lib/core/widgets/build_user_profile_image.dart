@@ -29,7 +29,7 @@ class BuildUserProfileImage extends StatefulWidget {
 }
 
 class _BuildUserProfileImageState extends State<BuildUserProfileImage> {
-  late UserEntity? currentUser;
+  UserEntity? currentUser;
   late String? profilePic;
 
   @override

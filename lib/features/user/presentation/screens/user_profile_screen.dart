@@ -62,13 +62,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 title: const Text('Take Photo'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final pickedFile = await _imagePickerService
-                      .pickImageFromCamera(); // ✅ Replaced
+                  final pickedFile =
+                      await _imagePickerService.pickImageFromCamera();
                   if (pickedFile != null) {
                     setState(() {
                       _localImagePath = pickedFile.path;
                     });
-                    // TODO: upload the image to backend here
+                    BlocProvider.of<SetUserProfilePictureCubit>(context)
+                        .uploadUserProfileImg(
+                      mediaFile: pickedFile,
+                    );
                   }
                 },
               ),
@@ -83,30 +86,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     Routes.setUserProfileImgRoute,
                     arguments: false,
                   );
-                  // final pickedFile =
-                  //     await _imagePickerService.pickImageFromGallery();
-                  // if (pickedFile != null) {
-                  //   setState(() {
-                  //     _localImagePath = pickedFile.path;
-                  //   });
-                  //   Navigator.pushNamed(
-                  //     context,
-                  //     Routes.setUserProfileImgRoute,
-                  //   );
-                  // }
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.delete),
-                title: const Text(
-                  'Delete Photo',
+              Visibility(
+                visible: widget.user.profileImage != null,
+                child: ListTile(
+                  leading: const Icon(Icons.delete),
+                  title: const Text(
+                    'Delete Photo',
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    BlocProvider.of<SetUserProfilePictureCubit>(context)
+                        .deleteUserProfileImg();
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Optionally handle deleting photo from UI and backend
-                  BlocProvider.of<SetUserProfilePictureCubit>(context)
-                      .deleteUserProfileImg();
-                },
               ),
               const SizedBox(height: 8),
             ],
