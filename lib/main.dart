@@ -14,6 +14,8 @@ import 'package:whatsapp/core/storage/app_storage_helper.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_strings.dart';
 import 'package:whatsapp/core/utils/app_themes.dart';
+import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
+import 'package:whatsapp/features/auth/presentation/cubits/set_user_profile_picture_cubit/set_user_profile_picture_cubit.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/socket_connection_cubit/socket_connection_cubit.dart';
@@ -104,6 +106,11 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
             socketConnectionCubit: socketCubit,
           ),
         ),
+        BlocProvider(
+          create: (context) => SetUserProfilePictureCubit(
+            authRepo: getIt<AuthRepo>(),
+          ),
+        )
       ],
       child: MaterialApp(
         title: AppStrings.appTitle,

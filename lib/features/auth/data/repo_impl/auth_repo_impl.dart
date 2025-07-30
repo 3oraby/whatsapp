@@ -221,7 +221,7 @@ class AuthRepoImpl extends AuthRepo {
         },
       );
 
-      final String mediaUrl = result["url"];
+      final String mediaUrl = result["data"]["profile_image"];
       final UserEntity? currentUser = getCurrentUserEntity();
 
       if (currentUser != null) {
@@ -241,7 +241,7 @@ class AuthRepoImpl extends AuthRepo {
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     } catch (e) {
-      log("error in get chat messages: $e");
+      log("error in uploadUserProfileImg: $e");
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     }
@@ -273,7 +273,7 @@ class AuthRepoImpl extends AuthRepo {
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     } catch (e) {
-      log("error in get chat messages: $e");
+      log("error in deleteUserProfileImg: $e");
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     }

@@ -1,53 +1,87 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/helpers/is_light_theme.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
+import 'package:whatsapp/features/auth/presentation/cubits/set_user_profile_picture_cubit/set_user_profile_picture_cubit.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
-class BuildUserProfileImage extends StatelessWidget {
+class BuildUserProfileImage extends StatefulWidget {
   const BuildUserProfileImage({
     super.key,
     this.userEntity,
     this.circleAvatarRadius = 30,
     this.profilePicUrl,
+    this.isEnabled = true,
   });
 
   final double circleAvatarRadius;
   final UserEntity? userEntity;
   final String? profilePicUrl;
+  final bool isEnabled;
+
+  @override
+  State<BuildUserProfileImage> createState() => _BuildUserProfileImageState();
+}
+
+class _BuildUserProfileImageState extends State<BuildUserProfileImage> {
+  late UserEntity currentUser;
+  late String? profilePic;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = getCurrentUserEntity()!;
+    profilePic = widget.profilePicUrl ?? widget.userEntity?.profileImage;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final String? profilePic = profilePicUrl ?? userEntity?.profileImage;
-    return GestureDetector(
-      onTap: userEntity == null
-          ? null
-          : () {
-              Navigator.pushNamed(
-                context,
-                Routes.userProfileRoute,
-                arguments: userEntity,
-              );
-            },
-      child: CircleAvatar(
-        radius: circleAvatarRadius,
-        backgroundColor: isLightTheme(context)
-            ? AppColors.highlightBackgroundColor
-            : AppColors.highlightBackgroundColorDark,
-        child: ClipOval(
-          child: profilePic != null
-              ? CachedNetworkImage(
-                  imageUrl: profilePic,
-                  fit: BoxFit.cover,
-                  width: circleAvatarRadius * 2,
-                  height: circleAvatarRadius * 2,
-                  errorWidget: (context, error, stackTrace) {
-                    return CustomPersonIcon(
-                        circleAvatarRadius: circleAvatarRadius);
-                  },
-                )
-              : CustomPersonIcon(circleAvatarRadius: circleAvatarRadius),
+    return BlocListener<SetUserProfilePictureCubit, SetUserProfilePictureState>(
+      listener: (BuildContext context, SetUserProfilePictureState state) {
+        if (currentUser.id == widget.userEntity?.id) {
+          if (state is SetUserProfilePictureLoadedState ||
+              state is DeletedUserProfilePictureLoadedState) {
+            setState(() {
+              currentUser = getCurrentUserEntity()!;
+              profilePic = currentUser.profileImage;
+            });
+          }
+        }
+      },
+      child: GestureDetector(
+        onTap: !widget.isEnabled
+            ? null
+            : () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.userProfileRoute,
+                  arguments: widget.userEntity,
+                );
+              },
+        child: CircleAvatar(
+          radius: widget.circleAvatarRadius,
+          backgroundColor: isLightTheme(context)
+              ? AppColors.highlightBackgroundColor
+              : AppColors.highlightBackgroundColorDark,
+          child: ClipOval(
+            child: profilePic != null
+                ? CachedNetworkImage(
+                    imageUrl: profilePic!,
+                    fit: BoxFit.cover,
+                    width: widget.circleAvatarRadius * 2,
+                    height: widget.circleAvatarRadius * 2,
+                    errorWidget: (context, error, stackTrace) {
+                      return CustomPersonIcon(
+                          circleAvatarRadius: widget.circleAvatarRadius);
+                    },
+                  )
+                : CustomPersonIcon(
+                    circleAvatarRadius: widget.circleAvatarRadius,
+                  ),
+          ),
         ),
       ),
     );

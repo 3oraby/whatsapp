@@ -29,4 +29,18 @@ class SetUserProfilePictureCubit extends BaseCubit<SetUserProfilePictureState> {
       },
     );
   }
+
+  Future<void> deleteUserProfileImg() async {
+    emit(SetUserProfilePictureLoadingState());
+    final result = await authRepo.deleteUserProfileImg();
+    result.fold(
+      (failure) {
+        handleFailure(failure);
+        emit(SetUserProfilePictureFailureState(message: failure.message!));
+      },
+      (_) {
+        emit(DeletedUserProfilePictureLoadedState());
+      },
+    );
+  }
 }

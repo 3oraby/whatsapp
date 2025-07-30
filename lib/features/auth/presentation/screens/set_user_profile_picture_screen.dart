@@ -25,13 +25,8 @@ class _SetUserProfilePictureScreenState
     extends State<SetUserProfilePictureScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SetUserProfilePictureCubit(
-        authRepo: getIt<AuthRepo>(),
-      ),
-      child: Scaffold(
-        body: const SetUserProfilePictureBlocConsumerBody(),
-      ),
+    return Scaffold(
+      body: const SetUserProfilePictureBlocConsumerBody(),
     );
   }
 }
@@ -47,20 +42,21 @@ class SetUserProfilePictureBlocConsumerBody extends StatelessWidget {
           showCustomSnackBar(context, state.message);
         } else if (state is SetUserProfilePictureLoadedState) {
           log("image uploaded successfully");
-          showSuccessAuthModalBottomSheet(
-            context: context,
-            sheetTitle: context.tr("Profile Picture Uploaded! 🎉"),
-            sheetDescription: context.tr(
-                "Your profile picture has been uploaded successfully. You're all set to explore tweets and connect with friends!"),
-            buttonDescription: context.tr('Explore Now'),
-            onNextButtonPressed: () {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                Routes.homeRoute,
-                (Route<dynamic> route) => false,
-              );
-            },
-          );
+          // showSuccessAuthModalBottomSheet(
+          //   context: context,
+          //   sheetTitle: context.tr("Profile Picture Uploaded! 🎉"),
+          //   sheetDescription: context.tr(
+          //       "Your profile picture has been uploaded successfully. You're all set to explore tweets and connect with friends!"),
+          //   buttonDescription: context.tr('Explore Now'),
+          //   onNextButtonPressed: () {
+          //     Navigator.pushNamedAndRemoveUntil(
+          //       context,
+          //       Routes.homeRoute,
+          //       (Route<dynamic> route) => false,
+          //     );
+          //   },
+          // );
+          Navigator.pop(context);
         }
       },
       builder: (context, state) {

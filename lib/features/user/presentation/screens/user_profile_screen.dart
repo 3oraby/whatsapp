@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
+import 'package:whatsapp/core/services/image_picker_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
+import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
+import 'package:whatsapp/features/auth/presentation/cubits/set_user_profile_picture_cubit/set_user_profile_picture_cubit.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -22,7 +25,7 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  final ImagePicker _picker = ImagePicker();
+  final ImagePickerService _imagePickerService = ImagePickerService();
   String? _localImagePath;
 
   void _copyEmail(BuildContext context, String email) {
@@ -51,8 +54,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 title: const Text('Take Photo'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final pickedFile =
-                      await _picker.pickImage(source: ImageSource.camera);
+                  final pickedFile = await _imagePickerService
+                      .pickImageFromCamera(); // ✅ Replaced
                   if (pickedFile != null) {
                     setState(() {
                       _localImagePath = pickedFile.path;
@@ -66,21 +69,34 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 title: const Text('Choose from Gallery'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final pickedFile =
-                      await _picker.pickImage(source: ImageSource.gallery);
-                  if (pickedFile != null) {
-                    setState(() {
-                      _localImagePath = pickedFile.path;
-                    });
-                    // TODO: upload the image to backend here
-                  }
+
+                  Navigator.pushNamed(
+                    context,
+                    Routes.setUserProfileImgRoute,
+                  );
+                  // final pickedFile =
+                  //     await _imagePickerService.pickImageFromGallery();
+                  // if (pickedFile != null) {
+                  //   setState(() {
+                  //     _localImagePath = pickedFile.path;
+                  //   });
+                  //   Navigator.pushNamed(
+                  //     context,
+                  //     Routes.setUserProfileImgRoute,
+                  //   );
+                  // }
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.delete),
-                title: const Text('Delete Photo'),
+                title: const Text(
+                  'Delete Photo',
+                ),
                 onTap: () {
                   Navigator.pop(context);
+                  // Optionally handle deleting photo from UI and backend
+                  BlocProvider.of<SetUserProfilePictureCubit>(context)
+                      .deleteUserProfileImg();
                 },
               ),
               const SizedBox(height: 8),
@@ -96,104 +112,128 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final String? imageUrl = _localImagePath ?? widget.user.profileImage;
 
     return Scaffold(
+      backgroundColor: AppColors.lightBackgroundColor,
       appBar: AppBar(
+        backgroundColor: AppColors.lightBackgroundColor,
         title: Text(
           widget.user.name,
           style: AppTextStyles.poppinsBold(context, 18),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const VerticalGap(24),
-          Hero(
-            tag: "userProfileImg",
-            child: GestureDetector(
-              onTap: () {
-                if (widget.user.profileImage != null ||
-                    _localImagePath != null) {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.fullUserProfileImgRoute,
-                    arguments: {
-                      "imagePath": _localImagePath ?? widget.user.profileImage!,
-                      "heroTag": "userProfileImg"
-                    },
-                  );
-                }
-              },
-              child: BuildUserProfileImage(
-                circleAvatarRadius: 100,
-                profilePicUrl: imageUrl,
-                // localFilePath: _localImagePath,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.horizontalPadding,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const VerticalGap(24),
+            Hero(
+              tag: "userProfileImg",
+              child: GestureDetector(
+                onTap: () {
+                  if (imageUrl != null) {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.fullUserProfileImgRoute,
+                      arguments: {
+                        "imagePath": imageUrl,
+                        "heroTag": "userProfileImg",
+                      },
+                    );
+                  }
+                },
+                child: BuildUserProfileImage(
+                  circleAvatarRadius: 100,
+                  userEntity: widget.user,
+                  isEnabled: false,
+                ),
               ),
             ),
-          ),
-          TextButton(
-            onPressed: () => _showEditPhotoOptions(),
-            child: Text(
-              "Edit Photo",
-              style: AppTextStyles.poppinsBold(context, 18).copyWith(
-                color: AppColors.primary,
+            TextButton(
+              onPressed: _showEditPhotoOptions,
+              child: Text(
+                "Edit Photo",
+                style: AppTextStyles.poppinsBold(context, 18).copyWith(
+                  color: AppColors.primary,
+                ),
               ),
             ),
-          ),
-          const VerticalGap(16),
-          Text(
-            widget.user.name,
-            style: AppTextStyles.poppinsBold(context, 22),
-          ),
-          const VerticalGap(8),
-          Text(
-            widget.user.phoneNumber ?? "Number",
-            style: AppTextStyles.poppinsMedium(context, 16).copyWith(
-              color: Theme.of(context).colorScheme.secondary,
+            const VerticalGap(16),
+            Text(
+              widget.user.name,
+              style: AppTextStyles.poppinsBold(context, 22),
             ),
-          ),
-          const VerticalGap(24),
-          GestureDetector(
-            onTap: () => _copyEmail(context, widget.user.email),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(16),
+            const VerticalGap(8),
+            Text(
+              widget.user.phoneNumber ?? "Number",
+              style: AppTextStyles.poppinsMedium(context, 16).copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            const VerticalGap(24),
+            GestureDetector(
+              onTap: () => _copyEmail(context, widget.user.email),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.email_outlined,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        widget.user.email,
+                        style:
+                            AppTextStyles.poppinsMedium(context, 16).copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.copy,
+                      size: 18,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const VerticalGap(24),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey.shade300),
               ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.email_outlined,
-                    color: AppColors.primary,
+              child: ListTile(
+                contentPadding: EdgeInsets.all(0),
+                tileColor: Colors.white,
+                leading: const Icon(Icons.info_outline),
+                title: Text(
+                  "About",
+                  style: AppTextStyles.poppinsMedium(context, 16),
+                ),
+                subtitle: Text(
+                  widget.user.description ?? "Hey there! I am using WhatsApp.",
+                  style: AppTextStyles.poppinsMedium(context, 16).copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      widget.user.email,
-                      style: AppTextStyles.poppinsMedium(context, 16).copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const Icon(
-                    Icons.copy,
-                    size: 18,
-                    color: Colors.grey,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-          const VerticalGap(24),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: const Text("About"),
-            subtitle: Text(
-                widget.user.description ?? "Hey there! I am using WhatsApp."),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

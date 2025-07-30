@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class FullUserProfileImgScreen extends StatelessWidget {
@@ -38,8 +39,8 @@ class FullUserProfileImgScreen extends StatelessWidget {
                       ? Image.file(
                           File(imagePath),
                         )
-                      : Image.network(
-                          imagePath,
+                      : CachedNetworkImage(
+                          imageUrl: imagePath,
                           height: MediaQuery.sizeOf(context).height * 0.5,
                           width: double.maxFinite,
                           fit: BoxFit.cover,

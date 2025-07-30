@@ -107,7 +107,7 @@ class ChatsRepoImpl extends ChatsRepo {
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     } catch (e) {
-      log("error in get chat messages: $e");
+      log("error in createNewChat: $e");
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     }
@@ -136,7 +136,7 @@ class ChatsRepoImpl extends ChatsRepo {
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     } catch (e) {
-      log("error in get chat messages: $e");
+      log("error in uploadChatImage: $e");
       return Left(CustomException(
           message: "Something went wrong. Please try again later."));
     }

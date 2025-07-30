@@ -22,3 +22,6 @@ final class SetUserProfilePictureFailureState
     required this.message,
   });
 }
+
+final class DeletedUserProfilePictureLoadedState
+    extends SetUserProfilePictureState {}
