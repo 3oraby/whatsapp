@@ -19,7 +19,7 @@ class FullUserProfileImgScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(""),
+        title: Text("content"),
       ),
       body: Column(
         children: [

@@ -32,6 +32,9 @@ class ApiInterceptor extends Interceptor {
     debugPrint("status message: ${err.response?.statusMessage}");
     debugPrint("response data: ${err.response?.data}");
 
+    if (err.response?.data is! Map) {
+      return;
+    }
     if (err.response?.data["message"] == "Unable to verify token") {
       try {
         debugPrint("error in ApiInterceptors: Unable to verify token");
@@ -48,19 +51,20 @@ class ApiInterceptor extends Interceptor {
         return handler.resolve(clonedRequest);
       } catch (e) {
         debugPrint("error in get refresh token part: ${e.toString()}");
-        await forcesUserdebugPrintOut(handler, err);
+        await forcesUserLogOut(handler, err);
       }
     }
 
     if (err.response?.data['message'] == "No refreshToken found in cookie") {
       debugPrint("No refreshToken found in cookie");
-      debugPrint("there is an except in the refresh token now, there is a problem");
-      await forcesUserdebugPrintOut(handler, err);
+      debugPrint(
+          "there is an except in the refresh token now, there is a problem");
+      await forcesUserLogOut(handler, err);
     }
     return handler.next(err);
   }
 
-  forcesUserdebugPrintOut(ErrorInterceptorHandler handler, DioException err) async {
+  forcesUserLogOut(ErrorInterceptorHandler handler, DioException err) async {
     await AppStorageHelper.deleteSecureData(StorageKeys.accessToken.toString());
 
     await AppStorageHelper.setBool(StorageKeys.isLoggedIn.toString(), false);
