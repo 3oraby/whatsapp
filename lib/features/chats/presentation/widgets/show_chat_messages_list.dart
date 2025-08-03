@@ -1,13 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_context_menu/super_context_menu.dart';
+import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/bubble_message_item.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/group_messages_date_header.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/swipe_to_reply_message_item.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class ShowChatMessagesList extends StatefulWidget {
   const ShowChatMessagesList({
@@ -29,6 +34,7 @@ class ShowChatMessagesList extends StatefulWidget {
 
 class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
   final ScrollController scrollController = ScrollController();
+  late UserEntity currentUser;
 
   bool _showScrollDownButton = false;
 
@@ -36,6 +42,8 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
   void initState() {
     super.initState();
     scrollController.addListener(_onScroll);
+
+    currentUser = getCurrentUserEntity()!;
   }
 
   void _onScroll() {
@@ -74,6 +82,33 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
     );
   }
 
+  void _showEditDialog(BuildContext context, MessageEntity message) {
+    final controller = TextEditingController(text: message.content);
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Edit message"),
+        content: TextField(controller: controller),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              BlocProvider.of<MessageStreamCubit>(context).emitEditMessage(
+                messageId: message.id,
+                newContent: controller.text,
+              );
+              Navigator.pop(context);
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final groupedMessages = <String, List<MessageEntity>>{};
@@ -109,7 +144,6 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
         messageWidgets.add(
           ContextMenuWidget(
             hitTestBehavior: HitTestBehavior.opaque,
-
             previewBuilder: (context, child) {
               return Padding(
                 padding: const EdgeInsets.symmetric(
@@ -124,24 +158,58 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
-                        vertical: 4,
+                        vertical: 8,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(60),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: ['❤️', '😂', '👍'].map((emoji) {
+                        children: ['❤️', '😂', '👍'].map((react) {
+                          final currentUserId = currentUser.id;
+                          final hasReact = msg.hasReactFromUser(currentUserId);
+
+                          final MessageReact reactType;
+                          if (hasReact) {
+                            reactType =
+                                msg.getMessageReactType(currentUserId) ??
+                                    MessageReact.love;
+                          } else {
+                            reactType = MessageReactExtension.fromString(react);
+                          }
+
+                          final isReactType = hasReact &&
+                              MessageReactExtension.getEmojiFromReact(
+                                    react: reactType.value,
+                                  ) ==
+                                  react;
                           return GestureDetector(
                             onTap: () {
-                              // handle react
+                              log("message");
+                              BlocProvider.of<MessageStreamCubit>(context)
+                                  .emitMessageReaction(
+                                messageId: msg.id,
+                                reactType: reactType,
+                                isCreate: !hasReact,
+                              );
                             },
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text(emoji,
-                                  style: const TextStyle(fontSize: 24)),
+                              child: Container(
+                                padding: isReactType
+                                    ? const EdgeInsets.all(6)
+                                    : const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: isReactType
+                                      ? Colors.grey.shade400
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(360),
+                                ),
+                                child: Text(react,
+                                    style: const TextStyle(fontSize: 24)),
+                              ),
                             ),
                           );
                         }).toList(),
@@ -153,7 +221,7 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
                 ),
               );
             },
-            menuProvider: (_) {
+            menuProvider: (MenuRequest menuRequest) {
               return Menu(
                 children: [
                   MenuAction(
@@ -177,7 +245,9 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
                     image: MenuImage.icon(
                       Icons.edit,
                     ),
-                    callback: () {},
+                    callback: () {
+                      _showEditDialog(context, msg);
+                    },
                   ),
                   MenuSeparator(),
                   MenuAction(

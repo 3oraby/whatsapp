@@ -50,6 +50,27 @@ extension MessageReactExtension on MessageReact {
 
     return '$emoji $count';
   }
+
+  static String getEmojiFromReact({
+    required String react,
+  }) {
+    String emoji;
+    switch (react.toLowerCase()) {
+      case 'love':
+        emoji = '❤️';
+        break;
+      case 'like':
+        emoji = '👍';
+        break;
+      case 'haha':
+        emoji = '😂';
+        break;
+      default:
+        emoji = '';
+    }
+
+    return emoji;
+  }
 }
 
 extension MessageReactParser on String {
