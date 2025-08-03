@@ -40,14 +40,17 @@ class MessageReactionOverlayMenu extends StatelessWidget {
             reactType = MessageReactExtension.fromString(react);
           }
 
-          final isReactType = hasReact &&
-              MessageReactExtension.getEmojiFromReact(
-                    react: reactType.value,
-                  ) ==
-                  react;
+          final isReactType =
+              hasReact && reactType == MessageReactExtension.fromEmoji(react);
           return GestureDetector(
             onTap: () {
-              onReactTap(reactType, !hasReact);
+              final tappedReactType = MessageReactExtension.fromEmoji(react);
+              final currentReactType = msg.getMessageReactType(currentUser.id);
+
+              final isSameReact = currentReactType == tappedReactType;
+              final isCreate = !isSameReact;
+
+              onReactTap(tappedReactType, isCreate);
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),

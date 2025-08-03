@@ -171,6 +171,17 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
     final reacts = List.of(msg.reacts);
 
     if (isCreate) {
+      MessageReactionInfo? existingReact;
+      try {
+        existingReact = reacts.firstWhere((r) => r.user.id == user.id);
+      } catch (e) {
+        existingReact = null;
+      }
+
+      if (existingReact != null) {
+        reacts.remove(existingReact);
+      }
+
       reacts.add(
         MessageReactionInfo(
           id: DateTime.now().millisecondsSinceEpoch,

@@ -31,6 +31,19 @@ extension MessageReactExtension on MessageReact {
     }
   }
 
+  static MessageReact fromEmoji(String emoji) {
+    switch (emoji) {
+      case '❤️':
+        return MessageReact.love;
+      case '👍':
+        return MessageReact.like;
+      case '😂':
+        return MessageReact.haha;
+      default:
+        return MessageReact.like;
+    }
+  }
+
   static String getEmojiFromReactWithCount({
     required List<MessageReactionInfo> reacts,
   }) {
