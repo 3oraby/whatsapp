@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_overlay_menu/smart_overlay_menu.dart';
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
@@ -8,7 +7,6 @@ import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/bubble_message_item.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/group_messages_date_header.dart';
-import 'package:whatsapp/features/chats/presentation/widgets/message_reaction_overlay_menu.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/swipe_to_reply_message_item.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
@@ -36,8 +34,6 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
 
   bool _showScrollDownButton = false;
 
-  final SmartOverlayMenuController smartOverlayMenuController =
-      SmartOverlayMenuController();
   @override
   void initState() {
     super.initState();
@@ -82,32 +78,32 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
     );
   }
 
-  void _showEditDialog(BuildContext context, MessageEntity message) {
-    final controller = TextEditingController(text: message.content);
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Edit message"),
-        content: TextField(controller: controller),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              BlocProvider.of<MessageStreamCubit>(context).emitEditMessage(
-                messageId: message.id,
-                newContent: controller.text,
-              );
-              Navigator.pop(context);
-            },
-            child: const Text("Save"),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _showEditDialog(BuildContext context, MessageEntity message) {
+  //   final controller = TextEditingController(text: message.content);
+  //   showDialog(
+  //     context: context,
+  //     builder: (_) => AlertDialog(
+  //       title: const Text("Edit message"),
+  //       content: TextField(controller: controller),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () => Navigator.pop(context),
+  //           child: const Text("Cancel"),
+  //         ),
+  //         ElevatedButton(
+  //           onPressed: () {
+  //             BlocProvider.of<MessageStreamCubit>(context).emitEditMessage(
+  //               messageId: message.id,
+  //               newContent: controller.text,
+  //             );
+  //             Navigator.pop(context);
+  //           },
+  //           child: const Text("Save"),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -142,38 +138,15 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
         }
 
         messageWidgets.add(
-          Builder(builder: (context) {
-            final controller = SmartOverlayMenuController();
-
-            return SmartOverlayMenu(
-              controller: controller,
-              key: ValueKey(msg.id),
-              topWidgetAlignment:
-                  isFromMe ? Alignment.centerRight : Alignment.centerLeft,
-              bottomWidgetAlignment: Alignment.center,
-              topWidget: MessageReactionOverlayMenu(
-                currentUser: currentUser,
-                msg: msg,
-                onReactTap: (reactType, isCreate) {
-                  context.read<MessageStreamCubit>().emitMessageReaction(
-                        messageId: msg.id,
-                        reactType: reactType,
-                        isCreate: isCreate,
-                      );
-
-                  controller.close();
-                },
-              ),
-              child: SwipeToReplyMessageItem(
-                key: ValueKey(msg.id),
-                msg: msg,
-                isFromMe: isFromMe,
-                showClipper: isLastFromSameSender,
-                onReply: (m) => widget.onReplyRequested?.call(m),
-                repliedMsg: repliedMsg,
-              ),
-            );
-          }),
+          SwipeToReplyMessageItem(
+            key: ValueKey(msg.id),
+            msg: msg,
+            isFromMe: isFromMe,
+            showClipper: isLastFromSameSender,
+            onReply: (m) => widget.onReplyRequested?.call(m),
+            repliedMsg: repliedMsg,
+            currentUser: currentUser,
+          ),
         );
         messageWidgets.add(const VerticalGap(8));
       }

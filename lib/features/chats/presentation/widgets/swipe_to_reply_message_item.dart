@@ -1,8 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_overlay_menu/smart_overlay_menu.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/custom_bubble_message_item.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/message_interaction_menu.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/message_reaction_overlay_menu.dart';
+import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class SwipeToReplyMessageItem extends StatefulWidget {
   final MessageEntity msg;
@@ -10,6 +16,7 @@ class SwipeToReplyMessageItem extends StatefulWidget {
   final bool showClipper;
   final void Function(MessageEntity msg) onReply;
   final MessageEntity? repliedMsg;
+  final UserEntity currentUser;
 
   const SwipeToReplyMessageItem({
     super.key,
@@ -17,6 +24,7 @@ class SwipeToReplyMessageItem extends StatefulWidget {
     required this.isFromMe,
     required this.showClipper,
     required this.onReply,
+    required this.currentUser,
     this.repliedMsg,
   });
 
@@ -30,6 +38,9 @@ class _SwipeToReplyMessageItemState extends State<SwipeToReplyMessageItem> {
   final double maxOffset = 80;
   final double triggerOffset = 60;
   bool _isDragging = false;
+
+  final SmartOverlayMenuController smartOverlayMenuController =
+      SmartOverlayMenuController();
 
   void _handleDragUpdate(DragUpdateDetails details) {
     setState(() {
@@ -58,38 +69,65 @@ class _SwipeToReplyMessageItemState extends State<SwipeToReplyMessageItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onHorizontalDragUpdate: _handleDragUpdate,
-      onHorizontalDragEnd: _handleDragEnd,
-      behavior: HitTestBehavior.translucent,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          AnimatedOpacity(
-            opacity: _isDragging ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 150),
-            child: const Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.only(left: 16),
-                child: Icon(
-                  Icons.reply,
-                  color: Colors.white,
-                  size: 26,
+    return SmartOverlayMenu(
+      key: ValueKey(widget.msg.id),
+      controller: smartOverlayMenuController,
+      scaleDownWhenTooLarge: true,
+      bottomWidgetPadding: EdgeInsets.all(12),
+      topWidgetAlignment:
+          widget.isFromMe ? Alignment.centerRight : Alignment.centerLeft,
+      bottomWidgetAlignment:
+          widget.isFromMe ? Alignment.centerRight : Alignment.centerLeft,
+      topWidget: MessageReactionOverlayMenu(
+        currentUser: widget.currentUser,
+        msg: widget.msg,
+        onReactTap: (reactType, isCreate) {
+          context.read<MessageStreamCubit>().emitMessageReaction(
+                messageId: widget.msg.id,
+                reactType: reactType,
+                isCreate: isCreate,
+              );
+
+          smartOverlayMenuController.close();
+        },
+      ),
+      bottomWidget: MessageInteractionMenu(
+        message: widget.msg,
+        onReply: () {},
+      ),
+      child: GestureDetector(
+        onHorizontalDragUpdate: _handleDragUpdate,
+        onHorizontalDragEnd: _handleDragEnd,
+        behavior: HitTestBehavior.translucent,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            AnimatedOpacity(
+              opacity: _isDragging ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 150),
+              child: const Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 16),
+                  child: Icon(
+                    Icons.reply,
+                    color: Colors.white,
+                    size: 26,
+                  ),
                 ),
               ),
             ),
-          ),
-          Transform.translate(
-            offset: Offset(_dragOffset, 0),
-            child: CustomBubbleMessageItem(
-              isFromMe: widget.isFromMe,
-              msg: widget.msg,
-              showClipper: widget.showClipper,
-              repliedMsg: widget.repliedMsg,
+            Transform.translate(
+              offset: Offset(_dragOffset, 0),
+              child: CustomBubbleMessageItem(
+                isFromMe: widget.isFromMe,
+                msg: widget.msg,
+                showClipper: widget.showClipper,
+                repliedMsg: widget.repliedMsg,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

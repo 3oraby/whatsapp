@@ -23,7 +23,7 @@ class MessageReactionOverlayMenu extends StatelessWidget {
         vertical: 8,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(60),
       ),
       child: Row(
