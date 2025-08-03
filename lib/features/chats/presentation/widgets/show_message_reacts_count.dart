@@ -30,8 +30,7 @@ class ShowMessageReactsCount extends StatelessWidget {
         ),
         child: Text(
           MessageReactExtension.getEmojiFromReactWithCount(
-            react: MessageReact.love.value,
-            count: msg.reactsCount,
+            reacts: msg.reacts,
           ),
           style: AppTextStyles.poppinsMedium(context, 14).copyWith(
             color: Theme.of(context).colorScheme.secondary,

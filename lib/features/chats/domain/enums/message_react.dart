@@ -1,3 +1,5 @@
+import 'package:whatsapp/features/chats/domain/entities/message_reaction_info.dart';
+
 enum MessageReact {
   love,
   like,
@@ -30,25 +32,38 @@ extension MessageReactExtension on MessageReact {
   }
 
   static String getEmojiFromReactWithCount({
-    required String react,
-    required int count,
+    required List<MessageReactionInfo> reacts,
   }) {
-    String emoji;
-    switch (react.toLowerCase()) {
-      case 'love':
-        emoji = '❤️';
-        break;
-      case 'like':
-        emoji = '👍';
-        break;
-      case 'haha':
-        emoji = '😂';
-        break;
-      default:
-        emoji = '';
+    final Map<MessageReact, int> reactCounts = {};
+
+    for (var react in reacts) {
+      reactCounts[react.messageReact] =
+          (reactCounts[react.messageReact] ?? 0) + 1;
     }
 
-    return '$emoji $count';
+    final priority = {
+      MessageReact.like: 1,
+      MessageReact.love: 2,
+      MessageReact.haha: 3,
+    };
+
+    final emojiMap = {
+      MessageReact.like: '👍',
+      MessageReact.love: '❤️',
+      MessageReact.haha: '😂',
+    };
+
+    final sortedReacts = reactCounts.entries.toList()
+      ..sort((a, b) {
+        final countCompare = b.value.compareTo(a.value);
+        if (countCompare != 0) return countCompare;
+
+        return priority[a.key]!.compareTo(priority[b.key]!);
+      });
+
+    return sortedReacts
+        .map((entry) => '${emojiMap[entry.key]} ${entry.value}')
+        .join(' ');
   }
 
   static String getEmojiFromReact({

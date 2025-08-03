@@ -30,7 +30,7 @@ class MessageReactionOverlayMenu extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: ['❤️', '😂', '👍'].map((react) {
           final currentUserId = currentUser.id;
-          final hasReact = msg.hasReactFromUser(currentUserId);
+          bool hasReact = msg.hasReactFromUser(currentUserId);
 
           final MessageReact reactType;
           if (hasReact) {

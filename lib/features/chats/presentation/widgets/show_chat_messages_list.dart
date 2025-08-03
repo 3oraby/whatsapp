@@ -142,13 +142,11 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
         }
 
         messageWidgets.add(
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              smartOverlayMenuController.open();
-            },
-            child: SmartOverlayMenu(
-              controller: smartOverlayMenuController,
+          Builder(builder: (context) {
+            final controller = SmartOverlayMenuController();
+
+            return SmartOverlayMenu(
+              controller: controller,
               key: ValueKey(msg.id),
               topWidgetAlignment:
                   isFromMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -157,28 +155,14 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
                 currentUser: currentUser,
                 msg: msg,
                 onReactTap: (reactType, isCreate) {
-                  BlocProvider.of<MessageStreamCubit>(context)
-                      .emitMessageReaction(
-                    messageId: msg.id,
-                    reactType: reactType,
-                    isCreate: isCreate,
-                  );
-                  smartOverlayMenuController.close();
+                  context.read<MessageStreamCubit>().emitMessageReaction(
+                        messageId: msg.id,
+                        reactType: reactType,
+                        isCreate: isCreate,
+                      );
+
+                  controller.close();
                 },
-              ),
-              bottomWidget: Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.delete, color: Colors.white),
-                    Text('Delete', style: TextStyle(color: Colors.white)),
-                  ],
-                ),
               ),
               child: SwipeToReplyMessageItem(
                 key: ValueKey(msg.id),
@@ -188,8 +172,8 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
                 onReply: (m) => widget.onReplyRequested?.call(m),
                 repliedMsg: repliedMsg,
               ),
-            ),
-          ),
+            );
+          }),
         );
         messageWidgets.add(const VerticalGap(8));
       }
