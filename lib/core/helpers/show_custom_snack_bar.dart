@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 
 void showCustomSnackBar(
   BuildContext context,
   String message, {
-  Color backgroundColor = AppColors.primary,
+  Color backgroundColor = Colors.black,
   bool showCloseIcon = true,
   int durationDay = 0,
 }) {

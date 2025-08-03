@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
+import 'package:whatsapp/core/cubit/save_media_cubit/save_media_cubit.dart';
 import 'package:whatsapp/core/helpers/get_initial_route.dart';
 import 'package:whatsapp/core/helpers/on_generate_routes.dart';
 import 'package:whatsapp/core/services/app_notification_service.dart';
@@ -42,6 +43,7 @@ Future<void> main() async {
       fallbackLocale: const Locale('en'),
       startLocale: const Locale('en'),
       child: DevicePreview(
+        enabled: false,
         builder: (context) => const Whatsapp(),
       ),
     ),
@@ -57,6 +59,7 @@ class Whatsapp extends StatefulWidget {
 
 class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
   late SocketConnectionCubit socketCubit;
+  late SaveMediaCubit saveMediaCubit;
 
   @override
   void initState() {
@@ -66,6 +69,7 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
     socketCubit = SocketConnectionCubit(
       socketRepo: getIt<SocketRepo>(),
     );
+    saveMediaCubit = SaveMediaCubit();
     if (checkLoginState()) {
       socketCubit.connect();
     }
@@ -110,7 +114,10 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
           create: (context) => SetUserProfilePictureCubit(
             authRepo: getIt<AuthRepo>(),
           ),
-        )
+        ),
+        BlocProvider(
+          create: (context) => saveMediaCubit,
+        ),
       ],
       child: MaterialApp(
         title: AppStrings.appTitle,

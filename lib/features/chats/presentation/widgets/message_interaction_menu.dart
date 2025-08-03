@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gallery_saver_plus/gallery_saver.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/cubit/save_media_cubit/save_media_cubit.dart';
 import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
 import 'package:whatsapp/core/widgets/custom_option_widget.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
@@ -34,27 +35,6 @@ class _MessageInteractionMenuState extends State<MessageInteractionMenu> {
     }
   }
 
-  Future<void> _handleSave(BuildContext context) async {
-    try {
-      final mediaUrl = widget.message.mediaUrl;
-      if (mediaUrl != null) {
-        final isVideo = mediaUrl.toLowerCase().endsWith(".mp4");
-        bool? success;
-
-        if (isVideo) {
-          success = await GallerySaver.saveVideo(mediaUrl);
-        } else {
-          success = await GallerySaver.saveImage(mediaUrl);
-        }
-
-        showSnackBarResult(
-            success == true ? "Saved to gallery" : "Failed to save");
-      }
-    } catch (e) {
-      showSnackBarResult("Failed to save");
-    }
-  }
-
   void showSnackBarResult(String message) {
     if (mounted) {
       showCustomSnackBar(context, message);
@@ -77,28 +57,40 @@ class _MessageInteractionMenuState extends State<MessageInteractionMenu> {
             label: "Reply",
             onTap: widget.onReply,
           ),
-          const Divider(),
+          const Divider(
+            height: 24,
+          ),
           CustomOptionWidget(
             icon: Icons.copy,
             label: "Copy",
             onTap: () => _handleCopy(context),
           ),
           if (widget.message.mediaUrl != null) ...[
-            const Divider(),
+            const Divider(
+              height: 24,
+            ),
             CustomOptionWidget(
               icon: Icons.save_alt,
               label: "Save",
-              onTap: () => _handleSave(context),
+              onTap: () {
+                BlocProvider.of<SaveMediaCubit>(context).saveMedia(
+                  widget.message.mediaUrl!,
+                );
+              },
             ),
           ],
           if (widget.message.isFromMe) ...[
-            const Divider(),
+            const Divider(
+              height: 24,
+            ),
             CustomOptionWidget(
               icon: Icons.edit,
               label: "Edit",
               onTap: () {},
             ),
-            const Divider(),
+            const Divider(
+              height: 24,
+            ),
             CustomOptionWidget(
               icon: Icons.delete,
               themeColor: Colors.red,
