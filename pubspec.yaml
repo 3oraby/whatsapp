@@ -44,7 +44,7 @@ dependencies:
   flutter_local_notifications: ^19.4.0
   http: ^1.4.0
   skeletonizer: ^2.1.0+1
-  super_context_menu: ^0.9.1
+  smart_overlay_menu: ^1.0.3
 
 dev_dependencies:
   flutter_test:

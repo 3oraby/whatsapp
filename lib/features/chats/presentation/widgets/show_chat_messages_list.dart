@@ -1,16 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_context_menu/super_context_menu.dart';
+import 'package:smart_overlay_menu/smart_overlay_menu.dart';
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
-import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/bubble_message_item.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/group_messages_date_header.dart';
+import 'package:whatsapp/features/chats/presentation/widgets/message_reaction_overlay_menu.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/swipe_to_reply_message_item.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
@@ -38,6 +36,8 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
 
   bool _showScrollDownButton = false;
 
+  final SmartOverlayMenuController smartOverlayMenuController =
+      SmartOverlayMenuController();
   @override
   void initState() {
     super.initState();
@@ -142,131 +142,52 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
         }
 
         messageWidgets.add(
-          ContextMenuWidget(
-            hitTestBehavior: HitTestBehavior.opaque,
-            previewBuilder: (context, child) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 12,
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              smartOverlayMenuController.open();
+            },
+            child: SmartOverlayMenu(
+              controller: smartOverlayMenuController,
+              key: ValueKey(msg.id),
+              topWidgetAlignment:
+                  isFromMe ? Alignment.centerRight : Alignment.centerLeft,
+              bottomWidgetAlignment: Alignment.center,
+              topWidget: MessageReactionOverlayMenu(
+                currentUser: currentUser,
+                msg: msg,
+                onReactTap: (reactType, isCreate) {
+                  BlocProvider.of<MessageStreamCubit>(context)
+                      .emitMessageReaction(
+                    messageId: msg.id,
+                    reactType: reactType,
+                    isCreate: isCreate,
+                  );
+                  smartOverlayMenuController.close();
+                },
+              ),
+              bottomWidget: Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
-                  crossAxisAlignment: isFromMe
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(60),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: ['❤️', '😂', '👍'].map((react) {
-                          final currentUserId = currentUser.id;
-                          final hasReact = msg.hasReactFromUser(currentUserId);
-
-                          final MessageReact reactType;
-                          if (hasReact) {
-                            reactType =
-                                msg.getMessageReactType(currentUserId) ??
-                                    MessageReact.love;
-                          } else {
-                            reactType = MessageReactExtension.fromString(react);
-                          }
-
-                          final isReactType = hasReact &&
-                              MessageReactExtension.getEmojiFromReact(
-                                    react: reactType.value,
-                                  ) ==
-                                  react;
-                          return GestureDetector(
-                            onTap: () {
-                              log("message");
-                              BlocProvider.of<MessageStreamCubit>(context)
-                                  .emitMessageReaction(
-                                messageId: msg.id,
-                                reactType: reactType,
-                                isCreate: !hasReact,
-                              );
-                            },
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              child: Container(
-                                padding: isReactType
-                                    ? const EdgeInsets.all(6)
-                                    : const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  color: isReactType
-                                      ? Colors.grey.shade400
-                                      : Colors.white,
-                                  borderRadius: BorderRadius.circular(360),
-                                ),
-                                child: Text(react,
-                                    style: const TextStyle(fontSize: 24)),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    const VerticalGap(8),
-                    child,
+                    Icon(Icons.delete, color: Colors.white),
+                    Text('Delete', style: TextStyle(color: Colors.white)),
                   ],
                 ),
-              );
-            },
-            menuProvider: (MenuRequest menuRequest) {
-              return Menu(
-                children: [
-                  MenuAction(
-                    title: 'Reply',
-                    image: MenuImage.icon(
-                      Icons.reply,
-                    ),
-                    callback: () {},
-                  ),
-                  MenuSeparator(),
-                  MenuAction(
-                    title: 'Copy',
-                    image: MenuImage.icon(
-                      Icons.copy,
-                    ),
-                    callback: () {},
-                  ),
-                  MenuSeparator(),
-                  MenuAction(
-                    title: 'Edit',
-                    image: MenuImage.icon(
-                      Icons.edit,
-                    ),
-                    callback: () {
-                      _showEditDialog(context, msg);
-                    },
-                  ),
-                  MenuSeparator(),
-                  MenuAction(
-                    title: 'Delete',
-                    image: MenuImage.icon(
-                      Icons.delete,
-                    ),
-                    attributes: const MenuActionAttributes(destructive: true),
-                    callback: () {},
-                  ),
-                ],
-              );
-            },
-            child: SwipeToReplyMessageItem(
-              msg: msg,
-              isFromMe: isFromMe,
-              showClipper: isLastFromSameSender,
-              onReply: (m) => widget.onReplyRequested?.call(m),
-              repliedMsg: repliedMsg,
+              ),
+              child: SwipeToReplyMessageItem(
+                key: ValueKey(msg.id),
+                msg: msg,
+                isFromMe: isFromMe,
+                showClipper: isLastFromSameSender,
+                onReply: (m) => widget.onReplyRequested?.call(m),
+                repliedMsg: repliedMsg,
+              ),
             ),
           ),
         );
