@@ -176,6 +176,7 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
           id: DateTime.now().millisecondsSinceEpoch,
           createdAt: DateTime.now(),
           user: user,
+          messageReact: reactType,
         ),
       );
     } else {
@@ -184,7 +185,6 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
     msgs[idx] = msg.copyWith(
       reactsCount: isCreate ? msg.reactsCount + 1 : msg.reactsCount - 1,
       reacts: reacts,
-      // add type here for react after back end edit
     );
     debugPrint(MessageModel.fromEntity(msgs[idx]).toJson().toString());
 

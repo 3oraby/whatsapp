@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_context_menu/super_context_menu.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/bubble_message_item.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/group_messages_date_header.dart';
-import 'package:whatsapp/features/chats/presentation/widgets/show_message_options_menu.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/swipe_to_reply_message_item.dart';
 
 class ShowChatMessagesList extends StatefulWidget {
@@ -107,9 +107,90 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
         }
 
         messageWidgets.add(
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onLongPress: () => showMessageOptionsMenu(context, msg),
+          ContextMenuWidget(
+            hitTestBehavior: HitTestBehavior.opaque,
+
+            previewBuilder: (context, child) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 12,
+                ),
+                child: Column(
+                  crossAxisAlignment: isFromMe
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: ['❤️', '😂', '👍'].map((emoji) {
+                          return GestureDetector(
+                            onTap: () {
+                              // handle react
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(emoji,
+                                  style: const TextStyle(fontSize: 24)),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    const VerticalGap(8),
+                    child,
+                  ],
+                ),
+              );
+            },
+            menuProvider: (_) {
+              return Menu(
+                children: [
+                  MenuAction(
+                    title: 'Reply',
+                    image: MenuImage.icon(
+                      Icons.reply,
+                    ),
+                    callback: () {},
+                  ),
+                  MenuSeparator(),
+                  MenuAction(
+                    title: 'Copy',
+                    image: MenuImage.icon(
+                      Icons.copy,
+                    ),
+                    callback: () {},
+                  ),
+                  MenuSeparator(),
+                  MenuAction(
+                    title: 'Edit',
+                    image: MenuImage.icon(
+                      Icons.edit,
+                    ),
+                    callback: () {},
+                  ),
+                  MenuSeparator(),
+                  MenuAction(
+                    title: 'Delete',
+                    image: MenuImage.icon(
+                      Icons.delete,
+                    ),
+                    attributes: const MenuActionAttributes(destructive: true),
+                    callback: () {},
+                  ),
+                ],
+              );
+            },
             child: SwipeToReplyMessageItem(
               msg: msg,
               isFromMe: isFromMe,

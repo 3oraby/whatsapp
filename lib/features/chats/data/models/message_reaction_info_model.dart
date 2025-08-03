@@ -1,4 +1,5 @@
 import 'package:whatsapp/features/chats/domain/entities/message_reaction_info.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/user/data/models/user_model.dart';
 
 class MessageReactionInfoModel extends MessageReactionInfo {
@@ -6,6 +7,7 @@ class MessageReactionInfoModel extends MessageReactionInfo {
     required super.id,
     required super.createdAt,
     required super.user,
+    required super.messageReact,
   });
 
   factory MessageReactionInfoModel.fromJson(Map<String, dynamic> json) {
@@ -13,6 +15,7 @@ class MessageReactionInfoModel extends MessageReactionInfo {
       id: json['id'],
       createdAt: DateTime.parse(json['createdAt']),
       user: UserModel.fromJson(json['user']).toEntity(),
+      messageReact: MessageReactExtension.fromString(json['react']),
     );
   }
 
@@ -21,6 +24,7 @@ class MessageReactionInfoModel extends MessageReactionInfo {
       id: entity.id,
       createdAt: entity.createdAt,
       user: UserModel.fromEntity(entity.user).toEntity(),
+      messageReact: entity.messageReact,
     );
   }
 
@@ -29,6 +33,7 @@ class MessageReactionInfoModel extends MessageReactionInfo {
       'id': id,
       'createdAt': createdAt.toIso8601String(),
       'user': UserModel.fromEntity(user).toJson(),
+      'react': messageReact,
     };
   }
 
@@ -37,6 +42,7 @@ class MessageReactionInfoModel extends MessageReactionInfo {
       id: id,
       createdAt: createdAt,
       user: user,
+      messageReact: messageReact,
     );
   }
 }

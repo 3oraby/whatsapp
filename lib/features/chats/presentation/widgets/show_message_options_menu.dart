@@ -13,6 +13,22 @@ void showMessageOptionsMenu(BuildContext context, MessageEntity message) {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            ListTile(
+              leading: const Icon(Icons.reply),
+              title: const Text('Reply'),
+              onTap: () {
+                Navigator.pop(context);
+                _showEditDialog(context, message);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.copy),
+              title: const Text('Copy'),
+              onTap: () {
+                Navigator.pop(context); 
+                _showEditDialog(context, message);
+              },
+            ),
             if (message.isFromMe)
               ListTile(
                 leading: const Icon(Icons.edit),
