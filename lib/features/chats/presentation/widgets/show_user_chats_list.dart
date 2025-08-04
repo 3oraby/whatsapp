@@ -22,6 +22,7 @@ class ShowUserChatsList extends StatelessWidget {
       itemBuilder: (context, index) {
         return BlocBuilder<MessageStreamCubit, MessageStreamState>(
           builder: (context, state) => CustomChatItem(
+            key: ValueKey(chats[index].id),
             chat: chats[index],
             isTyping:
                 state is UserTypingState && state.chatId == chats[index].id,

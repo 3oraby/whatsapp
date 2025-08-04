@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
@@ -10,7 +9,6 @@ import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_reaction_event.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
-import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 
@@ -162,9 +160,6 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       await pendingMessagesHelper.addPendingMessage(dto.toSocketPayload());
       return;
     }
-
-    debugPrint("medddddddddddddia: ${dto.type.value}");
-
     socketRepo.sendMessage(dto.toSocketPayload());
   }
 

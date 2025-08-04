@@ -54,7 +54,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     final dto = SendMessageDto(
       receiverId: widget.chat.anotherUser.id,
       chatId: widget.chat.id,
-      content: text,
+      content: text == "" ? null : text,
       mediaFile: mediaFile,
       parentId: _replyMessage?.id,
       type: mediaFile == null ? MessageType.text : MessageType.image,

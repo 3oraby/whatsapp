@@ -65,11 +65,14 @@ class CustomMessageContent extends StatelessWidget {
                       height: 400,
                       fit: BoxFit.cover,
                     ),
-                  const VerticalGap(2),
-                  Text(
-                    msg.content ?? "content",
-                    style: AppTextStyles.poppinsMedium(context, 20),
-                  ),
+                  const VerticalGap(4),
+                  if (msg.content != null && msg.content!.isNotEmpty) ...[
+                    const VerticalGap(2),
+                    Text(
+                      msg.content!,
+                      style: AppTextStyles.poppinsMedium(context, 20),
+                    ),
+                  ]
                 ],
               ),
             const VerticalGap(3),
