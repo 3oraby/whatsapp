@@ -5,19 +5,18 @@ import 'package:whatsapp/core/cubit/save_media_cubit/save_media_cubit.dart';
 import 'package:whatsapp/core/helpers/show_custom_snack_bar.dart';
 import 'package:whatsapp/core/widgets/custom_option_widget.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 
 class MessageInteractionMenu extends StatefulWidget {
   final MessageEntity message;
   final VoidCallback onReply;
-  final VoidCallback? onEdit;
-  final VoidCallback? onDelete;
+  final MessageStreamCubit messageStreamCubit;
 
   const MessageInteractionMenu({
     super.key,
     required this.message,
     required this.onReply,
-    this.onEdit,
-    this.onDelete,
+    required this.messageStreamCubit,
   });
 
   @override
@@ -41,6 +40,46 @@ class _MessageInteractionMenuState extends State<MessageInteractionMenu> {
     }
   }
 
+  void _showEditDialog() {
+    final controller = TextEditingController(text: widget.message.content);
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Edit message"),
+        content: TextField(controller: controller),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              widget.messageStreamCubit.emitEditMessage(
+                messageId: widget.message.id,
+                newContent: controller.text,
+              );
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _deleteMessage() {
+    Navigator.pop(context);
+    widget.messageStreamCubit
+        .emitDeleteMessage(messageId: widget.message.id);
+  }
+
+  void _saveMedia() {
+    BlocProvider.of<SaveMediaCubit>(context).saveMedia(
+      widget.message.mediaUrl!,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,14 +96,24 @@ class _MessageInteractionMenuState extends State<MessageInteractionMenu> {
             label: "Reply",
             onTap: widget.onReply,
           ),
-          const Divider(
-            height: 24,
-          ),
-          CustomOptionWidget(
-            icon: Icons.copy,
-            label: "Copy",
-            onTap: () => _handleCopy(context),
-          ),
+          if (widget.message.mediaUrl == null) ...[
+            const Divider(
+              height: 24,
+            ),
+            CustomOptionWidget(
+              icon: Icons.copy,
+              label: "Copy",
+              onTap: () => _handleCopy(context),
+            ),
+            const Divider(
+              height: 24,
+            ),
+            CustomOptionWidget(
+              icon: Icons.edit,
+              label: "Edit",
+              onTap: () => _showEditDialog(),
+            ),
+          ],
           if (widget.message.mediaUrl != null) ...[
             const Divider(
               height: 24,
@@ -72,11 +121,7 @@ class _MessageInteractionMenuState extends State<MessageInteractionMenu> {
             CustomOptionWidget(
               icon: Icons.save_alt,
               label: "Save",
-              onTap: () {
-                BlocProvider.of<SaveMediaCubit>(context).saveMedia(
-                  widget.message.mediaUrl!,
-                );
-              },
+              onTap: () => _saveMedia(),
             ),
           ],
           if (widget.message.isFromMe) ...[
@@ -84,18 +129,10 @@ class _MessageInteractionMenuState extends State<MessageInteractionMenu> {
               height: 24,
             ),
             CustomOptionWidget(
-              icon: Icons.edit,
-              label: "Edit",
-              onTap: () {},
-            ),
-            const Divider(
-              height: 24,
-            ),
-            CustomOptionWidget(
               icon: Icons.delete,
               themeColor: Colors.red,
               label: "Delete",
-              onTap: () {},
+              onTap: () => _deleteMessage(),
             ),
           ]
         ],

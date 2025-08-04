@@ -78,32 +78,6 @@ class _ShowChatMessagesListState extends State<ShowChatMessagesList> {
     );
   }
 
-  // void _showEditDialog(BuildContext context, MessageEntity message) {
-  //   final controller = TextEditingController(text: message.content);
-  //   showDialog(
-  //     context: context,
-  //     builder: (_) => AlertDialog(
-  //       title: const Text("Edit message"),
-  //       content: TextField(controller: controller),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.pop(context),
-  //           child: const Text("Cancel"),
-  //         ),
-  //         ElevatedButton(
-  //           onPressed: () {
-  //             BlocProvider.of<MessageStreamCubit>(context).emitEditMessage(
-  //               messageId: message.id,
-  //               newContent: controller.text,
-  //             );
-  //             Navigator.pop(context);
-  //           },
-  //           child: const Text("Save"),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {

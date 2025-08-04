@@ -55,10 +55,7 @@ class NormalMessageItem extends StatelessWidget {
             ),
           ),
         ),
-        if (
-            // msg.reaction != null &&
-            // msg.reactionCount != null &&
-            msg.reactsCount > 0)
+        if (msg.reactsCount > 0 && !msg.isDeleted)
           ShowMessageReactsCount(msg: msg),
       ],
     );

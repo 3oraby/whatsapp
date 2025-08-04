@@ -42,6 +42,14 @@ class _SwipeToReplyMessageItemState extends State<SwipeToReplyMessageItem> {
   final SmartOverlayMenuController smartOverlayMenuController =
       SmartOverlayMenuController();
 
+  late MessageStreamCubit messageStreamCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    messageStreamCubit = BlocProvider.of<MessageStreamCubit>(context);
+  }
+
   void _handleDragUpdate(DragUpdateDetails details) {
     setState(() {
       _dragOffset += details.delta.dx;
@@ -73,6 +81,7 @@ class _SwipeToReplyMessageItemState extends State<SwipeToReplyMessageItem> {
       key: ValueKey(widget.msg.id),
       controller: smartOverlayMenuController,
       scaleDownWhenTooLarge: true,
+      disabled: widget.msg.isDeleted,
       bottomWidgetPadding: EdgeInsets.all(12),
       topWidgetAlignment:
           widget.isFromMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -82,22 +91,25 @@ class _SwipeToReplyMessageItemState extends State<SwipeToReplyMessageItem> {
         currentUser: widget.currentUser,
         msg: widget.msg,
         onReactTap: (reactType, isCreate) {
-          context.read<MessageStreamCubit>().emitMessageReaction(
-                messageId: widget.msg.id,
-                reactType: reactType,
-                isCreate: isCreate,
-              );
+          messageStreamCubit.emitMessageReaction(
+            messageId: widget.msg.id,
+            reactType: reactType,
+            isCreate: isCreate,
+          );
 
           smartOverlayMenuController.close();
         },
       ),
       bottomWidget: MessageInteractionMenu(
+        messageStreamCubit: messageStreamCubit,
         message: widget.msg,
-        onReply: () {},
+        onReply: () {
+          widget.onReply(widget.msg);
+        },
       ),
       child: GestureDetector(
-        onHorizontalDragUpdate: _handleDragUpdate,
-        onHorizontalDragEnd: _handleDragEnd,
+        onHorizontalDragUpdate: widget.msg.isDeleted ? null : _handleDragUpdate,
+        onHorizontalDragEnd: widget.msg.isDeleted ? null : _handleDragEnd,
         behavior: HitTestBehavior.translucent,
         child: Stack(
           alignment: Alignment.center,
