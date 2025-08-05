@@ -10,20 +10,21 @@ class NotificationMessageModel extends NotificationMessageEntity {
     super.content,
     super.mediaUrl,
     super.profileImg,
+    required super.title,
   });
 
   factory NotificationMessageModel.fromRemoteMessage(RemoteMessage message) {
     final data = message.data;
-    final notification = message.notification;
 
     return NotificationMessageModel(
-      username: data['userName'] ?? notification?.title ?? 'New Message',
+      username: data['userName'] ?? 'Unknown User',
+      title: data['title'],
       mediaUrl: data['mediaUrl'],
       senderId: int.tryParse(data['senderId'] ?? '') ?? 0,
       chatId: int.tryParse(data['chatId'] ?? '') ?? 0,
       messageId: int.tryParse(data['messageId'] ?? '') ?? 0,
       profileImg: data['profileImg'],
-      content: notification?.body,
+      content: data['body'],
     );
   }
 
@@ -36,6 +37,7 @@ class NotificationMessageModel extends NotificationMessageEntity {
       'content': content,
       'mediaUrl': mediaUrl,
       'profileImg': profileImg,
+      'title': title,
     };
   }
 }

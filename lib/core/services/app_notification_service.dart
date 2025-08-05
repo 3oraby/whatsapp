@@ -62,18 +62,15 @@ class AppNotificationService {
         ?.createNotificationChannel(channel);
 
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-    handleForegroundMessage();
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      debugPrint("onMessageOpenedApp: ${message.notification?.title}");
-    });
+    // enable if we have fore ground notifications 
+    // handleForegroundMessage(); 
   }
 
   @pragma('vm:entry-point')
   static Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    debugPrint("notification data: ${message.data}");
-    debugPrint(
-        "onBackgroundMessage -- title: ${message.notification?.title} -- body: ${message.notification?.body}");
+    debugPrint("------------------------- handleBackgroundMessage -------------------------");
+    debugPrint("data: ${message.data}");
 
     final notificationMessageEntity =
         NotificationMessageModel.fromRemoteMessage(message);
@@ -81,17 +78,21 @@ class AppNotificationService {
     await showChatNotification(notificationMessageEntity);
   }
 
-  static void handleForegroundMessage() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      debugPrint(
-          "onForegroundMessage -- title: ${message.notification?.title} -- body: ${message.notification?.body}");
+  // static void handleForegroundMessage() {
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+  //     debugPrint(
+  //         "onForegroundMessage -- title: ${message.notification?.title} -- body: ${message.notification?.body}");
+  //     if (message.notification != null) {
+  //       debugPrint("Skipping background duplicate notification");
+  //       return;
+  //     }
+  
+  //     final notificationMessageEntity =
+  //         NotificationMessageModel.fromRemoteMessage(message);
 
-      final notificationMessageEntity =
-          NotificationMessageModel.fromRemoteMessage(message);
-
-      await showChatNotification(notificationMessageEntity);
-    });
-  }
+  //     await showChatNotification(notificationMessageEntity);
+  //   });
+  // }
 
   static Future<void> showChatNotification(
       NotificationMessageEntity data) async {
@@ -130,7 +131,7 @@ class AppNotificationService {
       await flutterLocalNotificationsPlugin.show(
         data.messageId,
         data.username,
-        data.content ?? "Photo",
+        _getContentText(data),
         platformDetails,
         payload: data.chatId.toString(),
       );
@@ -149,5 +150,17 @@ class AppNotificationService {
     final file = File(filePath);
     await file.writeAsBytes(response.bodyBytes);
     return filePath;
+  }
+
+  static String _getContentText(NotificationMessageEntity data) {
+    if (data.content != null && data.content!.isNotEmpty) {
+      return data.content!;
+    }
+
+    if (data.mediaUrl != null && data.mediaUrl!.isNotEmpty) {
+      return "Photo";
+    }
+
+    return "New Message";
   }
 }
