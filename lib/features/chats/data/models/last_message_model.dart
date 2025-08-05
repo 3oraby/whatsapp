@@ -24,7 +24,7 @@ class LastMessageModel extends LastMessageEntity {
       type: MessageTypeExtension.fromString(json['type'] ?? 'text'),
       senderId: json['senderId'],
       isMine: json['isMine'] ?? false,
-      isDeleted: json['isDeleted'] ?? false,
+      isDeleted: json['isdeleted'] ?? false,
     );
   }
 
