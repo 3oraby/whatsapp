@@ -49,7 +49,7 @@ class AppNotificationService {
     }
 
     const AndroidInitializationSettings androidInitSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@drawable/default_user');
 
     const InitializationSettings initSettings =
         InitializationSettings(android: androidInitSettings);
@@ -63,13 +63,14 @@ class AppNotificationService {
 
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
 
-    // enable if we have fore ground notifications 
-    // handleForegroundMessage(); 
+    // enable if we have fore ground notifications
+    // handleForegroundMessage();
   }
 
   @pragma('vm:entry-point')
   static Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    debugPrint("------------------------- handleBackgroundMessage -------------------------");
+    debugPrint(
+        "------------------------- handleBackgroundMessage -------------------------");
     debugPrint("data: ${message.data}");
 
     final notificationMessageEntity =
@@ -86,7 +87,7 @@ class AppNotificationService {
   //       debugPrint("Skipping background duplicate notification");
   //       return;
   //     }
-  
+
   //     final notificationMessageEntity =
   //         NotificationMessageModel.fromRemoteMessage(message);
 
@@ -123,7 +124,7 @@ class AppNotificationService {
         priority: Priority.high,
         largeIcon: largeIcon != null ? FilePathAndroidBitmap(largeIcon) : null,
         styleInformation: style,
-        icon: '@mipmap/ic_launcher',
+        // icon: '@mipmap/ic_launcher',
       );
 
       final platformDetails = NotificationDetails(android: androidDetails);
