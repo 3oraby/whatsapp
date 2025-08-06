@@ -7,6 +7,7 @@ enum StorageKeys {
   isLoggedIn,
   currentUser,
   pendingMessages,
+  fcmToken,
 }
 
 extension StorageKeysExt on StorageKeys {
