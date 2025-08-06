@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
@@ -66,20 +67,21 @@ class MessageReactsBottomSheet extends StatelessWidget {
             const SizedBox(height: 12),
             TabBar(
               isScrollable: true,
-              labelColor: Theme.of(context).colorScheme.primary,
+              labelColor: AppColors.primary,
               unselectedLabelColor: Colors.grey,
+              dividerColor: Colors.grey,
+              indicatorColor: AppColors.primary,
               tabs: tabs.map((tab) {
                 return Tab(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                          tab['label'] == "All"
-                              ? "All"
-                              : tab['emoji'] as String,
-                          style: const TextStyle(
-                            fontSize: 18,
-                          )),
+                        tab['label'] == "All" ? "All" : tab['emoji'] as String,
+                        style: TextStyle(
+                          fontSize: tab['label'] == "All" ? 16 : 18,
+                        ),
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         (tab['count'] as int).toString(),
@@ -105,21 +107,31 @@ class MessageReactsBottomSheet extends StatelessWidget {
                           .toList();
 
                   if (filteredReacts.isEmpty) {
-                    return const Center(child: Text('No reactions'));
+                    return Center(
+                      child: Text(
+                        'No reactions',
+                        style:
+                            AppTextStyles.poppinsMedium(context, 18).copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                    );
                   }
 
                   return ListView.separated(
                     controller: scrollController,
                     itemCount: filteredReacts.length,
-                    separatorBuilder: (context, index) => const VerticalGap(8),
+                    separatorBuilder: (context, index) => const Divider(
+                      indent: 92,
+                      height: 24,
+                    ),
                     itemBuilder: (context, index) {
                       final reaction = filteredReacts[index];
+
                       return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Stack(
                               clipBehavior: Clip.none,
@@ -132,11 +144,10 @@ class MessageReactsBottomSheet extends StatelessWidget {
                                   bottom: -14,
                                   right: -14,
                                   child: Container(
-                                    padding: EdgeInsets.all(4),
+                                    padding: const EdgeInsets.all(4),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(360),
+                                      borderRadius: BorderRadius.circular(360),
                                     ),
                                     child: Text(
                                       MessageReactExtension.getEmojiFromReact(
@@ -150,27 +161,11 @@ class MessageReactsBottomSheet extends StatelessWidget {
                             ),
                             const HorizontalGap(24),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const VerticalGap(20),
-                                  Text(
-                                    reaction.user.name,
-                                    style: AppTextStyles.poppinsBold(
-                                        context, 18),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const VerticalGap(20),
-                                  Visibility(
-                                    visible:
-                                        index < filteredReacts.length - 1,
-                                    child: const Divider(
-                                      height: 16,
-                                    ),
-                                  ),
-                                ],
+                              child: Text(
+                                reaction.user.name,
+                                style: AppTextStyles.poppinsBold(context, 18),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
