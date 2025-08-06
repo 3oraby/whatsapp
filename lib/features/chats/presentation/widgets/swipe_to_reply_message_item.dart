@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_overlay_menu/smart_overlay_menu.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
+import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/custom_bubble_message_item.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/message_interaction_menu.dart';
@@ -77,11 +78,14 @@ class _SwipeToReplyMessageItemState extends State<SwipeToReplyMessageItem> {
 
   @override
   Widget build(BuildContext context) {
+    final bool canUseMessageOptions =
+        !widget.msg.isDeleted && widget.msg.status != MessageStatus.pending;
+
     return SmartOverlayMenu(
       key: ValueKey(widget.msg.id),
       controller: smartOverlayMenuController,
       scaleDownWhenTooLarge: true,
-      disabled: widget.msg.isDeleted,
+      disabled: !canUseMessageOptions,
       bottomWidgetPadding: EdgeInsets.all(12),
       topWidgetAlignment:
           widget.isFromMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -108,8 +112,8 @@ class _SwipeToReplyMessageItemState extends State<SwipeToReplyMessageItem> {
         },
       ),
       child: GestureDetector(
-        onHorizontalDragUpdate: widget.msg.isDeleted ? null : _handleDragUpdate,
-        onHorizontalDragEnd: widget.msg.isDeleted ? null : _handleDragEnd,
+        onHorizontalDragUpdate: !canUseMessageOptions ? null : _handleDragUpdate,
+        onHorizontalDragEnd: !canUseMessageOptions ? null : _handleDragEnd,
         behavior: HitTestBehavior.translucent,
         child: Stack(
           alignment: Alignment.center,

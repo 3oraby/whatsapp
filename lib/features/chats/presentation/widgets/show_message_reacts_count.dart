@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
@@ -20,7 +21,10 @@ class ShowMessageReactsCount extends StatelessWidget {
           context: context,
           isScrollControlled: true,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: BorderRadius.vertical(
+                top: Radius.circular(
+              AppConstants.bottomSheetBorderRadius,
+            )),
           ),
           builder: (_) => MessageReactsBottomSheet(reacts: msg.reacts),
         );

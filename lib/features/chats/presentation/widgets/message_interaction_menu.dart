@@ -70,8 +70,7 @@ class _MessageInteractionMenuState extends State<MessageInteractionMenu> {
 
   void _deleteMessage() {
     Navigator.pop(context);
-    widget.messageStreamCubit
-        .emitDeleteMessage(messageId: widget.message.id);
+    widget.messageStreamCubit.emitDeleteMessage(messageId: widget.message.id);
   }
 
   void _saveMedia() {
@@ -82,6 +81,9 @@ class _MessageInteractionMenuState extends State<MessageInteractionMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final bool canEdit =
+        DateTime.now().difference(widget.message.createdAt).inMinutes < 15;
+
     return Container(
       width: MediaQuery.sizeOf(context).width * 0.6,
       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -105,14 +107,14 @@ class _MessageInteractionMenuState extends State<MessageInteractionMenu> {
               label: "Copy",
               onTap: () => _handleCopy(context),
             ),
-            const Divider(
-              height: 24,
-            ),
-            CustomOptionWidget(
-              icon: Icons.edit,
-              label: "Edit",
-              onTap: () => _showEditDialog(),
-            ),
+            if (canEdit) ...[
+              const Divider(height: 24),
+              CustomOptionWidget(
+                icon: Icons.edit,
+                label: "Edit",
+                onTap: () => _showEditDialog(),
+              ),
+            ],
           ],
           if (widget.message.mediaUrl != null) ...[
             const Divider(
