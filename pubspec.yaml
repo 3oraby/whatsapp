@@ -46,6 +46,7 @@ dependencies:
   skeletonizer: ^2.1.0+1
   smart_overlay_menu: ^1.0.3
   gallery_saver_plus: ^3.2.8
+  awesome_notifications: ^0.10.1
 
 dev_dependencies:
   flutter_test:
