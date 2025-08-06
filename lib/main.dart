@@ -21,17 +21,20 @@ import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/socket_connection_cubit/socket_connection_cubit.dart';
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
+import 'package:whatsapp/features/notifications/domain/repos/notifications_repo.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await setupGetIt();
   await AppStorageHelper.init();
-  await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   await AppNotificationService().init();
   Bloc.observer = CustomBlocObserver();
+
+  await getIt<NotificationsRepo>().saveFcmToken();
 
   runApp(
     EasyLocalization(

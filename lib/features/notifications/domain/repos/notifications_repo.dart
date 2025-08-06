@@ -1,3 +1,3 @@
-abstract class NotificationRepo {
-  Future<void> saveFcmToken(String token);
+abstract class NotificationsRepo {
+  Future<void> saveFcmToken();
 }

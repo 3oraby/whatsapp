@@ -9,6 +9,7 @@ import 'package:whatsapp/core/api/api_consumer.dart';
 import 'package:whatsapp/core/api/dio_consumer.dart';
 import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
 import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper_impl.dart';
+import 'package:whatsapp/core/services/app_notification_service.dart';
 import 'package:whatsapp/core/services/web_socket_service.dart';
 import 'package:whatsapp/features/auth/data/repo_impl/auth_repo_impl.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
@@ -18,6 +19,8 @@ import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/contacts/data/repos_impl/contacts_repo_impl.dart';
 import 'package:whatsapp/features/contacts/domain/repos/contacts_repo.dart';
+import 'package:whatsapp/features/notifications/data/repos_impl/notifications_repo_impl.dart';
+import 'package:whatsapp/features/notifications/domain/repos/notifications_repo.dart';
 import 'package:whatsapp/features/stories/data/repos_impl/stories_repo_impl.dart';
 import 'package:whatsapp/features/stories/domain/repos/stories_repo.dart';
 import 'package:whatsapp/features/user/data/repo_impl/user_repo_impl.dart';
@@ -71,5 +74,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerSingleton<ChatsRepo>(ChatsRepoImpl(
     apiConsumer: getIt<ApiConsumer>(),
+  ));
+
+  getIt.registerSingleton<NotificationsRepo>(NotificationsRepoImpl(
+    apiConsumer: getIt<ApiConsumer>(),
+    appNotificationService: AppNotificationService(),
   ));
 }

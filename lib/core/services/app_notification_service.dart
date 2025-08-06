@@ -4,13 +4,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:whatsapp/core/api/api_consumer.dart';
-import 'package:whatsapp/core/api/end_points.dart';
-import 'package:whatsapp/core/constants/storage_keys.dart';
-import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
-import 'package:whatsapp/core/services/get_it_service.dart';
-import 'package:whatsapp/core/storage/app_storage_helper.dart';
-import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 import 'package:whatsapp/features/notifications/domain/entities/notification_message_entity.dart';
 import 'package:whatsapp/features/notifications/data/models/notification_message_model.dart';
 
@@ -28,41 +21,17 @@ class AppNotificationService {
     importance: Importance.high,
   );
 
+  Future<String?> getFcmToken() async {
+    final String? fcmToken = await messaging.getToken();
+    debugPrint("fcm token: $fcmToken");
+
+    return fcmToken;
+  }
+
   Future<void> init() async {
     debugPrint('init app notification service');
 
     await messaging.requestPermission();
-
-    final String? fcmToken = await messaging.getToken();
-    if (fcmToken != null) {
-      debugPrint("fcm token: $fcmToken");
-    }
-
-    final String? locallyFcmToken =
-        await AppStorageHelper.getSecureData(StorageKeys.fcmToken.toString());
-
-    // send the fsm token only if changed
-    if (locallyFcmToken != fcmToken) {
-      debugPrint("send the fcm token to backend");
-      final UserEntity? user = getCurrentUserEntity();
-      if (user != null && fcmToken != null) {
-        final result = await getIt<ApiConsumer>().post(
-          EndPoints.saveFcmToken,
-          data: {
-            "userId": user.id,
-            "fcmToken": fcmToken,
-          },
-        );
-        debugPrint('result from save fcm token: $result');
-
-        await AppStorageHelper.setSecureData(
-          StorageKeys.fcmToken.toString(),
-          fcmToken,
-        );
-      }
-    } else {
-      debugPrint("fcm token not changed");
-    }
 
     const AndroidInitializationSettings androidInitSettings =
         AndroidInitializationSettings('@drawable/default_user');
