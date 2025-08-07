@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/helpers/is_light_theme.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
@@ -7,11 +6,10 @@ import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
+import 'package:whatsapp/features/chats/domain/entities/chat_screen_args.dart';
 import 'package:whatsapp/features/chats/domain/entities/last_message_entity.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
-import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
-import 'package:whatsapp/features/chats/presentation/routes/chat_screen_args.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/build_message_status_icon.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_unread_messages_count.dart';
 
@@ -36,10 +34,7 @@ class CustomChatItem extends StatelessWidget {
         Navigator.pushNamed(
           context,
           Routes.chatScreenRoute,
-          arguments: ChatScreenArgs(
-            chat: chat,
-            messageStreamCubit: BlocProvider.of<MessageStreamCubit>(context),
-          ),
+          arguments: ChatScreenArgs.fromChatEntity(chat),
         );
       },
       child: Row(

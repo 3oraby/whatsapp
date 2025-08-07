@@ -8,6 +8,7 @@ import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
 import 'package:whatsapp/core/cubit/save_media_cubit/save_media_cubit.dart';
 import 'package:whatsapp/core/helpers/get_initial_route.dart';
 import 'package:whatsapp/core/helpers/on_generate_routes.dart';
+import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
 import 'package:whatsapp/core/services/app_notification_service.dart';
 import 'package:whatsapp/core/services/custom_bloc_observer.dart';
 import 'package:whatsapp/core/services/get_it_service.dart';
@@ -18,7 +19,9 @@ import 'package:whatsapp/core/utils/app_themes.dart';
 import 'package:whatsapp/features/auth/domain/repo_interface/auth_repo.dart';
 import 'package:whatsapp/features/auth/presentation/cubits/set_user_profile_picture_cubit/set_user_profile_picture_cubit.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
+import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/socket_connection_cubit/socket_connection_cubit.dart';
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
 import 'package:whatsapp/features/notifications/domain/repos/notifications_repo.dart';
@@ -121,6 +124,13 @@ class _WhatsappState extends State<Whatsapp> with WidgetsBindingObserver {
         BlocProvider(
           create: (context) => saveMediaCubit,
         ),
+        BlocProvider(
+          create: (context) => MessageStreamCubit(
+            socketRepo: getIt<SocketRepo>(),
+            pendingMessagesHelper: getIt<PendingMessagesHelper>(),
+            chatsRepo: getIt<ChatsRepo>(),
+          ),
+        )
       ],
       child: MaterialApp(
         title: AppStrings.appTitle,

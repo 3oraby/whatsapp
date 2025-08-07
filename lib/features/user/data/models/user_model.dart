@@ -4,7 +4,7 @@ class UserModel extends UserEntity {
   const UserModel({
     required super.id,
     required super.name,
-    required super.email,
+    super.email,
     super.phoneNumber,
     super.description,
     super.profileImage,
@@ -53,6 +53,4 @@ class UserModel extends UserEntity {
       profileImage: profileImage,
     );
   }
-
-
 }

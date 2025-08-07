@@ -8,7 +8,7 @@ import 'package:whatsapp/features/auth/presentation/screens/set_user_profile_pic
 import 'package:whatsapp/features/auth/presentation/screens/signin_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/signup_screen.dart';
 import 'package:whatsapp/features/auth/presentation/screens/verify_otp_screen.dart';
-import 'package:whatsapp/features/chats/presentation/routes/chat_screen_args.dart';
+import 'package:whatsapp/features/chats/domain/entities/chat_screen_args.dart';
 import 'package:whatsapp/features/chats/presentation/screens/chat_screen.dart';
 import 'package:whatsapp/features/contacts/presentation/screens/add_new_contacts_screen.dart';
 import 'package:whatsapp/features/home/presentation/screens/home_screen.dart';
@@ -77,14 +77,10 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       );
 
     case Routes.chatScreenRoute:
-      final ChatScreenArgs chatScreenArgs =
-          settings.arguments as ChatScreenArgs;
+      final ChatScreenArgs chat = settings.arguments as ChatScreenArgs;
       return MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: chatScreenArgs.messageStreamCubit,
-          child: ChatScreen(
-            chat: chatScreenArgs.chat,
-          ),
+        builder: (_) => ChatScreen(
+          chatScreenArgs: chat,
         ),
       );
 

@@ -3,7 +3,6 @@ import 'package:whatsapp/core/cubit/base/base_cubit.dart';
 import 'package:whatsapp/core/helpers/pending_messages/pending_message_helper.dart';
 import 'package:whatsapp/features/chats/data/models/message_model.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
-import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_reaction_info.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
@@ -39,14 +38,14 @@ class GetChatMessagesCubit extends BaseCubit<GetChatMessagesState> {
   }
 
   void loadPendingMessages({
-    required ChatEntity chat,
+    required int chatId,
     required int currentUserId,
   }) async {
     final pending = await pendingMessagesHelper.getPendingMessages();
     final List chatPending =
-        pending.where((m) => m['chatId'] == chat.id).toList();
+        pending.where((m) => m['chatId'] == chatId).toList();
     if (chatPending.isEmpty) {
-      debugPrint("there is no pending messages in this chat: ${chat.id}");
+      debugPrint("there is no pending messages in this chat: $chatId");
       return;
     }
     for (final msg in chatPending) {

@@ -6,7 +6,7 @@ import 'package:whatsapp/core/cubit/internet/internet_connection_cubit.dart';
 import 'package:whatsapp/core/helpers/get_current_user_entity.dart';
 import 'package:whatsapp/core/utils/app_images.dart';
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
-import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
+import 'package:whatsapp/features/chats/domain/entities/chat_screen_args.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_entity.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_status.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_type.dart';
@@ -19,7 +19,7 @@ import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class ShowChatMessagesBody extends StatefulWidget {
   final List<MessageEntity> messages;
-  final ChatEntity chat;
+  final ChatScreenArgs chat;
 
   const ShowChatMessagesBody({
     super.key,
@@ -44,7 +44,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     super.initState();
     getChatMessagesCubit = context.read<GetChatMessagesCubit>();
     messageStreamCubit = context.read<MessageStreamCubit>();
-    messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
+    messageStreamCubit.resendPendingMessagesForChat(widget.chat.chatId);
     currentUser = getCurrentUserEntity()!;
   }
 
@@ -53,7 +53,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
 
     final dto = SendMessageDto(
       receiverId: widget.chat.anotherUser.id,
-      chatId: widget.chat.id,
+      chatId: widget.chat.chatId,
       content: text == "" ? null : text,
       mediaFile: mediaFile,
       parentId: _replyMessage?.id,
@@ -81,7 +81,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
   void _onInternetStateChanged(
       BuildContext context, InternetConnectionState state) {
     if (state is InternetConnectionConnected) {
-      messageStreamCubit.resendPendingMessagesForChat(widget.chat.id);
+      messageStreamCubit.resendPendingMessagesForChat(widget.chat.chatId);
     }
   }
 
@@ -89,7 +89,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
     if (state is NewIncomingMessageState) {
       getChatMessagesCubit.addMessageToList(state.message);
       messageStreamCubit.markMessageAsRead(
-        chatId: widget.chat.id,
+        chatId: widget.chat.chatId,
         messageId: state.message.id,
         senderId: state.message.senderId!,
       );
@@ -182,11 +182,11 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
                     curr is UserTypingState || curr is UserStopTypingState,
                 builder: (context, state) {
                   final isTyping = state is UserTypingState &&
-                      state.chatId == widget.chat.id;
+                      state.chatId == widget.chat.chatId;
 
                   return Expanded(
                     child: ShowChatMessagesList(
-                      chatId: widget.chat.id,
+                      chatId: widget.chat.chatId,
                       messages: widget.messages,
                       onReplyRequested: _onReplyRequested,
                       isTyping: isTyping,
@@ -203,7 +203,7 @@ class _ShowChatMessagesBodyState extends State<ShowChatMessagesBody> {
               SendMessageSection(
                 sendMessage: sendMessage,
                 contentController: contentController,
-                chatId: widget.chat.id,
+                chatId: widget.chat.chatId,
                 onImageSelected: (file) {
                   setState(() {
                     mediaFile = file;

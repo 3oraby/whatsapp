@@ -4,8 +4,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:whatsapp/core/utils/app_routes.dart';
+import 'package:whatsapp/features/chats/domain/entities/chat_screen_args.dart';
 import 'package:whatsapp/features/notifications/domain/entities/notification_message_entity.dart';
 import 'package:whatsapp/features/notifications/data/models/notification_message_model.dart';
+import 'package:whatsapp/main.dart';
 
 @pragma('vm:entry-point')
 class AppNotificationService {
@@ -39,7 +42,31 @@ class AppNotificationService {
     const InitializationSettings initSettings =
         InitializationSettings(android: androidInitSettings);
 
-    await flutterLocalNotificationsPlugin.initialize(initSettings);
+    await flutterLocalNotificationsPlugin.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (details) {
+        debugPrint("onDidReceiveNotificationResponse");
+        final payload = details.payload;
+        if (payload != null) {
+          final NotificationMessageEntity data =
+              NotificationMessageModel.fromJson(payload);
+
+          debugPrint(payload);
+          navigatorKey.currentState?.pushNamed(
+            Routes.chatScreenRoute,
+            arguments: ChatScreenArgs.fromNotificationMessageEntity(data),
+          );
+        }
+      },
+      // onDidReceiveBackgroundNotificationResponse: (details) {
+      //   debugPrint("onDidReceiveBackgroundNotificationResponse");
+      //   final payload = details.payload;
+      //   if (payload != null) {
+      //     final data = NotificationMessageModel.fromJson(payload);
+      //     // onNotificationTap(data);
+      //   }
+      // },
+    );
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -137,7 +164,7 @@ class AppNotificationService {
         data.username,
         _getContentText(data),
         platformDetails,
-        payload: data.toString(),
+        payload: NotificationMessageModel.toJsonString(data),
       );
     } catch (e, stackTrace) {
       debugPrint('Error showing notification: $e');

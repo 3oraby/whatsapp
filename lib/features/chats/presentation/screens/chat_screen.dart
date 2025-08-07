@@ -9,7 +9,7 @@ import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
-import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
+import 'package:whatsapp/features/chats/domain/entities/chat_screen_args.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 import 'package:whatsapp/features/chats/domain/repos/socket_repo.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/chat_friend_status_cubit/chat_friend_status_cubit.dart';
@@ -20,10 +20,10 @@ import 'package:whatsapp/features/user/domain/repos/user_repo.dart';
 class ChatScreen extends StatefulWidget {
   const ChatScreen({
     super.key,
-    required this.chat,
+    required this.chatScreenArgs,
   });
 
-  final ChatEntity chat;
+  final ChatScreenArgs chatScreenArgs;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -36,7 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     chatFriendStatusCubit = ChatFriendStatusCubit(
-      currentChatUserId: widget.chat.anotherUser.id,
+      currentChatUserId: widget.chatScreenArgs.anotherUser.id,
       socketRepo: getIt<SocketRepo>(),
       userRepo: getIt<UserRepo>(),
     );
@@ -51,7 +51,7 @@ class _ChatScreenState extends State<ChatScreen> {
             chatsRepo: getIt<ChatsRepo>(),
             pendingMessagesHelper: getIt<PendingMessagesHelper>(),
           )..loadPendingMessages(
-              chat: widget.chat,
+              chatId: widget.chatScreenArgs.chatId,
               currentUserId: getCurrentUserEntity()!.id,
             ),
         ),
@@ -71,7 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Row(
                   children: [
                     BuildUserProfileImage(
-                      userEntity: widget.chat.anotherUser,
+                      userEntity: widget.chatScreenArgs.anotherUser,
                       circleAvatarRadius: 16,
                     ),
                     const HorizontalGap(10),
@@ -79,7 +79,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.chat.anotherUser.name,
+                          widget.chatScreenArgs.anotherUser.name,
                           style: AppTextStyles.poppinsMedium(context, 18),
                         ),
                         const VerticalGap(2),
@@ -101,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
           ),
-          body: ShowChatMessagesBlocConsumerBody(chat: widget.chat),
+          body: ShowChatMessagesBlocConsumerBody(chat: widget.chatScreenArgs),
         ),
       ),
     );

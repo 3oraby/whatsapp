@@ -7,9 +7,8 @@ import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_action_box.dart';
 import 'package:whatsapp/core/widgets/custom_loading_indicator.dart';
+import 'package:whatsapp/features/chats/domain/entities/chat_screen_args.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/create_new_chat_cubit/create_new_chat_cubit.dart';
-import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
-import 'package:whatsapp/features/chats/presentation/routes/chat_screen_args.dart';
 import 'package:whatsapp/features/user/domain/entities/user_entity.dart';
 
 class StartChatButton extends StatelessWidget {
@@ -29,10 +28,7 @@ class StartChatButton extends StatelessWidget {
           Navigator.pushNamed(
             context,
             Routes.chatScreenRoute,
-            arguments: ChatScreenArgs(
-              chat: state.chat,
-              messageStreamCubit: BlocProvider.of<MessageStreamCubit>(context),
-            ),
+            arguments: ChatScreenArgs.fromChatEntity(state.chat),
           );
         }
       },

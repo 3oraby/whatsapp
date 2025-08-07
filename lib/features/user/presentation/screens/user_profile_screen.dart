@@ -176,40 +176,41 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
             const VerticalGap(24),
-            GestureDetector(
-              onTap: () => _copyEmail(context, widget.user.email),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.email_outlined,
-                      color: AppColors.primary,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        widget.user.email,
-                        style:
-                            AppTextStyles.poppinsMedium(context, 16).copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+            if (widget.user.email != null)
+              GestureDetector(
+                onTap: () => _copyEmail(context, widget.user.email!),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.email_outlined,
+                        color: AppColors.primary,
                       ),
-                    ),
-                    const Icon(
-                      Icons.copy,
-                      size: 18,
-                      color: Colors.grey,
-                    ),
-                  ],
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          widget.user.email!,
+                          style:
+                              AppTextStyles.poppinsMedium(context, 16).copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.copy,
+                        size: 18,
+                        color: Colors.grey,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
             const VerticalGap(24),
             Container(
               padding: const EdgeInsets.symmetric(

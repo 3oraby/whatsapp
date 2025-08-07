@@ -45,13 +45,14 @@ class CustomUserInfoCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
-                    user.email,
-                    style: AppTextStyles.poppinsBold(context, 14).copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
+                  if (user.email != null)
+                    Text(
+                      user.email!,
+                      style: AppTextStyles.poppinsBold(context, 14).copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
                 ],
               ),
             ),
@@ -76,4 +77,3 @@ class CustomUserInfoCard extends StatelessWidget {
     );
   }
 }
-
