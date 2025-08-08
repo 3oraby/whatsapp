@@ -154,12 +154,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
-            TextButton(
-              onPressed: _showEditPhotoOptions,
-              child: Text(
-                "Edit Photo",
-                style: AppTextStyles.poppinsBold(context, 18).copyWith(
-                  color: AppColors.primary,
+            Visibility(
+              visible: widget.user.id == currentUser?.id,
+              child: TextButton(
+                onPressed: _showEditPhotoOptions,
+                child: Text(
+                  "Edit Photo",
+                  style: AppTextStyles.poppinsBold(context, 18).copyWith(
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ),
