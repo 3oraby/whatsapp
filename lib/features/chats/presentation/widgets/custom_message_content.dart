@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp/core/services/time_ago_service.dart';
 import 'package:whatsapp/core/utils/app_constants.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
+import 'package:whatsapp/core/widgets/custom_file_image.dart';
 import 'package:whatsapp/core/widgets/custom_network_image.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
@@ -59,11 +60,19 @@ class CustomMessageContent extends StatelessWidget {
                 children: [
                   if (msg.mediaUrl != null)
                     CustomNetworkImage(
-                      borderRadius: AppConstants.messageBorderRadius,
                       imageUrl: msg.mediaUrl!,
                       width: 400,
                       height: 400,
                       fit: BoxFit.cover,
+                      borderRadius: AppConstants.messageBorderRadius,
+                    )
+                  else if (msg.mediaFile != null)
+                    CustomFileImage(
+                      file: msg.mediaFile!,
+                      width: 400,
+                      height: 400,
+                      fit: BoxFit.cover,
+                      borderRadius: AppConstants.messageBorderRadius,
                     ),
                   const VerticalGap(4),
                   if (msg.content != null && msg.content!.isNotEmpty) ...[

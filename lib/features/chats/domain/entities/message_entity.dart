@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:whatsapp/features/chats/data/models/send_message_dto.dart';
 import 'package:whatsapp/features/chats/domain/entities/message_reaction_info.dart';
 import 'package:whatsapp/features/chats/domain/enums/message_react.dart';
@@ -9,6 +11,7 @@ class MessageEntity {
   final int id;
   final String? content;
   final String? mediaUrl;
+  final File? mediaFile;
   final int? chatId;
   final int? senderId;
   final int? receiverId;
@@ -29,6 +32,7 @@ class MessageEntity {
     required this.id,
     required this.content,
     this.mediaUrl,
+    this.mediaFile,
     required this.chatId,
     required this.senderId,
     required this.receiverId,
@@ -50,6 +54,7 @@ class MessageEntity {
     int? id,
     String? content,
     String? mediaUrl,
+    File? mediaFile,
     int? chatId,
     int? senderId,
     int? receiverId,
@@ -70,6 +75,7 @@ class MessageEntity {
       id: id ?? this.id,
       content: content ?? this.content,
       mediaUrl: mediaUrl ?? this.mediaUrl,
+      mediaFile: mediaFile ?? this.mediaFile,
       chatId: chatId ?? this.chatId,
       senderId: senderId ?? this.senderId,
       receiverId: receiverId ?? this.receiverId,
@@ -114,6 +120,7 @@ class MessageEntity {
       createdAt: DateTime.now(),
       type: dto.type,
       mediaUrl: dto.mediaUrl,
+      mediaFile: dto.mediaFile,
       isFromMe: true,
       reactsCount: 0,
     );

@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/errors/failures.dart';
+import 'package:whatsapp/core/services/image_picker_service.dart';
 import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_text_form_field.dart';
-import 'package:whatsapp/core/widgets/gallery_image_picker.dart';
 import 'package:whatsapp/core/widgets/horizontal_gap.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/selected_image_banner.dart';
@@ -75,47 +77,23 @@ class _SendMessageSectionState extends State<SendMessageSection> {
     super.dispose();
   }
 
-  Future<dynamic> showGalleryImages(BuildContext context) {
-    return showModalBottomSheet(
-      context: context,
-      builder: (_) => Column(
-        children: [
-          Row(
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Cancel",
-                  style: AppTextStyles.poppinsBold(context, 16),
-                ),
-              ),
-              const HorizontalGap(120), // change it later
-              Text(
-                "Photos",
-                style: AppTextStyles.poppinsBold(context, 16),
-              ),
-            ],
-          ),
-          Expanded(
-            child: GalleryImagePicker(
-              onImageSelected: (image) {
-                image.originFile.then((file) {
-                  if (file != null) {
-                    setState(() {
-                      _selectedImageFile = file;
-                    });
-                    widget.onImageSelected(file);
-                  }
-                });
-                Navigator.pop(context);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+  Future<void> _onAddImagePressed() async {
+    try {
+      ImagePickerService imagePickerService = ImagePickerService();
+
+      final image = await imagePickerService.pickImageFromGallery();
+
+      if (image != null) {
+        _selectedImageFile = File(image.path);
+        if (_selectedImageFile != null) {
+          widget.onImageSelected(_selectedImageFile!);
+        }
+      }
+    } catch (e) {
+      debugPrint(
+          "There is an exception with adding an image in AddUserProfileScreen: $e");
+      throw CustomException(message: "Failed to upload image".tr());
+    }
   }
 
   @override
@@ -139,7 +117,7 @@ class _SendMessageSectionState extends State<SendMessageSection> {
               IconButton(
                 icon: const Icon(Icons.add, color: Colors.black),
                 onPressed: () {
-                  showGalleryImages(context);
+                  _onAddImagePressed();
                 },
               ),
               const HorizontalGap(16),

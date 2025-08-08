@@ -139,6 +139,10 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
     required SendMessageDto dto,
     required int currentUserId,
   }) async {
+    final tempMessage = MessageEntity.fromDto(dto, currentUserId);
+
+    emit(NewOutgoingMessageState(tempMessage));
+    
     if (dto.mediaFile != null) {
       final result = await chatsRepo.uploadChatImage(image: dto.mediaFile!);
       result.fold(
@@ -153,9 +157,6 @@ class MessageStreamCubit extends Cubit<MessageStreamState> {
       );
     }
 
-    final tempMessage = MessageEntity.fromDto(dto, currentUserId);
-
-    emit(NewOutgoingMessageState(tempMessage));
     if (!socketRepo.isConnected) {
       await pendingMessagesHelper.addPendingMessage(dto.toSocketPayload());
       return;

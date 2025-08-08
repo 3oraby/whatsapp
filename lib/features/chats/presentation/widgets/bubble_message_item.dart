@@ -24,6 +24,7 @@ class BubbleMessageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bgColor = isFromMe ? AppColors.myMessageLight : Colors.grey.shade200;
+    final hasMedia = msg?.mediaUrl == null || msg?.mediaFile == null;
 
     final bool isRepliedMessage = repliedMsg != null;
     return Column(
@@ -41,7 +42,7 @@ class BubbleMessageItem extends StatelessWidget {
                   radius: AppConstants.messageBorderRadius,
                 ),
           alignment: isFromMe ? Alignment.topRight : Alignment.topLeft,
-          padding: msg?.mediaUrl == null
+          padding: !hasMedia
               ? EdgeInsets.only(
                   top: isRepliedMessage ? 4 : 6,
                   bottom: 4,

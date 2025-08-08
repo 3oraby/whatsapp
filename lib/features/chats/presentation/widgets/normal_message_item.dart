@@ -21,6 +21,7 @@ class NormalMessageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isRepliedMessage = repliedMsg != null;
     final bgColor = isFromMe ? AppColors.myMessageLight : Colors.grey.shade200;
+    final hasMedia = msg.mediaUrl == null || msg.mediaFile == null;
 
     return Column(
       crossAxisAlignment:
@@ -35,7 +36,7 @@ class NormalMessageItem extends StatelessWidget {
                 AppConstants.messageBorderRadius,
               ),
             ),
-            padding: msg.mediaUrl == null
+            padding: !hasMedia
                 ? EdgeInsets.only(
                     top: isRepliedMessage ? 4 : 6,
                     bottom: 4,
