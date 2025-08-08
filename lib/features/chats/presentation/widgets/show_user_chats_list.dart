@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 import 'package:whatsapp/features/chats/domain/entities/chat_entity.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/get_user_chats_cubit/get_user_chats_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/message_stream_cubit/message_stream_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/custom_chat_item.dart';
 
@@ -15,20 +16,25 @@ class ShowUserChatsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: EdgeInsets.all(0),
-      itemCount: chats.length,
-      separatorBuilder: (context, index) => const VerticalGap(6),
-      itemBuilder: (context, index) {
-        return BlocBuilder<MessageStreamCubit, MessageStreamState>(
-          builder: (context, state) => CustomChatItem(
-            key: ValueKey(chats[index].id),
-            chat: chats[index],
-            isTyping:
-                state is UserTypingState && state.chatId == chats[index].id,
-          ),
-        );
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<GetUserChatsCubit>().getUserChats();
       },
+      child: ListView.separated(
+        padding: EdgeInsets.all(0),
+        itemCount: chats.length,
+        separatorBuilder: (context, index) => const VerticalGap(6),
+        itemBuilder: (context, index) {
+          return BlocBuilder<MessageStreamCubit, MessageStreamState>(
+            builder: (context, state) => CustomChatItem(
+              key: ValueKey(chats[index].id),
+              chat: chats[index],
+              isTyping:
+                  state is UserTypingState && state.chatId == chats[index].id,
+            ),
+          );
+        },
+      ),
     );
   }
 }

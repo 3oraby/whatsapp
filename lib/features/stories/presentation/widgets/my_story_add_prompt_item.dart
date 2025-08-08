@@ -50,12 +50,19 @@ class MyStoryAddPromptItem extends StatelessWidget {
                     isCurrentUser: true,
                   ),
                   Positioned(
-                    right: -3,
-                    bottom: -3,
-                    child: Icon(
-                      Icons.add_circle,
-                      color: AppColors.primary,
-                      size: AppConstants.myStoryItemAddIconSize,
+                    right: -12,
+                    bottom: -12,
+                    child: Container(
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(360),
+                      ),
+                      child: Icon(
+                        Icons.add_circle,
+                        color: AppColors.primary,
+                        size: AppConstants.myStoryItemAddIconSize,
+                      ),
                     ),
                   )
                 ],

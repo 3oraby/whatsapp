@@ -68,16 +68,6 @@ class _ShowCurrentStoriesViewState extends State<ShowCurrentStoriesView> {
               );
             },
           ),
-          IconButton(
-            icon: Icon(
-              Icons.replay_outlined,
-              color: Theme.of(context).iconTheme.color,
-              size: 36,
-            ),
-            onPressed: () {
-              getCurrentStories();
-            },
-          ),
         ],
       ),
       body: CustomAppPadding(
@@ -96,8 +86,7 @@ class _ShowCurrentStoriesViewState extends State<ShowCurrentStoriesView> {
                     state.currentUserContactStoryEntity,
                 unViewedContactsStories:
                     state.userContactsStories.unViewedContacts,
-                viewedContactsStories:
-                    state.userContactsStories.viewedContacts,
+                viewedContactsStories: state.userContactsStories.viewedContacts,
               );
             }
             return SizedBox();
