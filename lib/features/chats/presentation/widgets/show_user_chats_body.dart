@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/custom_app_padding.dart';
 import 'package:whatsapp/core/widgets/custom_empty_state_body.dart';
@@ -86,7 +87,22 @@ class _ShowUserChatsBodyState extends State<ShowUserChatsBody> {
                       onRetry: getUserChats,
                     );
                   } else if (state is GetUserChatsEmptyState) {
-                    return const CustomEmptyStateBody(title: "No chats yet.");
+                    return CustomEmptyStateBody(
+                      title: "No chats yet.",
+                      subtitle:
+                          "You haven't started any conversations yet. Start chatting now!",
+                      actionButtonTitle: "Add new friends",
+                      onActionPressed: () async {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.addNewContactsRoute,
+                        ).then(
+                          (value) {
+                            getUserChats();
+                          },
+                        );
+                      },
+                    );
                   } else if (state is GetUserChatsLoadedState) {
                     final chats = state.chats;
                     return ShowUserChatsList(chats: chats);

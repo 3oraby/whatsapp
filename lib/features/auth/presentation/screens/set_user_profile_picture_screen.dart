@@ -48,8 +48,8 @@ class SetUserProfilePictureBlocConsumerBody extends StatelessWidget {
               context: context,
               sheetTitle: context.tr("Profile Picture Uploaded! 🎉"),
               sheetDescription: context.tr(
-                  "Your profile picture has been uploaded successfully. You're all set to explore tweets and connect with friends!"),
-              buttonDescription: context.tr('Explore Now'),
+                  "Your profile picture is set! You're all ready to start chatting and stay connected with your friends."),
+              buttonDescription: context.tr('Go to Chats'),
               onNextButtonPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
                   context,

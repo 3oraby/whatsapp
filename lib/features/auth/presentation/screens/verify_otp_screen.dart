@@ -52,7 +52,7 @@ class VerifyOtpBlocConsumerBody extends StatelessWidget {
             context: context,
             sheetTitle: context.tr("Welcome Back! 🎉"),
             sheetDescription: context.tr(
-                "You’ve logged in successfully. Start exploring tweets, connecting with friends, and sharing your thoughts instantly."),
+                "Your account is ready. Next, choose your profile picture, then start chatting and sharing moments with your friends instantly."),
             buttonDescription: context.tr('Explore Now'),
             onNextButtonPressed: () {
               Navigator.pushNamedAndRemoveUntil(

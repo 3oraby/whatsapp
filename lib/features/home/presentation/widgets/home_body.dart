@@ -5,6 +5,8 @@ import 'package:whatsapp/core/services/get_it_service.dart';
 import 'package:whatsapp/features/chats/domain/repos/chats_repo.dart';
 import 'package:whatsapp/features/chats/presentation/cubits/get_user_chats_cubit/get_user_chats_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/user_chats_view.dart';
+import 'package:whatsapp/features/contacts/domain/repos/contacts_repo.dart';
+import 'package:whatsapp/features/contacts/presentation/cubits/get_user_contacts_cubit/get_user_contacts_cubit.dart';
 import 'package:whatsapp/features/contacts/presentation/widgets/user_contacts_view.dart';
 import 'package:whatsapp/features/settings/presentation/widgets/settings_view.dart';
 import 'package:whatsapp/features/stories/presentation/widgets/stories_view.dart';
@@ -24,7 +26,12 @@ class HomeBody extends StatelessWidget {
           create: (context) => GetUserChatsCubit(
             chatsRepo: getIt<ChatsRepo>(),
           ),
-        )
+        ),
+        BlocProvider(
+          create: (context) => GetUserContactsCubit(
+            contactsRepo: getIt<ContactsRepo>(),
+          ),
+        ),
       ],
       child: LazyIndexedStack(
         index: currentViewIndex,

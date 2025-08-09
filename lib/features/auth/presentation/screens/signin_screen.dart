@@ -66,8 +66,9 @@ class SignInBLocConsumerBody extends StatelessWidget {
             context: context,
             sheetTitle: context.tr("Welcome Back! 🎉"),
             sheetDescription: context.tr(
-                "You’ve logged in successfully. Start exploring tweets, connecting with friends, and sharing your thoughts instantly."),
-            buttonDescription: context.tr('Explore Now'),
+              "You’ve logged in successfully. Your chats are ready — start messaging your friends and stay connected instantly.",
+            ),
+            buttonDescription: context.tr('Go to Chats'),
             onNextButtonPressed: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,

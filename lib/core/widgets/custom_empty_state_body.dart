@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp/core/helpers/is_light_theme.dart';
+import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/vertical_gap.dart';
 
@@ -8,6 +10,8 @@ class CustomEmptyStateBody extends StatelessWidget {
   final IconData? icon;
   final double iconSize;
   final Color? iconColor;
+  final VoidCallback? onActionPressed;
+  final String actionButtonTitle;
 
   const CustomEmptyStateBody({
     super.key,
@@ -16,6 +20,8 @@ class CustomEmptyStateBody extends StatelessWidget {
     this.icon = Icons.inbox,
     this.iconSize = 130,
     this.iconColor,
+    this.onActionPressed,
+    this.actionButtonTitle = "Press Here",
   });
 
   @override
@@ -46,6 +52,22 @@ class CustomEmptyStateBody extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppTextStyles.poppinsMedium(context, 16).copyWith(
                   color: Colors.grey[500],
+                ),
+              ),
+            ],
+            if (onActionPressed != null) ...[
+              const VerticalGap(24),
+              Container(
+                color: isLightTheme(context)
+                    ? AppColors.highlightBackgroundColor
+                    : AppColors.highlightBackgroundColorDark,
+                child: TextButton(
+                  onPressed: onActionPressed,
+                  child: Text(
+                    actionButtonTitle,
+                    style: AppTextStyles.poppinsBold(context, 16)
+                        .copyWith(color: AppColors.primary),
+                  ),
                 ),
               ),
             ],

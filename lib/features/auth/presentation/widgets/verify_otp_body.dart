@@ -59,6 +59,7 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
   }
 
   Future<void> _verifyOtp(String otp) async {
+    if (!mounted) return;
     log("Verifying OTP: $otp");
 
     if (email != null) {
@@ -104,67 +105,108 @@ class _VerifyOtpBodyState extends State<VerifyOtpBody> {
           });
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.horizontalPadding,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const VerticalGap(60),
-            Text(
-              "Please Enter 6-digit code",
-              style: AppTextStyles.poppinsBlack(context, 32),
-            ),
-            const VerticalGap(16),
-            Text(
-              "We sent you 6-digit code to you at",
-              style: AppTextStyles.poppinsRegular(context, 16).copyWith(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-            const VerticalGap(4),
-            Text(
-              email!,
-              style: AppTextStyles.poppinsRegular(context, 16).copyWith(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-            const VerticalGap(40),
-            PinCodeTextField(
-              controller: _otpController,
-              appContext: context,
-              length: 6,
-              onCompleted: _verifyOtp,
-              keyboardType: TextInputType.number,
-              animationType: AnimationType.fade,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-                fieldHeight: 65,
-                fieldWidth: 50,
-                activeColor: AppColors.actionColor,
-                selectedColor: AppColors.primary,
-                inactiveColor: Colors.grey,
-              ),
-              backgroundColor: theme.scaffoldBackgroundColor,
-            ),
-            const VerticalGap(30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.horizontalPadding,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  _canResend
-                      ? "Didn't receive the code?"
-                      : "Resend code in $_secondsRemaining sec",
-                  style: AppTextStyles.poppinsRegular(context, 16),
+                const VerticalGap(40),
+                Icon(
+                  Icons.lock_outline,
+                  size: 60,
+                  color: AppColors.primary,
                 ),
-                ResendOtpBlocConsumerButton(
-                  onPressed: _canResend ? _resendOtp : null,
+                const VerticalGap(16),
+                Text(
+                  "Verify Your Email",
+                  style: AppTextStyles.poppinsBlack(context, 26),
+                  textAlign: TextAlign.center,
+                ),
+                const VerticalGap(8),
+                Text(
+                  "Enter the 6-digit code we sent to",
+                  style: AppTextStyles.poppinsRegular(context, 15)
+                      .copyWith(color: theme.colorScheme.secondary),
+                  textAlign: TextAlign.center,
+                ),
+                const VerticalGap(4),
+                Text(
+                  email ?? '',
+                  style: AppTextStyles.poppinsRegular(context, 15)
+                      .copyWith(fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+                const VerticalGap(32),
+                PinCodeTextField(
+                  controller: _otpController,
+                  appContext: context,
+                  length: 6,
+                  onCompleted: _verifyOtp,
+                  keyboardType: TextInputType.number,
+                  animationType: AnimationType.scale,
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius:
+                        BorderRadius.circular(AppConstants.borderRadius),
+                    fieldHeight: 60,
+                    fieldWidth: 48,
+                    activeColor: AppColors.primary,
+                    selectedColor: AppColors.actionColor,
+                    inactiveColor: Colors.grey.shade400,
+                    activeFillColor: Colors.grey.shade100,
+                    selectedFillColor: Colors.white,
+                    inactiveFillColor: Colors.grey.shade50,
+                  ),
+                  animationDuration: const Duration(milliseconds: 250),
+                  enableActiveFill: true,
+                  backgroundColor: theme.scaffoldBackgroundColor,
+                ),
+                const VerticalGap(24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _canResend
+                          ? "Didn't receive the code?"
+                          : "Resend code in $_secondsRemaining sec",
+                      style: AppTextStyles.poppinsRegular(context, 14)
+                          .copyWith(color: Colors.grey.shade700),
+                    ),
+                    const SizedBox(width: 6),
+                    ResendOtpBlocConsumerButton(
+                      onPressed: _canResend ? _resendOtp : null,
+                    ),
+                  ],
+                ),
+                const VerticalGap(24),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(AppConstants.borderRadius),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_otpController.text.length == 6) {
+                      _verifyOtp(_otpController.text);
+                    }
+                  },
+                  child: Text(
+                    "Verify",
+                    style: AppTextStyles.poppinsBlack(context, 16)
+                        .copyWith(color: Colors.white),
+                  ),
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

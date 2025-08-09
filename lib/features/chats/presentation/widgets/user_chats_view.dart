@@ -5,10 +5,20 @@ import 'package:whatsapp/core/utils/app_colors.dart';
 import 'package:whatsapp/core/utils/app_routes.dart';
 import 'package:whatsapp/core/utils/app_text_styles.dart';
 import 'package:whatsapp/core/widgets/build_user_profile_image.dart';
+import 'package:whatsapp/features/chats/presentation/cubits/get_user_chats_cubit/get_user_chats_cubit.dart';
 import 'package:whatsapp/features/chats/presentation/widgets/show_user_chats_body.dart';
 
-class UserChatsView extends StatelessWidget {
+class UserChatsView extends StatefulWidget {
   const UserChatsView({super.key});
+
+  @override
+  State<UserChatsView> createState() => _UserChatsViewState();
+}
+
+class _UserChatsViewState extends State<UserChatsView> {
+  _getUserChats() {
+    context.read<GetUserChatsCubit>().getUserChats();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +49,11 @@ class UserChatsView extends StatelessWidget {
                   size: 30,
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, Routes.addNewContactsRoute);
+                  Navigator.pushNamed(context, Routes.addNewContactsRoute).then(
+                    (value) {
+                      _getUserChats();
+                    },
+                  );
                 },
               ),
               IconButton(

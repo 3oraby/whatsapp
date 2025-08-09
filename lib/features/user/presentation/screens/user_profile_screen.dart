@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,18 +47,27 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
+  _uploadUserProfileImg({required File pickedFile}) {
+    BlocProvider.of<SetUserProfilePictureCubit>(context).uploadUserProfileImg(
+      mediaFile: pickedFile,
+    );
+  }
+
   void _showEditPhotoOptions() {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(
+          AppConstants.bottomSheetBorderRadius,
+        )),
       ),
       builder: (_) {
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 8),
+              const VerticalGap(12),
               ListTile(
                 leading: const Icon(Icons.camera_alt),
                 title: const Text('Take Photo'),
@@ -68,10 +79,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     setState(() {
                       _localImagePath = pickedFile.path;
                     });
-                    BlocProvider.of<SetUserProfilePictureCubit>(context)
-                        .uploadUserProfileImg(
-                      mediaFile: pickedFile,
-                    );
+                    _uploadUserProfileImg(pickedFile: pickedFile);
                   }
                 },
               ),
@@ -91,9 +99,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               Visibility(
                 visible: widget.user.profileImage != null,
                 child: ListTile(
-                  leading: const Icon(Icons.delete),
-                  title: const Text(
+                  leading: const Icon(
+                    Icons.delete,
+                    color: AppColors.error,
+                  ),
+                  title: Text(
                     'Delete Photo',
+                    style: AppTextStyles.poppinsMedium(context, 16).copyWith(
+                      color: AppColors.error,
+                    ),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -102,7 +116,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   },
                 ),
               ),
-              const SizedBox(height: 8),
+              const VerticalGap(12),
             ],
           ),
         );
