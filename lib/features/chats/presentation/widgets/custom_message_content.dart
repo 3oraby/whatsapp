@@ -32,7 +32,7 @@ class CustomMessageContent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (repliedMsg != null)
+            if (repliedMsg != null && msg.isDeleted != true)
               RepliedMessageBox(
                 msg: repliedMsg!,
               ),

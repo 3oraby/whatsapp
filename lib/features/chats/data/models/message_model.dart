@@ -35,7 +35,7 @@ class MessageModel extends MessageEntity {
       senderId: json['user_id'],
       receiverId: json['reciever_id'],
       status: MessageStatusExtension.fromString(json['status'] ?? 'sent'),
-      parentId: json['parent']?['id'],
+      parentId: json['parent_id'],
       type: MessageTypeExtension.fromString(json['type'] ?? 'text'),
       statusId: json['statusId'],
       isDeleted: json['isDeleted'] ?? false,

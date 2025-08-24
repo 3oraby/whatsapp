@@ -26,6 +26,14 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
         if (chats.isEmpty) {
           emit(GetUserChatsEmptyState());
         } else {
+          chats.sort((a, b) {
+            final aDate = a.lastMessage?.createdAt ??
+                DateTime.fromMillisecondsSinceEpoch(0);
+            final bDate = b.lastMessage?.createdAt ??
+                DateTime.fromMillisecondsSinceEpoch(0);
+            return bDate.compareTo(aDate); 
+          });
+
           emit(GetUserChatsLoadedState(chats: chats));
         }
       },
@@ -66,9 +74,7 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
       debugPrint(message.status.value);
       updatedChat = oldChat.copyWith(
         lastMessage: lastMessageEntity,
-        unreadCount: isToMe
-            ? oldChat.unreadCount + 1
-            : oldChat.unreadCount,
+        unreadCount: isToMe ? oldChat.unreadCount + 1 : oldChat.unreadCount,
       );
 
       chats.removeAt(chatIndex);
@@ -92,7 +98,8 @@ class GetUserChatsCubit extends BaseCubit<GetUserChatsState> {
     required int messageId,
     required MessageStatus newStatus,
   }) {
-    debugPrint("update last message:: id = $messageId  with status: $newStatus in getUserChatsCubit");
+    debugPrint(
+        "update last message:: id = $messageId  with status: $newStatus in getUserChatsCubit");
     final currentState = state;
     if (currentState is! GetUserChatsLoadedState) return;
 
