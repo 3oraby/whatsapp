@@ -22,6 +22,7 @@ void showCustomSnackBar(
     ),
     backgroundColor: backgroundColor,
   );
+  
 
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
